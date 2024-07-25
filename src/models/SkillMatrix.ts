@@ -1,5 +1,4 @@
 import { Schema, model, models } from "mongoose";
-import { v4 as uuidv4 } from "uuid";
 
 export const FormMetaData = new Schema({
   docNo: {
@@ -25,11 +24,7 @@ export const FormMetaData = new Schema({
   },
   lastUpdated: {
     type: Date,
-    default: () =>
-      new Date().toLocaleString("en-US", {
-        timeZone: "Asia/Calcutta",
-        hour12: true,
-      }),
+    default: Date.now,
   },
   departmentName: {
     type: String,

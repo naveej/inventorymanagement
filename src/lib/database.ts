@@ -6,7 +6,6 @@ dotenv.config();
 export const connectDB = async () => {
   mongoose.set("strictQuery", true);
   mongoose.set("bufferCommands", false);
-  console.log("Running DB File");
 
   const mongoUri = process.env.MONGODB_URI;
   if (!mongoUri) {

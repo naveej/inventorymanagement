@@ -26,6 +26,17 @@ export async function POST(request: Request) {
   }: RequestBody = await request.json();
 
   try {
+    console.log("TESTINNNGG", {
+      docNo,
+      version,
+      preparedBy,
+      reviewedBy,
+      approvedBy,
+      departmentName,
+      name,
+      skills,
+    });
+
     if (!docNo)
       throw new NextResponse(JSON.stringify("Invalid Form Fields"), {
         status: 402,

@@ -6,22 +6,21 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 
 const SkillMatrixForm = () => {
-  const [docNo, setDocNo] = useState(" ");
-  const [version, setVersion] = useState(" ");
-  const [preparedBy, setPreparedBy] = useState(" ");
-  const [reviewedBy, setReviewedBy] = useState(" ");
-  const [approvedBy, setApprovedBy] = useState(" ");
-  const [departmentName, setDepartmentName] = useState(" ");
-  const [name, setName] = useState(" ");
-  const [skills1, setSkill1] = useState(" ");
-  const [skills2, setSkill2] = useState(" ");
+  const [docNo, setDocNo] = useState("IAD003");
+  const [version, setVersion] = useState("01");
+  const [preparedBy, setPreparedBy] = useState(
+    "Dr Pavana Kumara B - Head-IQAC"
+  );
+  const [reviewedBy, setReviewedBy] = useState("Dr Prakash Pinto - Dean MBA");
+  const [approvedBy, setApprovedBy] = useState("Dr Rio D'Souza - Principal");
+  const [departmentName, setDepartmentName] = useState("");
+  const [name, setName] = useState("");
+  const [skills1, setSkill1] = useState("");
+  const [skills2, setSkill2] = useState("");
 
   const HandleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!docNo) {
-      console.error("Doc No is empty!");
-      return;
-    }
+
     const formData = {
       docNo,
       version,
@@ -34,7 +33,7 @@ const SkillMatrixForm = () => {
     };
     console.log("Client before Send", formData);
 
-    const result = await axios.post("/api/post/form", formData);
+    const result = await axios.post("/api/post/create/skillMatrix", formData);
     console.log("Result", result);
   };
 
@@ -49,26 +48,30 @@ const SkillMatrixForm = () => {
         <Input
           type="text"
           placeholder="Doc No"
+          defaultValue={docNo}
           onChange={(e) => setDocNo(e.target.value)}
         />
         <Input
           type="text"
-          placeholder="Version No"
+          placeholder="Version No: 01"
           onChange={(e) => setVersion(e.target.value)}
         />
         <Input
           type="text"
           placeholder="Prepared By"
+          defaultValue={preparedBy}
           onChange={(e) => setPreparedBy(e.target.value)}
         />
         <Input
           type="text"
           placeholder="reviewedBy"
+          defaultValue={reviewedBy}
           onChange={(e) => setReviewedBy(e.target.value)}
         />
         <Input
           type="text"
           placeholder="approvedBy"
+          defaultValue={approvedBy}
           onChange={(e) => setApprovedBy(e.target.value)}
         />
         <Input

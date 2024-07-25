@@ -5,11 +5,9 @@ export const FormMetaData = new Schema({
   docNo: {
     type: String,
     required: true,
-    unique: true,
-    default: uuidv4,
   },
   version: {
-    type: String,
+    type: Number,
     required: true,
     default: 1,
   },
@@ -27,7 +25,11 @@ export const FormMetaData = new Schema({
   },
   lastUpdated: {
     type: Date,
-    default: Date.now,
+    default: () =>
+      new Date().toLocaleString("en-US", {
+        timeZone: "Asia/Calcutta",
+        hour12: true,
+      }),
   },
   departmentName: {
     type: String,
@@ -37,12 +39,17 @@ export const FormMetaData = new Schema({
 
 const SkillMatrixSchema = new Schema({
   metadata: FormMetaData,
+  // slno: {
+  //   type: String,
+  //   required: true,
+  //   unique: true,
+  // },
   name: {
     type: String,
     required: true,
   },
   skills: {
-    type: [String], // Define skills as an array of strings
+    type: [String],
   },
 });
 

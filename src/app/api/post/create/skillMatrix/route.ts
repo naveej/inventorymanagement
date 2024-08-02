@@ -10,7 +10,7 @@ type RequestBody = {
   approvedBy: string;
   departmentName: string;
   name: string;
-  skills: string[]; // Update skills type to an array of strings
+  skills: string[];
 };
 
 export async function POST(request: Request) {
@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     approvedBy,
     departmentName,
     name,
-    skills, // Update skills variable name
+    skills,
   }: RequestBody = await request.json();
 
   try {
@@ -38,7 +38,7 @@ export async function POST(request: Request) {
         departmentName,
       },
       name,
-      skills, // Pass the skills array directly
+      skills,
     });
     console.log("SkillMatrix document:", result);
     await result.save();

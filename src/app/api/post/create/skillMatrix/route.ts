@@ -1,53 +1,40 @@
-import { connectDB } from "@/lib/database";
+import { connectDB } from "@/lib/database"; // Adjust the import path as necessary
+import SkillMatrix from "@/models/SkillMatrix"; // Adjust the import path as necessary
 import { NextResponse } from "next/server";
-import SkillMatrix from "@/models/SkillMatrix";
 
 type RequestBody = {
-  docNo: string;
-  version: string;
-  preparedBy: string;
-  reviewedBy: string;
-  approvedBy: string;
-  departmentName: string;
+  metadata: {
+    docNo: string;
+    version: string;
+    preparedBy: string;
+    reviewedBy: string;
+    approvedBy: string;
+    departmentName: string;
+  };
   name: string;
   skills: string[];
 };
 
 export async function POST(request: Request) {
-  const {
-    docNo,
-    version,
-    preparedBy,
-    reviewedBy,
-    approvedBy,
-    departmentName,
-    name,
-    skills,
-  }: RequestBody = await request.json();
-
   try {
+    const { metadata, name, skills }: RequestBody = await request.json();
+
     await connectDB();
 
     const result = new SkillMatrix({
-      metadata: {
-        docNo,
-        version,
-        preparedBy,
-        reviewedBy,
-        approvedBy,
-        departmentName,
-      },
+      metadata,
       name,
       skills,
     });
-    console.log("SkillMatrix document:", result);
+
     await result.save();
 
-    return new NextResponse(JSON.stringify("Submitted Form Successfully!"), {
-      status: 201,
-    });
-  } catch (err) {
-    console.error(err);
-    return new NextResponse(JSON.stringify(err), { status: 500 });
+    return NextResponse.json(result, { status: 201 });
+  } catch (error) {
+    console.error("Error saving SkillMatrix:", error);
+    return NextResponse.json(
+      { error: (error as Error).message },
+      { status: 500 }
+    );
   }
 }

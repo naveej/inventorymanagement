@@ -1,14 +1,34 @@
-import { Schema, model, models } from "mongoose";
+import mongoose, { Schema, Document, Model } from "mongoose";
+//import AutoIncrementFactory from "mongoose-sequence";
 
-export const FormMetaData = new Schema({
+// const connection = mongoose.connection;
+// const AutoIncrement = AutoIncrementFactory(connection);
+
+interface IFormMetaData {
+  docNo: string;
+  version: string;
+  preparedBy: string;
+  reviewedBy: string;
+  approvedBy: string;
+  lastUpdated: Date;
+  departmentName: string;
+}
+
+interface ISkillMatrix extends Document {
+  metadata: IFormMetaData;
+  name: string;
+  skills: string[];
+}
+
+export const FormMetaDataSchema = new Schema<IFormMetaData>({
   docNo: {
     type: String,
     required: true,
   },
   version: {
-    type: Number,
+    type: String,
     required: true,
-    default: 1,
+    default: "1",
   },
   preparedBy: {
     type: String,
@@ -32,11 +52,13 @@ export const FormMetaData = new Schema({
   },
 });
 
-const SkillMatrixSchema = new Schema({
-  metadata: FormMetaData,
+const SkillMatrixSchema = new Schema<ISkillMatrix>({
+  metadata: {
+    type: FormMetaDataSchema,
+    required: true,
+  },
   // slno: {
-  //   type: String,
-  //   required: true,
+  //   type: Number,
   //   unique: true,
   // },
   name: {
@@ -48,6 +70,12 @@ const SkillMatrixSchema = new Schema({
   },
 });
 
-const SkillMatrixModel = models.Skill || model("Skill", SkillMatrixSchema);
+// Apply the auto-increment plugin to the schema
+//SkillMatrixSchema.plugin(AutoIncrement, { inc_field: "slno" });
+
+// Check if the model already exists before defining it
+const SkillMatrixModel: Model<ISkillMatrix> =
+  mongoose.models.SkillMatrix ||
+  mongoose.model<ISkillMatrix>("SkillMatrix", SkillMatrixSchema);
 
 export default SkillMatrixModel;

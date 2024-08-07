@@ -1,6 +1,6 @@
 import { connectDB } from "@/lib/database";
 import { NextResponse } from "next/server";
-import SkillMatrix from "@/models/SkillMatrix";
+import SkillMatrix from "@/models/SkillMatrixModel";
 
 type RequestBody = {
   docNo: string;

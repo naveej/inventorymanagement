@@ -1,9 +1,9 @@
-import mongoose, { Schema, Document, Model } from "mongoose";
-import { FormMetaDataSchema } from "./SkillMatrix"; // Adjust the import path as necessary
+import mongoose, { Schema, Document } from "mongoose";
+import { MetadataSchema } from "./SkillMatrixModel";
 
 // Define an interface representing a document in MongoDB.
 interface IAssetMaintenance extends Document {
-  metadata: typeof FormMetaDataSchema;
+  metadata: typeof MetadataSchema;
   assetName: string;
   assetNo: string;
   frequencyOfMaintenance: string;
@@ -12,12 +12,13 @@ interface IAssetMaintenance extends Document {
   refNo: string;
   nextDueOn: Date;
   comments: string;
+  lastUpdated: Date;
 }
 
 // Create a Schema corresponding to the document interface.
 const AssetMaintenanceSchema = new Schema<IAssetMaintenance>({
   metadata: {
-    type: FormMetaDataSchema,
+    type: MetadataSchema,
     required: true,
   },
   assetName: {
@@ -52,9 +53,17 @@ const AssetMaintenanceSchema = new Schema<IAssetMaintenance>({
     type: String,
     required: true,
   },
+  lastUpdated: {
+    type: Date,
+    default: Date.now,
+  },
+});
+AssetMaintenanceSchema.pre("save", function (next) {
+  this.lastUpdated = new Date();
+  next();
 });
 
-const AssetMaintenance: Model<IAssetMaintenance> =
+const AssetMaintenance =
   mongoose.models.AssetMaintenance ||
   mongoose.model<IAssetMaintenance>("AssetMaintenance", AssetMaintenanceSchema);
 export default AssetMaintenance;

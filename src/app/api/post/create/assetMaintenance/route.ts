@@ -1,5 +1,5 @@
 import { connectDB } from "@/lib/database"; // Adjust the import path as necessary
-import AssetMaintenance from "@/models/AssetMaintenance"; // Adjust the import path as necessary
+import AssetMaintenance from "@/models/AssetMaintenanceModel"; // Adjust the import path as necessary
 import { NextResponse } from "next/server";
 
 type RequestBody = {
@@ -23,6 +23,8 @@ type RequestBody = {
 
 export async function POST(request: Request) {
   try {
+    const body: RequestBody = await request.json();
+
     const {
       metadata,
       assetName,
@@ -33,7 +35,24 @@ export async function POST(request: Request) {
       refNo,
       nextDueOn,
       comments,
-    }: RequestBody = await request.json();
+    } = body;
+
+    // Validate required fields
+    if (
+      !metadata ||
+      !assetName ||
+      !assetNo ||
+      !frequencyOfMaintenance ||
+      !typeOfAsset ||
+      !lastDoneAt ||
+      !refNo ||
+      !nextDueOn
+    ) {
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
 
     await connectDB();
 
@@ -47,6 +66,7 @@ export async function POST(request: Request) {
       refNo,
       nextDueOn,
       comments,
+      lastUpdated: new Date(),
     });
 
     await result.save();
@@ -56,7 +76,7 @@ export async function POST(request: Request) {
     console.error("Error saving AssetMaintenance:", {
       message: (error as Error).message,
       stack: (error as Error).stack,
-      requestBody: request.body,
+      requestBody: await request.json(),
     });
     return NextResponse.json(
       { error: (error as Error).message },

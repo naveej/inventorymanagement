@@ -1,13 +1,15 @@
 "use client";
 import Sidebar from "@/components/ui/Sidebar";
-import Navbar from "@/components/ui/navbar";
-import Link from "next/link";
 
 export default function Home() {
   return (
     <>
       <div className="w-full min-h-screen">
-        <Sidebar />
+        <div className="flex flex-col items-center justify-center">
+          <span className="text-3xl pt-5 py-4 font-bold">
+            Welcome , <span className="font-light">User</span>
+          </span>
+        </div>
       </div>
     </>
   );

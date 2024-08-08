@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import Navbar from "./ui/navbar";
 import Sidebar from "./ui/Sidebar";
+import Navbar from "./ui/navbar";
 
 type Props = {
   children: React.ReactNode;
@@ -9,13 +9,17 @@ type Props = {
 
 const Provider = ({ children }: Props) => {
   return (
-    <main>
-      {/* Header */}
+    <main className="flex flex-col h-screen">
+      {/* Nav */}
       <Navbar />
 
-      {children}
+      <div className="flex flex-1">
+        {/* -- Sidebar -- */}
+        <Sidebar />
 
-      {/* Footer */}
+        {/* Main content */}
+        <div className="flex-1">{children}</div>
+      </div>
     </main>
   );
 };

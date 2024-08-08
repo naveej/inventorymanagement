@@ -26,7 +26,7 @@ const Navbar = () => {
                   href="/Skillmatrixform"
                   className="block px-4 py-2 text-white hover:bg-gray-700 whitespace-nowrap"
                 >
-                  Submit Form
+                  Skill <br></br> Matrix
                 </Link>
                 <Link
                   href="/AssetMaintenanceform"

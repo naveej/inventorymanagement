@@ -18,11 +18,11 @@ interface Asset {
   assetNo: string;
   frequencyOfMaintenance: string;
   typeOfAsset: string;
-  lastDoneAt: Date;
+  lastDoneAt: string;
   refNo: string;
-  nextDueOn: Date;
+  nextDueOn: string;
   comments: string;
-  lastUpdated: Date;
+  lastUpdated: string;
 }
 
 async function getData(): Promise<Asset[]> {
@@ -43,11 +43,14 @@ const DemoPage: React.FC = () => {
     async function fetchData() {
       try {
         const data = await getData();
-        const formattedLastUpdated = new Date(
-          data[0]?.lastUpdated
-        ).toLocaleDateString();
-        setData(data);
-        setLastUpdated(formattedLastUpdated);
+        const formattedData = data.map((item) => ({
+          ...item,
+          lastDoneAt: new Date(item.lastDoneAt).toLocaleDateString(),
+          nextDueOn: new Date(item.nextDueOn).toLocaleDateString(),
+          lastUpdated: new Date(item.lastUpdated).toLocaleDateString(),
+        }));
+        setData(formattedData);
+        setLastUpdated(formattedData[0]?.lastUpdated);
       } catch (error) {
         setError((error as Error).message);
       } finally {

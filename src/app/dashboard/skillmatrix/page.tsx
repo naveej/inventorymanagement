@@ -1,5 +1,6 @@
 "use client";
-import { SkillMatrixForm } from "./columns";
+//import { SkillMatrixForm } from "./columns";
+
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/ui/data-table";
 import { useEffect, useState } from "react";
@@ -15,6 +16,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { ExtendedColumnDef } from "@/app/_types/utility.types";
+
+interface SkillMatrixForm {
+  _id: string;
+  docNo: string;
+  version: string;
+  preparedBy: string;
+  reviewedBy: string;
+  approvedBy: string;
+  departmentName: string;
+  name: string;
+  skills: string[];
+  lastUpdated: string;
+  [key: string]: any;
+}
 
 // Function to fetch data
 async function fetchData(): Promise<SkillMatrixForm[]> {
@@ -24,6 +40,7 @@ async function fetchData(): Promise<SkillMatrixForm[]> {
   }
   const data = await response.json();
   return data.map((item: any) => ({
+    _id: item._id,
     docNo: item.metadata.docNo,
     version: item.metadata.version,
     preparedBy: item.metadata.preparedBy,
@@ -38,28 +55,83 @@ async function fetchData(): Promise<SkillMatrixForm[]> {
 
 export default function DemoPage() {
   const [data, setData] = useState<SkillMatrixForm[]>([]);
-  const [columns, setColumns] = useState<ColumnDef<SkillMatrixForm>[]>([]);
+  const [columns, setColumns] = useState<ExtendedColumnDef<SkillMatrixForm>[]>(
+    []
+  );
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  console.log("DATA: 🔥🔥", data);
 
   useEffect(() => {
     const getData = async () => {
       try {
         const result = await fetchData();
         console.log("RESULT:", result);
-        setData(result);
+
+        const updatedResult = result.map((item) => {
+          const updatedSkill = item.skills.map((skill, index) => ({
+            [`skill${index}`]: skill,
+          }));
+
+          return {
+            ...item,
+            ...updatedSkill.reduce((acc, cur) => ({ ...acc, ...cur }), {}),
+          };
+        });
+
+        setData(updatedResult);
 
         // Determine the maximum number of skills in the fetched data
         const maxSkills = Math.max(...result.map((item) => item.skills.length));
 
-        // Update the columns array to reflect the fields in the SkillMatrixForm
-        const updatedColumns: ColumnDef<SkillMatrixForm>[] = [
+        const updatedColumns: ExtendedColumnDef<SkillMatrixForm>[] = [
           { accessorKey: "name", header: "Name" },
           // Dynamically generate columns for skills based on the maximum number of skills
-          ...Array.from({ length: maxSkills }, (_, i) => ({
-            accessorKey: `skills[${i}]`,
+          ...updatedResult.map((item, i) => ({
+            accessorKey: `skill${i}`,
             header: `Skill ${i + 1}`,
           })),
+          {
+            id: "actions",
+            className: "text-right",
+            cell: ({ row }) => {
+              const data = row.original;
+              return (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="h-8 w-8 p-0">
+                      <span className="sr-only">Open menu</span>
+                      <MoreHorizontal className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align="end"
+                    style={{
+                      backgroundColor: "Black",
+                      border: "1px solid #ccc",
+                      boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+                    }}
+                  >
+                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        if (data._id) {
+                          navigator.clipboard.writeText(data._id);
+                        } else {
+                          console.error("_id is undefined");
+                        }
+                      }}
+                    >
+                      Copy Entry ID
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>Update</DropdownMenuItem>
+                    <DropdownMenuItem>Delete</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              );
+            },
+          },
         ];
 
         // const updatedColumnData: SkillMatrixForm[] = result.map((row) => {
@@ -181,7 +253,7 @@ export default function DemoPage() {
             {" "}
             All skill set required for the area handled to be :{" "}
             <span className="flex flex-grow font-normal text-white">
-              Rating Rationale: 1 - beginner, 2, needs improvement, 3 - can
+              Rating Rationale: 1 - beginner, 2 - needs improvement, 3 - can
               handle independently, 4 - can train others
             </span>
           </span>

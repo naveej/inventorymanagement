@@ -35,10 +35,10 @@ const Navbar = () => {
                   Asset <br></br> Maintenance
                 </Link>
                 <Link
-                  href="/"
+                  href="/CaliberationScheduleform"
                   className="block px-4 py-2 text-white hover:bg-gray-700 whitespace-nowrap"
                 >
-                  Form 2
+                  Caliberation <br></br> Schedule
                 </Link>
                 <Link
                   href="/"
@@ -90,6 +90,11 @@ const Navbar = () => {
                 <Link href="/dashboard/assetMaintenance">
                   <span className="block px-4 py-2 text-gray-300 hover:bg-gray-700">
                     Asset Maintenance
+                  </span>
+                </Link>
+                <Link href="/dashboard/caliberation_Schedule">
+                  <span className="block px-4 py-2 text-gray-300 hover:bg-gray-700">
+                    Calibration Schedule
                   </span>
                 </Link>
               </div>

@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import Link from "next/link";
 
-const AssetMaintenanceForm = () => {
-  const [docNo, setDocNo] = useState<string>("IADO09");
+const CalibrationScheduleForm = () => {
+  const [docNo, setDocNo] = useState<string>("IADO1O");
   const [version, setVersion] = useState<string>("01");
   const [preparedBy, setPreparedBy] = useState<string>(
     "Dr Pavana Kumara B - Head-IQAC"
@@ -19,11 +19,11 @@ const AssetMaintenanceForm = () => {
     "Dr Rio D'Souza - Principal"
   );
   const [departmentName, setDepartmentName] = useState<string>("");
-  const [assetName, setAssetName] = useState<string>("");
-  const [assetNo, setAssetNo] = useState<string>("");
-  const [frequencyOfMaintenance, setFrequencyOfMaintenance] =
+  const [instrumentName, setInstrumentName] = useState<string>("");
+  const [instrumentNo, setInstrumentNo] = useState<string>("");
+  const [frequencyOfCalibration, setFrequencyOfCalibration] =
     useState<string>("");
-  const [typeOfAsset, setTypeOfAsset] = useState<string>("");
+  const [typeOfInstrument, setTypeOfInstrument] = useState<string>("");
   const [lastDoneAt, setLastDoneAt] = useState<Date>();
   const [refNo, setRefNo] = useState<string>("");
   const [nextDueOn, setNextDueOn] = useState<Date>();
@@ -43,10 +43,10 @@ const AssetMaintenanceForm = () => {
 
     const formData = {
       metadata,
-      assetName,
-      assetNo,
-      frequencyOfMaintenance,
-      typeOfAsset,
+      instrumentName,
+      instrumentNo,
+      frequencyOfCalibration,
+      typeOfInstrument,
       lastDoneAt,
       refNo,
       nextDueOn,
@@ -57,7 +57,7 @@ const AssetMaintenanceForm = () => {
 
     try {
       const result = await axios.post(
-        "/api/post/create/assetMaintenance",
+        "/api/post/create/caliberation_Schedule",
         formData
       );
       console.log("Result", result);
@@ -74,7 +74,7 @@ const AssetMaintenanceForm = () => {
   return (
     <div className="w-full h-full text-white flex p-4 justify-center items-center flex-col bg-gray-900">
       <div className="text-6xl font-bold text-gray-300">
-        Asset Maintenance Form
+        Calibration Schedule Form
       </div>
 
       <form
@@ -179,63 +179,69 @@ const AssetMaintenanceForm = () => {
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="assetName" className="text-slate-300 font-semibold">
-              Asset Name
+            <label
+              htmlFor="instrumentName"
+              className="text-slate-300 font-semibold"
+            >
+              Instrument Name
             </label>
             <Input
               type="text"
-              id="assetName"
-              placeholder="Asset Name"
-              value={assetName}
-              onChange={(e) => setAssetName(e.target.value)}
-              className="p-2 rounded text-slate-600 border-gray-300"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label htmlFor="assetNo" className="text-slate-300 font-semibold">
-              Asset No
-            </label>
-            <Input
-              type="text"
-              id="assetNo"
-              placeholder="Asset No"
-              value={assetNo}
-              onChange={(e) => setAssetNo(e.target.value)}
+              id="instrumentName"
+              placeholder="Instrument Name"
+              value={instrumentName}
+              onChange={(e) => setInstrumentName(e.target.value)}
               className="p-2 rounded text-slate-600 border-gray-300"
             />
           </div>
 
           <div className="flex flex-col gap-2">
             <label
-              htmlFor="frequencyOfMaintenance"
+              htmlFor="instrumentNo"
               className="text-slate-300 font-semibold"
             >
-              Frequency of Maintenance
+              Instrument No
             </label>
             <Input
               type="text"
-              id="frequencyOfMaintenance"
-              placeholder="Frequency of Maintenance"
-              value={frequencyOfMaintenance}
-              onChange={(e) => setFrequencyOfMaintenance(e.target.value)}
+              id="instrumentNo"
+              placeholder="Instrument No"
+              value={instrumentNo}
+              onChange={(e) => setInstrumentNo(e.target.value)}
               className="p-2 rounded text-slate-600 border-gray-300"
             />
           </div>
 
           <div className="flex flex-col gap-2">
             <label
-              htmlFor="typeOfAsset"
+              htmlFor="frequencyOfCalibration"
               className="text-slate-300 font-semibold"
             >
-              Type of Asset (Internal/External)
+              Frequency of Calibration
             </label>
             <Input
               type="text"
-              id="typeOfAsset"
-              placeholder="Type of Asset (Internal/External)"
-              value={typeOfAsset}
-              onChange={(e) => setTypeOfAsset(e.target.value)}
+              id="frequencyOfCalibration"
+              placeholder="Frequency of Calibration"
+              value={frequencyOfCalibration}
+              onChange={(e) => setFrequencyOfCalibration(e.target.value)}
+              className="p-2 rounded text-slate-600 border-gray-300"
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label
+              htmlFor="typeOfInstrument"
+              className="text-slate-300 font-semibold"
+            >
+              Type of Instrument (Internal/External)
+            </label>
+            <Input
+              type="text"
+              id="typeOfInstrument"
+              placeholder="Type of Instrument (Internal/External)"
+              value={typeOfInstrument}
+              onChange={(e) => setTypeOfInstrument(e.target.value)}
               className="p-2 rounded text-slate-600 border-gray-300"
             />
           </div>
@@ -317,4 +323,4 @@ const AssetMaintenanceForm = () => {
   );
 };
 
-export default AssetMaintenanceForm;
+export default CalibrationScheduleForm;

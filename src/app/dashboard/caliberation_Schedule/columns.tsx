@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 // This type is used to define the shape of our data.
-export type Asset = {
+export type CalibrationSchedule = {
   _id: string;
   metadata: {
     docNo: string;
@@ -24,10 +24,10 @@ export type Asset = {
     approvedBy: string;
     departmentName: string;
   }; // Adjust this type according to MetadataSchema
-  assetName: string;
-  assetNo: string;
-  frequencyOfMaintenance: string;
-  typeOfAsset: string;
+  instrumentName: string;
+  instrumentNo: string;
+  frequencyOfCalibration: string;
+  typeOfInstrument: string;
   lastDoneAt: string;
   refNo: string;
   nextDueOn: string;
@@ -35,26 +35,26 @@ export type Asset = {
   lastUpdated: string;
 };
 
-export const columns: ColumnDef<Asset, unknown>[] = [
+export const columns: ColumnDef<CalibrationSchedule, unknown>[] = [
   {
-    accessorKey: "assetName",
-    header: "Asset Name",
-    cell: ({ row }) => <span>{row.original.assetName}</span>,
+    accessorKey: "instrumentName",
+    header: "Instrument Name",
+    cell: ({ row }) => <span>{row.original.instrumentName}</span>,
   },
   {
-    accessorKey: "assetNo",
-    header: "Asset No",
-    cell: ({ row }) => <span>{row.original.assetNo}</span>,
+    accessorKey: "instrumentNo",
+    header: "Instrument No",
+    cell: ({ row }) => <span>{row.original.instrumentNo}</span>,
   },
   {
-    accessorKey: "frequencyOfMaintenance",
-    header: "Frequency of Maintenance",
-    cell: ({ row }) => <span>{row.original.frequencyOfMaintenance}</span>,
+    accessorKey: "frequencyOfCalibration",
+    header: "Frequency of Calibration",
+    cell: ({ row }) => <span>{row.original.frequencyOfCalibration}</span>,
   },
   {
-    accessorKey: "typeOfAsset",
+    accessorKey: "typeOfInstrument",
     header: "Internal / External",
-    cell: ({ row }) => <span>{row.original.typeOfAsset}</span>,
+    cell: ({ row }) => <span>{row.original.typeOfInstrument}</span>,
   },
   {
     accessorKey: "lastDoneAt",

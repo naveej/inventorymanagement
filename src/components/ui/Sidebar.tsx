@@ -67,17 +67,21 @@ const Sidebar = () => {
             <Link href="/dashboard/skillmatrix">Skill Matrix</Link>
             <br></br>
             <Link href="/dashboard/assetMaintenance">Asset Maintenance</Link>
+            <br></br>
+            <Link href="/dashboard/caliberation_Schedule">
+              Caliberation Schedule
+            </Link>
             <nav className="mt-4">
               <h3 className="text-lg font-medium text-white">Forms</h3>
               <ul className="mt-2 space-y-2">
                 <li>
                   <Link href="/Skillmatrixform">
-                    <span className="flex items-center px-4 py-2 text-gray-700 bg-gray-100 rounded-md dark:bg-gray-800 dark:text-gray-200">
+                    <div className="flex items-center px-4 py-2 text-gray-600 transition-colors duration-300 transform rounded-md dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700">
                       <BookText />
                       <span className="mx-4 font-medium">
-                        Skill Matrix Submit
+                        Skill Matrix Form
                       </span>
-                    </span>
+                    </div>
                   </Link>
                 </li>
                 <li>
@@ -86,6 +90,16 @@ const Sidebar = () => {
                       <BookText />
                       <span className="mx-4 font-medium">
                         Asset Maintenance Form
+                      </span>
+                    </div>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/CaliberationScheduleform">
+                    <div className="flex items-center px-4 py-2 text-gray-600 transition-colors duration-300 transform rounded-md dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700">
+                      <BookText />
+                      <span className="mx-4 font-medium">
+                        Caliberation Schedule Form
                       </span>
                     </div>
                   </Link>

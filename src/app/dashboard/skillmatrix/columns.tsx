@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 // Define the shape of the SkillMatrixForm data
 export type SkillMatrixForm = {
+  _id: string;
   docNo: string;
   version: string;
   preparedBy: string;

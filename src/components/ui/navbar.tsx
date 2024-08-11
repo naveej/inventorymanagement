@@ -41,10 +41,10 @@ const Navbar = () => {
                   Caliberation <br></br> Schedule
                 </Link>
                 <Link
-                  href="/"
+                  href="/NCOutputform"
                   className="block px-4 py-2 text-white hover:bg-gray-700 whitespace-nowrap"
                 >
-                  Form 3
+                  NC <br></br> Output
                 </Link>
                 <Link
                   href="/"

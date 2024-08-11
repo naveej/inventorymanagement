@@ -104,6 +104,16 @@ const Sidebar = () => {
                     </div>
                   </Link>
                 </li>
+                <li>
+                  <Link href="/NCOutputform">
+                    <div className="flex items-center px-4 py-2 text-gray-600 transition-colors duration-300 transform rounded-md dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700">
+                      <BookText />
+                      <span className="mx-4 font-medium">
+                        NC Output Form
+                      </span>
+                    </div>
+                  </Link>
+                </li>
               </ul>
               <h3 className="mt-6 text-lg font-medium text-white">General</h3>
               <ul className="mt-2 space-y-2">

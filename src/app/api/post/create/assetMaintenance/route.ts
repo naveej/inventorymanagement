@@ -22,38 +22,45 @@ type RequestBody = {
 };
 
 export async function POST(request: Request) {
+  let body: RequestBody;
+
   try {
-    const body: RequestBody = await request.json();
+    body = await request.json();
+  } catch (error) {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
 
-    const {
-      metadata,
-      assetName,
-      assetNo,
-      frequencyOfMaintenance,
-      typeOfAsset,
-      lastDoneAt,
-      refNo,
-      nextDueOn,
-      comments,
-    } = body;
+  const {
+    metadata,
+    assetName,
+    assetNo,
+    frequencyOfMaintenance,
+    typeOfAsset,
+    lastDoneAt,
+    refNo,
+    nextDueOn,
+    comments,
+  } = body;
 
-    // Validate required fields
-    if (
-      !metadata ||
-      !assetName ||
-      !assetNo ||
-      !frequencyOfMaintenance ||
-      !typeOfAsset ||
-      !lastDoneAt ||
-      !refNo ||
-      !nextDueOn
-    ) {
-      return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 }
-      );
-    }
+  // Validate required fields
+  if (
+    !metadata ||
+    !assetName ||
+    !assetNo ||
+    !frequencyOfMaintenance ||
+    !typeOfAsset ||
+    !lastDoneAt ||
+    !refNo ||
+    !nextDueOn ||
+    !comments
+  ) {
+    return NextResponse.json(
+      { error: "Missing required fields" },
+      { status: 400 }
+    );
+  }
 
+  try {
     await connectDB();
 
     const result = new AssetMaintenance({
@@ -76,7 +83,7 @@ export async function POST(request: Request) {
     console.error("Error saving AssetMaintenance:", {
       message: (error as Error).message,
       stack: (error as Error).stack,
-      requestBody: await request.json(),
+      requestBody: body,
     });
     return NextResponse.json(
       { error: (error as Error).message },

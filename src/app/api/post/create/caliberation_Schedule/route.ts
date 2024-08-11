@@ -46,7 +46,8 @@ export async function POST(request: Request) {
       !typeOfInstrument ||
       !lastDoneAt ||
       !refNo ||
-      !nextDueOn
+      !nextDueOn ||
+      !comments
     ) {
       return NextResponse.json(
         { error: "Missing required fields" },

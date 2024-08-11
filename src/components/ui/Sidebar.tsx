@@ -71,6 +71,8 @@ const Sidebar = () => {
             <Link href="/dashboard/caliberation_Schedule">
               Caliberation Schedule
             </Link>
+            <br></br>
+            <Link href="/dashboard/ncOutput">NC Output</Link>
             <nav className="mt-4">
               <h3 className="text-lg font-medium text-white">Forms</h3>
               <ul className="mt-2 space-y-2">
@@ -108,9 +110,7 @@ const Sidebar = () => {
                   <Link href="/NCOutputform">
                     <div className="flex items-center px-4 py-2 text-gray-600 transition-colors duration-300 transform rounded-md dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700">
                       <BookText />
-                      <span className="mx-4 font-medium">
-                        NC Output Form
-                      </span>
+                      <span className="mx-4 font-medium">NC Output Form</span>
                     </div>
                   </Link>
                 </li>

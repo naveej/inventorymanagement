@@ -21,11 +21,15 @@ const SkillMatrixForm = () => {
   const [departmentName, setDepartmentName] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [skills, setSkills] = useState<string[]>([""]);
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    if (!name || !skills) {
+      setError("Please fill out all required fields.");
+      return;
+    }
     const metadata = {
       docNo,
       version,
@@ -46,8 +50,16 @@ const SkillMatrixForm = () => {
     try {
       const result = await axios.post("/api/post/create/skillMatrix", formData);
       console.log("Result", result);
+      setError(null); // Clear any previous errors
     } catch (error) {
-      console.error("Error submitting form", error);
+      if (axios.isAxiosError(error)) {
+        console.error("Axios error message:", error.message);
+        console.error("Axios error response:", error.response);
+        setError(error.response?.data?.error || "An error occurred");
+      } else {
+        console.error("Unexpected error:", error);
+        setError("An unexpected error occurred");
+      }
     } finally {
       setLoading(false);
     }
@@ -287,6 +299,8 @@ const SkillMatrixForm = () => {
             Add Skill
           </Button>
         </div>
+
+        {error && <div className="text-red-500">{error}</div>}
 
         <Button
           type="submit"

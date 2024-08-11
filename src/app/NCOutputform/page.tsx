@@ -7,7 +7,7 @@ import axios from "axios";
 import Link from "next/link";
 
 const NCOutputForm = () => {
-  const [docNo, setDocNo] = useState<string>("IADO09");
+  const [docNo, setDocNo] = useState<string>("IAD011");
   const [version, setVersion] = useState<string>("01");
   const [preparedBy, setPreparedBy] = useState<string>(
     "Dr Pavana Kumara B - Head-IQAC"
@@ -19,18 +19,35 @@ const NCOutputForm = () => {
     "Dr Rio D'Souza - Principal"
   );
   const [departmentName, setDepartmentName] = useState<string>("");
-  const [nCDetails, setNCDetails] = useState<string>("");
+  const [ncDetails, setncDetails] = useState<string>("");
   const [reason, setReason] = useState<string>("");
-  const [actionTaken, setActionTaken] =
-    useState<string>("");
+  const [actionTaken, setActionTaken] = useState<string>("");
   const [responsibility, setResponsibility] = useState<string>("");
-  const [ncApprovedBy, setncApprovedBy] = useState<string>('');
+  const [ncApprovedBy, setncApprovedBy] = useState<string>("");
   const [targetDate, setTargetDate] = useState<Date>();
-  const [status, setStatus] = useState<string>('pending');
+  const [status, setStatus] = useState<string>("Pending");
   const [comments, setComments] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // Validate required fields
+    if (
+      !departmentName ||
+      !ncDetails ||
+      !reason ||
+      !actionTaken ||
+      !responsibility ||
+      !ncApprovedBy ||
+      !targetDate ||
+      !status ||
+      !comments
+    ) {
+      setError("Please fill out all required fields.");
+      return;
+    }
 
     const metadata = {
       docNo,
@@ -42,41 +59,40 @@ const NCOutputForm = () => {
     };
 
     const formData = {
-        metadata,
-        date: new Date(),
-        nCDetails,
-        reason,
-        actionTaken,
-        responsibility,
-        ncApprovedBy,
-        targetDate,
-        status,
-        comments,
+      metadata,
+      ncDetails,
+      reason,
+      actionTaken,
+      responsibility,
+      ncApprovedBy,
+      targetDate,
+      status,
+      comments,
     };
 
     console.log("Client before Send", formData);
-
+    setLoading(true);
     try {
-      const result = await axios.post(
-        "/api/post/create/ncOutput",
-        formData
-      );
+      const result = await axios.post("/api/post/create/ncOutput", formData);
       console.log("Result", result);
+      setError(null); // Clear any previous errors
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error("Axios error message:", error.message);
         console.error("Axios error response:", error.response);
+        setError(error.response?.data?.error || "An error occurred");
       } else {
         console.error("Unexpected error:", error);
+        setError("An unexpected error occurred");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="w-full h-full text-white flex p-4 justify-center items-center flex-col bg-gray-900">
-      <div className="text-6xl font-bold text-gray-300">
-        NC Output Form
-      </div>
+      <div className="text-6xl font-bold text-gray-300">NC Output Form</div>
 
       <form
         onSubmit={handleSubmit}
@@ -187,8 +203,8 @@ const NCOutputForm = () => {
               type="text"
               id="ncDetails"
               placeholder="NC Details"
-              value={nCDetails}
-              onChange={(e) => setNCDetails(e.target.value)}
+              value={ncDetails}
+              onChange={(e) => setncDetails(e.target.value)}
               className="p-2 rounded text-slate-600 border-gray-300"
             />
           </div>
@@ -259,7 +275,10 @@ const NCOutputForm = () => {
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="targetDate" className="text-slate-300 font-semibold">
+            <label
+              htmlFor="targetDate"
+              className="text-slate-300 font-semibold"
+            >
               Target Date
             </label>
             <Input
@@ -301,11 +320,14 @@ const NCOutputForm = () => {
           </div>
         </div>
 
+        {error && <div className="text-red-500">{error}</div>}
+
         <Button
-          className="border-2 text-white/70 bg-gray-900/70 w-1/2 mx-auto justify-center hover:bg-gray-700 transition duration-300 ease-in-out mt-4"
           type="submit"
+          disabled={loading}
+          className="mt-6 border-2 w-1/2 mx-auto text-white bg-blue-900 hover:bg-blue-600 transition duration-300 ease-in-out rounded p-2"
         >
-          Submit
+          {loading ? "Submitting..." : "Submit"}
         </Button>
       </form>
 

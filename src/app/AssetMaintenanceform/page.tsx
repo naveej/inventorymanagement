@@ -7,7 +7,7 @@ import axios from "axios";
 import Link from "next/link";
 
 const AssetMaintenanceForm = () => {
-  const [docNo, setDocNo] = useState<string>("IADO09");
+  const [docNo, setDocNo] = useState<string>("IAD009");
   const [version, setVersion] = useState<string>("01");
   const [preparedBy, setPreparedBy] = useState<string>(
     "Dr Pavana Kumara B - Head-IQAC"
@@ -28,10 +28,27 @@ const AssetMaintenanceForm = () => {
   const [refNo, setRefNo] = useState<string>("");
   const [nextDueOn, setNextDueOn] = useState<Date>();
   const [comments, setComments] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    // Validate required fields
+    if (
+      !departmentName ||
+      !assetName ||
+      !assetNo ||
+      !frequencyOfMaintenance ||
+      !typeOfAsset ||
+      !lastDoneAt ||
+      !refNo ||
+      !nextDueOn ||
+      !comments
+    ) {
+      setError("Please fill out all required fields.");
+      return;
+    }
     const metadata = {
       docNo,
       version,
@@ -54,20 +71,25 @@ const AssetMaintenanceForm = () => {
     };
 
     console.log("Client before Send", formData);
-
+    setLoading(true);
     try {
       const result = await axios.post(
         "/api/post/create/assetMaintenance",
         formData
       );
       console.log("Result", result);
+      setError(null); // Clear any previous errors
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error("Axios error message:", error.message);
         console.error("Axios error response:", error.response);
+        setError(error.response?.data?.error || "An error occurred");
       } else {
         console.error("Unexpected error:", error);
+        setError("An unexpected error occurred");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -300,11 +322,14 @@ const AssetMaintenanceForm = () => {
           </div>
         </div>
 
+        {error && <div className="text-red-500">{error}</div>}
+
         <Button
-          className="border-2 text-white/70 bg-gray-900/70 w-1/2 mx-auto justify-center hover:bg-gray-700 transition duration-300 ease-in-out mt-4"
           type="submit"
+          disabled={loading}
+          className="mt-6 border-2 w-1/2 mx-auto text-white bg-blue-900 hover:bg-blue-600 transition duration-300 ease-in-out rounded p-2"
         >
-          Submit
+          {loading ? "Submitting..." : "Submit"}
         </Button>
       </form>
 

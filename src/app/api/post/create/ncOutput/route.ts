@@ -1,6 +1,6 @@
 import { connectDB } from "@/lib/database"; // Adjust the import path as necessary
 import NCOutput from "@/models/NCOutputModel"; // Adjust the import path as necessary
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server"; // Ensure Request is imported
 
 type RequestBody = {
   metadata: {
@@ -11,52 +11,56 @@ type RequestBody = {
     approvedBy: string;
     departmentName: string;
   };
-  date: Date
   ncDetails: string;
   reason: string;
   actionTaken: string;
   responsibility: string;
-  approvedBy: string;
+  ncApprovedBy: string;
   targetDate: Date;
   status: string;
   comments: string;
 };
 
 export async function POST(request: Request) {
+  let body: RequestBody;
+
   try {
-    const body: RequestBody = await request.json();
+    body = await request.json();
+  } catch (error) {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
 
-    const {
-        metadata,
-        date,
-        ncDetails,
-        reason,
-        actionTaken,
-        responsibility,
-        approvedBy,
-        targetDate,
-        status,
-        comments,
-    } = body;
+  const {
+    metadata,
+    ncDetails,
+    reason,
+    actionTaken,
+    responsibility,
+    ncApprovedBy,
+    targetDate,
+    status,
+    comments,
+  } = body;
 
-    // Validate required fields
-    if (
-      !metadata ||
-      !ncDetails ||
-      !reason ||
-      !actionTaken ||
-      !responsibility ||
-      !approvedBy ||
-      !targetDate ||
-      !status||
-      !comments
-    ) {
-      return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 }
-      );
-    }
+  // Validate required fields
+  if (
+    !metadata ||
+    !ncDetails ||
+    !reason ||
+    !actionTaken ||
+    !responsibility ||
+    !ncApprovedBy ||
+    !targetDate ||
+    !status ||
+    !comments
+  ) {
+    return NextResponse.json(
+      { error: "Missing required fields" },
+      { status: 400 }
+    );
+  }
 
+  try {
     await connectDB();
 
     const result = new NCOutput({
@@ -66,7 +70,7 @@ export async function POST(request: Request) {
       reason,
       actionTaken,
       responsibility,
-      approvedBy,
+      ncApprovedBy,
       targetDate,
       status,
       comments,
@@ -80,7 +84,7 @@ export async function POST(request: Request) {
     console.error("Error saving NCOutput:", {
       message: (error as Error).message,
       stack: (error as Error).stack,
-      requestBody: await request.json(),
+      requestBody: body,
     });
     return NextResponse.json(
       { error: (error as Error).message },

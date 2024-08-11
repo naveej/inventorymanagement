@@ -97,6 +97,11 @@ const Navbar = () => {
                     Calibration Schedule
                   </span>
                 </Link>
+                <Link href="/dashboard/ncOutput">
+                  <span className="block px-4 py-2 text-gray-300 hover:bg-gray-700">
+                    NC Output
+                  </span>
+                </Link>
               </div>
             )}
           </div>

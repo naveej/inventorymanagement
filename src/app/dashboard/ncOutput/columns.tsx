@@ -29,7 +29,7 @@ export type NCOutput = {
   reason: string;
   actionTaken: string;
   responsibility: string;
-  approvedBy: string;
+  ncApprovedBy: string;
   targetDate: string;
   status: string;
   comments: string;
@@ -40,7 +40,9 @@ export const columns: ColumnDef<NCOutput, unknown>[] = [
   {
     accessorKey: "date",
     header: "Date",
-    cell: ({ row }) => <span>{new Date(row.original.date).toLocaleDateString()}</span>,
+    cell: ({ row }) => (
+      <span>{new Date(row.original.date).toLocaleDateString()}</span>
+    ),
   },
   {
     accessorKey: "ncDetails",
@@ -60,14 +62,12 @@ export const columns: ColumnDef<NCOutput, unknown>[] = [
   {
     accessorKey: "responsibility",
     header: "Responsibility",
-    cell: ({ row }) => (
-      <span>{(row.original.responsibility)}</span>
-    ),
+    cell: ({ row }) => <span>{row.original.responsibility}</span>,
   },
   {
     accessorKey: "ncApprovedBy",
     header: "Approved By",
-    cell: ({ row }) => <span>{row.original.approvedBy}</span>,
+    cell: ({ row }) => <span>{row.original.ncApprovedBy}</span>,
   },
   {
     accessorKey: "targetDate",
@@ -76,8 +76,9 @@ export const columns: ColumnDef<NCOutput, unknown>[] = [
       <span>{new Date(row.original.targetDate).toLocaleDateString()}</span>
     ),
   },
-  {accessorKey: 'status',
-    header: 'Status',
+  {
+    accessorKey: "status",
+    header: "Status",
     cell: ({ row }) => <span>{row.original.status}</span>,
   },
   {

@@ -9,7 +9,7 @@ interface INCOutput extends Document {
   reason: string;
   actionTaken: string;
   responsibility: string;
-  approvedBy: string;
+  ncApprovedBy: string;
   targetDate: Date;
   status: string;
   comments: string;
@@ -24,7 +24,7 @@ const NCOutputSchema = new Schema<INCOutput>({
   },
   date: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   ncDetails: {
     type: String,
@@ -42,7 +42,7 @@ const NCOutputSchema = new Schema<INCOutput>({
     type: String,
     required: true,
   },
-  approvedBy: {
+  ncApprovedBy: {
     type: String,
     required: true,
   },

@@ -6,7 +6,7 @@ import Image from "next/image";
 import logo from "../../assets/logo.png";
 
 interface NCOutput {
-    _id: string;
+  _id: string;
   metadata: {
     docNo: string;
     version: string;
@@ -20,7 +20,7 @@ interface NCOutput {
   reason: string;
   actionTaken: string;
   responsibility: string;
-  approvedBy: string;
+  ncApprovedBy: string;
   targetDate: string;
   status: string;
   comments: string;

@@ -2,8 +2,28 @@
 import React from "react";
 import { motion } from "framer-motion";
 import Link from "next/dist/client/link";
+import useUserStore from "@/store/useUserStore";
+import { type userTypes } from "@/store/useUserStore";
 
 const Login = () => {
+  const { setUser, setIsAdmin } = useUserStore();
+
+  // const handleLogin = async () => {
+  //   const result = await fetch("./some/login/path")
+  //   const user: userTypes = {
+  //     name: result?.name || ,
+  //     registerNo: result?.regno,
+  //     email: result?.email,
+  //     role: result?.role,
+  //   }
+
+  //   // After Successful login, save user to Zustand store
+  //   setUser(user);
+  //   if(user.role == "admin"){
+  //     setIsAdmin(true)
+  //   }
+  // };
+
   return (
     <section className="bg-gray-900">
       <div className="container flex items-center justify-center min-h-screen px-4 mx-auto">

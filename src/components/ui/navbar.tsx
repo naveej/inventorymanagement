@@ -1,11 +1,13 @@
 import { useState } from "react";
 import Link from "next/link";
+import { ModeToggle } from "@/components//ui/modeTogglebutton"; // Adjust the import path as necessary
 
 const Navbar = () => {
   const [isFormsOpen, setIsFormsOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
+
   return (
     <nav className="bg-gray-900 p-4 border border-gray-600">
       <div className="container mx-auto flex justify-between items-center">
@@ -105,6 +107,7 @@ const Navbar = () => {
               </div>
             )}
           </div>
+          <ModeToggle /> {/* Add the ModeToggle component here */}
         </div>
       </div>
     </nav>

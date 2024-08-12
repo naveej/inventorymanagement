@@ -1,6 +1,5 @@
 "use client";
-import Sidebar from "@/components/ui/Sidebar";
-import TestForm from "./forms/TestForm/page";
+import NCOutputform from "./forms/NC-Outputform/page";
 
 export default function Home() {
   return (
@@ -14,8 +13,7 @@ export default function Home() {
     //   </div>
     // </>
     <div className="max-w-3xl mx-auto p-10">
-      <TestForm />
-      <div className="text-white font-bold">hello</div>
+      <NCOutputform />
     </div>
   );
 }

@@ -15,6 +15,7 @@ export default function Home() {
     // </>
     <div className="max-w-3xl mx-auto p-10">
       <TestForm />
+      <div className="text-white font-bold">hello</div>
     </div>
   );
 }

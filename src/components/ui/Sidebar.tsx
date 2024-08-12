@@ -10,6 +10,7 @@ import {
   Settings,
   User,
 } from "lucide-react";
+import { ModeToggle } from "./modeTogglebutton";
 
 const Sidebar = () => {
   return (
@@ -151,6 +152,7 @@ const Sidebar = () => {
                   <span className="mx-4 font-medium">Categories</span>
                 </Link>
               </li>
+              <ModeToggle />
             </ul>
           </nav>
         </div>

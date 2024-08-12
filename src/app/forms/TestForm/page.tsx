@@ -19,6 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { toast } from "sonner"; // Import sonnar
+import { motion } from "framer-motion";
 
 // Define the form schema using zod
 const formSchema = z.object({
@@ -106,12 +107,28 @@ const TestForm = () => {
   };
   return (
     <div className="w-full h-full flex p-4 justify-center items-center flex-col">
-      <div className="text-6xl font-bold">NC Output Form</div>
+      <motion.div
+        className="text-6xl font-bold"
+        initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        transition={{
+          duration: 0.7,
+          ease: "easeInOut",
+        }}
+      >
+        NC Output Form
+      </motion.div>
 
       <Form {...form}>
-        <form
+        <motion.form
           onSubmit={form.handleSubmit(onSubmit)}
           className="min-w-[680px] px-4 py-4 flex flex-col gap-4 mt-8 p-4 rounded-lg border-solid border-2 border-current"
+          initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{
+            duration: 0.5,
+            ease: "easeInOut",
+          }}
         >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <FormField
@@ -330,11 +347,11 @@ const TestForm = () => {
           <Button
             type="submit"
             disabled={form.formState.isSubmitting}
-            className="mt-6 border-2 w-1/2 mx-auto text-white bg-blue-900 hover:bg-blue-600 transition duration-300 ease-in-out rounded p-2"
+            className="mt-6 border-2 rounded-2xl  w-1/2 mx-auto text-white bg-blue-900 hover:bg-blue-600 transition duration-300 ease-in-out p-2"
           >
             {form.formState.isSubmitting ? "Submitting..." : "Submit"}
           </Button>
-        </form>
+        </motion.form>
       </Form>
 
       <div className="mt-4">

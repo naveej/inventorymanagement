@@ -77,8 +77,8 @@ const DemoPage: React.FC = () => {
         NC Output
       </div>
       {/* --- Header --- */}
-      <div className="dark:bg-black py-4 mt-6 p-4 max-w-[93rem] px-4 mx-auto border-2 border-gray-400 rounded-lg">
-        <div className="flex text-center mb-4 border-b-2 border-gray-600 pb-2">
+      <div className="bg-slate-100 dark:bg-slate-900 py-4 mt-6 p-4 max-w-[93rem] px-4 mx-auto border-2 border-slate-600 rounded-lg">
+        <div className="flex text-center mb-4 border-b-2 border-slate-600 pb-2">
           <Image
             src={logo.src}
             alt="logo"
@@ -87,77 +87,78 @@ const DemoPage: React.FC = () => {
             className="w-20 aspect-square"
           />
           <div className="w-full">
-            <h1 className="text-2xl font-bold dark:text-white text-black">
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
               ST JOSEPH ENGINEERING COLLEGE, VAMANJOOR, MANGALURU - 575028
             </h1>
-            <h2 className="text-xl font-semibold mt-2 dark:text-white text-black">
+            <h2 className="text-xl font-semibold mt-2 text-slate-800 dark:text-slate-200">
               NC OUTPUT
             </h2>
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-4 mb-4">
-          <div className="col-span-1 border rounded-md border-gray-600 p-2">
-            <span className="text-sm font-semibold text-black dark:text-white">
+          <div className="col-span-1 border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
+            <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">
               Doc. No :{" "}
             </span>
-            <span className="text-black dark:text-white">
+            <span className="text-slate-900 dark:text-slate-100">
               {data[0]?.metadata.docNo}
             </span>
           </div>
-          <div className="col-span-1 "></div>
-          <div className="col-span-1 border border-gray-600 p-2 rounded-md">
-            <span className="text-sm font-semibold text-black dark:text-white">
+          <div className="col-span-1"></div>
+          <div className="col-span-1 border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
+            <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">
               Version No :{" "}
             </span>
-            <span className="text-black dark:text-white">
+            <span className="text-slate-900 dark:text-slate-100">
               {data[0]?.metadata.version}
             </span>
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-4 mb-6 rounded-md">
-          <div className="border border-gray-600 p-2 rounded-md">
-            <h3 className="text-lg font-semibold mb-2 text-center text-black dark:text-white">
+          <div className="border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
+            <h3 className="text-lg font-semibold mb-2 text-center text-slate-900 dark:text-slate-100">
               Prepared By
             </h3>
-            <p className="text-sm text-center text-black dark:text-white">
+            <p className="text-sm text-center text-slate-900 dark:text-slate-100">
               {data[0]?.metadata.preparedBy}
             </p>
           </div>
-          <div className="border border-gray-600 p-2 rounded-md">
-            <h3 className="text-lg font-semibold mb-2 text-center text-black dark:text-white">
+          <div className="border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
+            <h3 className="text-lg font-semibold mb-2 text-center text-slate-900 dark:text-slate-100">
               Reviewed By
             </h3>
-            <p className="text-sm text-center text-black dark:text-white">
+            <p className="text-sm text-center text-slate-900 dark:text-slate-100">
               {data[0]?.metadata.reviewedBy}
             </p>
           </div>
-          <div className="border border-gray-600 p-2 rounded-md">
-            <h3 className="text-lg font-semibold mb-2 text-center text-black dark:text-white">
+          <div className="border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
+            <h3 className="text-lg font-semibold mb-2 text-center text-slate-900 dark:text-slate-100">
               Approved By
             </h3>
-            <p className="text-sm text-center text-black dark:text-white">
+            <p className="text-sm text-center text-slate-900 dark:text-slate-100">
               {data[0]?.metadata.approvedBy}
             </p>
           </div>
         </div>
 
-        <div className="border border-gray-600 p-2 rounded-md">
-          <p className="text-sm mb-2 font-semibold text-black dark:text-white">
+        <div className="border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
+          <p className="text-sm mb-2 font-semibold text-slate-900 dark:text-slate-100">
             Last Updated On :{" "}
-            <span className="text-black dark:text-white font-mono">
+            <span className="text-slate-900 dark:text-slate-100 font-mono">
               {lastUpdated}
             </span>
           </p>
-          <p className="text-sm font-bold text-black dark:text-white">
+          <p className="text-sm font-bold text-slate-900 dark:text-slate-100">
             Name of the Department :{" "}
-            <span className="text-black dark:text-white font-normal">
+            <span className="text-slate-900 dark:text-slate-100 font-normal">
               {data[0]?.metadata.departmentName}
             </span>
           </p>
         </div>
       </div>
+
       {/* --- Database --- */}
       <div className="justify-center px-12 py-6">
         <DataTable columns={columns} data={data} />

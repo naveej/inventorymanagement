@@ -178,11 +178,11 @@ export default function DemoPage() {
 
   return (
     <>
-      <div className="text-center text-3xl font-bold py-4 text-slate-200">
+      <div className="text-center text-3xl font-bold py-4 text-black">
         Skill Matrix
       </div>
       {/* --- Header --- */}
-      <div className="bg-black mt-6 text-white p-4 max-w-[100rem] px-4 mx-auto border-2 border-gray-600 rounded-md">
+      <div className="bg-black mt-6 text-white p-4 max-w-[94rem] px-4 mx-auto border-2 border-gray-600 rounded-md">
         <div className="flex text-center mb-4 border-b-2 border-gray-600 pb-2">
           <Image
             src={logo.src}
@@ -192,10 +192,10 @@ export default function DemoPage() {
             className="w-20 aspect-square"
           />
           <div className="w-full">
-            <h1 className="text-2xl font-bold text-slate-300">
+            <h1 className="text-2xl font-bold dark:text-black">
               ST JOSEPH ENGINEERING COLLEGE, VAMANJOOR, MANGALURU - 575028
             </h1>
-            <h2 className="text-xl font-semibold mt-2 text-slate-300">
+            <h2 className="text-xl font-semibold mt-2 dark:text-black">
               PROCESS LEVEL SKILL MATRIX
             </h2>
           </div>
@@ -203,35 +203,37 @@ export default function DemoPage() {
 
         <div className="grid grid-cols-3 gap-4 mb-4">
           <div className="col-span-1 border border-gray-600 p-2">
-            <span className="text-sm font-semibold text-gray-200">
+            <span className="text-sm font-semibold text-black dark:text-white">
               Doc. No :{" "}
             </span>
-            <span className="text-white">{data[0]?.docNo}</span>
+            <span className="dark:text-black">{data[0]?.docNo}</span>
           </div>
           <div className="col-span-1 rounded-md"></div>
           <div className="col-span-1 border border-gray-600 p-2">
-            <span className="text-sm font-semibold text-gray-200">
+            <span className="text-sm font-semibold text-black dark:text-white">
               Version No :{" "}
             </span>
-            <span className="text-white">{data[0]?.version}</span>
+            <span className="text-black dark:text-white">
+              {data[0]?.version}
+            </span>
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-4 mb-6 rounded-md">
           <div className="border border-gray-600 p-2">
-            <h3 className="text-lg font-semibold mb-2 text-center text-gray-200">
+            <h3 className="text-lg font-semibold mb-2 text-center text-black dark:text-white">
               Prepared By
             </h3>
             <p className="text-sm text-center">{data[0]?.reviewedBy}</p>
           </div>
           <div className="border border-gray-600 p-2">
-            <h3 className="text-lg font-semibold mb-2 text-center text-gray-200">
+            <h3 className="text-lg font-semibold mb-2 text-center text-black dark:text-white">
               Reviewed By
             </h3>
             <p className="text-sm text-center">{data[0]?.reviewedBy}</p>
           </div>
           <div className="border border-gray-600 p-2">
-            <h3 className="text-lg font-semibold mb-2 text-center text-gray-200">
+            <h3 className="text-lg font-semibold mb-2 text-center text-black dark:text-white">
               Approved By
             </h3>
             <p className="text-sm text-center">{data[0]?.approvedBy}</p>
@@ -239,17 +241,18 @@ export default function DemoPage() {
         </div>
 
         <div className="border border-gray-600 p-2">
-          <p className="text-sm mb-2 font-semibold text-gray-200">
+          <p className="text-sm mb-2 font-semibold text-black dark:text-white">
             Last Updated On :{" "}
             <span className="text-white">{data[0]?.lastUpdated}</span>
           </p>
-          <p className="text-sm font-medium text-gray-200">
+          <p className="text-sm font-medium text-black dark:text-white">
             Name of the Department :{" "}
             <span className="text-white">{data[0]?.departmentName}</span>
           </p>
         </div>
-        <div className="border border-gray-600 p-2">
-          <span className="flex flex-grow text-gray-200 text-sm font-semibold gap-12">
+      </div>
+      {/* <div className="border border-gray-600 p-2">
+          <span className="flex flex-grow text-black dark:text-white text-sm font-semibold gap-12">
             {" "}
             All skill set required for the area handled to be :{" "}
             <span className="flex flex-grow font-normal text-white">
@@ -257,8 +260,7 @@ export default function DemoPage() {
               handle independently, 4 - can train others
             </span>
           </span>
-        </div>
-      </div>
+        </div> */}
       {/* --- Database --- */}
       <div className="justify-center px-12 py-6">
         <DataTable columns={columns} data={data} />

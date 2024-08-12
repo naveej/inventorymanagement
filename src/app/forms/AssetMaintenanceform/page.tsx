@@ -95,7 +95,7 @@ const AssetMaintenanceForm = () => {
 
   return (
     <div className="w-full h-full text-white flex p-4 justify-center items-center flex-col bg-gray-900">
-      <div className="text-6xl font-bold text-gray-300">
+      <div className="text-3xl font-bold text-black">
         Asset Maintenance Form
       </div>
 

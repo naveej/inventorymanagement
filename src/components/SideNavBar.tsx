@@ -106,6 +106,12 @@ export default function SideNavbar({}: Props) {
             variant: "ghost",
           },
           {
+            title: "Documented Information",
+            href: "/dashboard/documentedInformation",
+            icon: BookText,
+            variant: "ghost",
+          },
+          {
             title: "Home",
             href: "#",
             icon: House,

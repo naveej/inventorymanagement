@@ -1,6 +1,4 @@
 "use client";
-//import { SkillMatrixForm } from "./columns";
-
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/ui/data-table";
 import { useEffect, useState } from "react";
@@ -61,14 +59,10 @@ export default function DemoPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  console.log("DATA: 🔥🔥", data);
-
   useEffect(() => {
     const getData = async () => {
       try {
         const result = await fetchData();
-        console.log("RESULT:", result);
-
         const updatedResult = result.map((item) => {
           const updatedSkill = item.skills.map((skill, index) => ({
             [`skill${index}`]: skill,
@@ -88,7 +82,7 @@ export default function DemoPage() {
         const updatedColumns: ExtendedColumnDef<SkillMatrixForm>[] = [
           { accessorKey: "name", header: "Name" },
           // Dynamically generate columns for skills based on the maximum number of skills
-          ...updatedResult.map((item, i) => ({
+          ...Array.from({ length: maxSkills }).map((_, i) => ({
             accessorKey: `skill${i}`,
             header: `Skill ${i + 1}`,
           })),
@@ -107,14 +101,13 @@ export default function DemoPage() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent
                     align="end"
-                    style={{
-                      backgroundColor: "Black",
-                      border: "1px solid #ccc",
-                      boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-                    }}
+                    className="dark:bg-slate-800 dark:border-slate-700 bg-white border-gray-300 shadow-lg"
                   >
-                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                    <DropdownMenuLabel className="dark:text-white text-black">
+                      Actions
+                    </DropdownMenuLabel>
                     <DropdownMenuItem
+                      className="dark:hover:bg-slate-700 hover:bg-gray-100"
                       onClick={() => {
                         if (data._id) {
                           navigator.clipboard.writeText(data._id);
@@ -125,8 +118,12 @@ export default function DemoPage() {
                     >
                       Copy Entry ID
                     </DropdownMenuItem>
-                    <DropdownMenuItem>Update</DropdownMenuItem>
-                    <DropdownMenuItem>Delete</DropdownMenuItem>
+                    <DropdownMenuItem className="dark:hover:bg-slate-700 hover:bg-gray-100">
+                      Update
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="dark:hover:bg-slate-700 hover:bg-gray-100">
+                      Delete
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               );
@@ -134,30 +131,7 @@ export default function DemoPage() {
           },
         ];
 
-        // const updatedColumnData: SkillMatrixForm[] = result.map((row) => {
-        //   const spreadSkills = row.skills.reduce(
-        //     (acc: { [key: string]: string }, skill: string, index: number) => {
-        //       acc[`skill-${index + 1}`] = skill;
-        //       return acc;
-        //     },
-        //     {}
-        //   );
-
-        //   return {
-        //     docNo: row.docNo,
-        //     version: row.version,
-        //     preparedBy: row.preparedBy,
-        //     reviewedBy: row.reviewedBy,
-        //     approvedBy: row.approvedBy,
-        //     departmentName: row.departmentName,
-        //     name: row.name,
-        //     ...spreadSkills,
-        //     lastUpdated: new Date(row.lastUpdated).toLocaleDateString(),
-        //   };
-        // });
-
         setColumns(updatedColumns);
-        // setData(data);
       } catch (err) {
         setError((err as Error).message);
       } finally {
@@ -178,11 +152,11 @@ export default function DemoPage() {
 
   return (
     <>
-      <div className="text-center text-3xl font-bold py-4 text-slate-200">
+      <div className="text-center text-3xl font-bold py-4 dark:text-white text-black">
         Skill Matrix
       </div>
       {/* --- Header --- */}
-      <div className="bg-black mt-6 text-white p-4 max-w-[100rem] px-4 mx-auto border-2 border-gray-600 rounded-md">
+      <div className="bg-card dark:bg-slate-800 dark:border-slate-700 dark:text-white bg-slate-200 mt-6 text-white p-4 max-w-[88rem] mx-auto border-2 border-gray-600 rounded-md">
         <div className="flex text-center mb-4 border-b-2 border-gray-600 pb-2">
           <Image
             src={logo.src}
@@ -192,73 +166,68 @@ export default function DemoPage() {
             className="w-20 aspect-square"
           />
           <div className="w-full">
-            <h1 className="text-2xl font-bold text-slate-300">
+            <h1 className="text-2xl font-bold text-card-foreground dark:text-gray-200">
               ST JOSEPH ENGINEERING COLLEGE, VAMANJOOR, MANGALURU - 575028
             </h1>
-            <h2 className="text-xl font-semibold mt-2 text-slate-300">
+            <h2 className="text-xl font-semibold mt-2 text-card-foreground dark:text-gray-300">
               PROCESS LEVEL SKILL MATRIX
             </h2>
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-4 mb-4">
-          <div className="col-span-1 border border-gray-600 p-2">
-            <span className="text-sm font-semibold text-gray-200">
+          <div className="col-span-1 border dark:border-slate-700 border-gray-600 p-2 bg-card dark:bg-slate-900 rounded-md">
+            <span className="text-sm font-semibold text-card-foreground dark:text-gray-200">
               Doc. No :{" "}
             </span>
-            <span className="text-white">{data[0]?.docNo}</span>
+            <span>{data[0]?.docNo}</span>
           </div>
-          <div className="col-span-1 rounded-md"></div>
-          <div className="col-span-1 border border-gray-600 p-2">
-            <span className="text-sm font-semibold text-gray-200">
+          <div className="col-span-1"></div>
+          <div className="col-span-1 border dark:border-slate-700 border-gray-600 p-2 bg-card dark:bg-slate-900 rounded-md">
+            <span className="text-sm font-semibold text-card-foreground dark:text-gray-200">
               Version No :{" "}
             </span>
-            <span className="text-white">{data[0]?.version}</span>
+            <span>{data[0]?.version}</span>
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-4 mb-6 rounded-md">
-          <div className="border border-gray-600 p-2">
-            <h3 className="text-lg font-semibold mb-2 text-center text-gray-200">
+          <div className="border dark:border-slate-700 border-gray-600 p-2 bg-card dark:bg-slate-900 rounded-md">
+            <h3 className="text-lg font-semibold mb-2 text-center text-card-foreground dark:text-gray-300">
               Prepared By
             </h3>
-            <p className="text-sm text-center">{data[0]?.reviewedBy}</p>
+            <p className="text-sm text-center text-card-foreground dark:text-gray-400">
+              {data[0]?.reviewedBy}
+            </p>
           </div>
-          <div className="border border-gray-600 p-2">
-            <h3 className="text-lg font-semibold mb-2 text-center text-gray-200">
+          <div className="border dark:border-slate-700 border-gray-600 p-2 bg-card dark:bg-slate-900 rounded-md">
+            <h3 className="text-lg font-semibold mb-2 text-center text-card-foreground dark:text-gray-300">
               Reviewed By
             </h3>
-            <p className="text-sm text-center">{data[0]?.reviewedBy}</p>
+            <p className="text-sm text-center text-card-foreground dark:text-gray-400">
+              {data[0]?.reviewedBy}
+            </p>
           </div>
-          <div className="border border-gray-600 p-2">
-            <h3 className="text-lg font-semibold mb-2 text-center text-gray-200">
+          <div className="border dark:border-slate-700 border-gray-600 p-2 bg-card dark:bg-slate-900 rounded-md">
+            <h3 className="text-lg font-semibold mb-2 text-center text-card-foreground dark:text-gray-300">
               Approved By
             </h3>
-            <p className="text-sm text-center">{data[0]?.approvedBy}</p>
+            <p className="text-sm text-center text-card-foreground dark:text-gray-400">
+              {data[0]?.approvedBy}
+            </p>
           </div>
         </div>
 
-        <div className="border border-gray-600 p-2">
-          <p className="text-sm mb-2 font-semibold text-gray-200">
-            Last Updated On :{" "}
-            <span className="text-white">{data[0]?.lastUpdated}</span>
+        <div className="border dark:border-slate-700 border-gray-600 p-2 bg-card dark:bg-slate-900 rounded-md">
+          <p className="text-sm mb-2 font-semibold text-card-foreground dark:text-gray-200">
+            Last Updated On : <span>{data[0]?.lastUpdated}</span>
           </p>
-          <p className="text-sm font-medium text-gray-200">
-            Name of the Department :{" "}
-            <span className="text-white">{data[0]?.departmentName}</span>
+          <p className="text-sm font-medium text-card-foreground dark:text-gray-300">
+            Name of the Department : <span>{data[0]?.departmentName}</span>
           </p>
-        </div>
-        <div className="border border-gray-600 p-2">
-          <span className="flex flex-grow text-gray-200 text-sm font-semibold gap-12">
-            {" "}
-            All skill set required for the area handled to be :{" "}
-            <span className="flex flex-grow font-normal text-white">
-              Rating Rationale: 1 - beginner, 2 - needs improvement, 3 - can
-              handle independently, 4 - can train others
-            </span>
-          </span>
         </div>
       </div>
+
       {/* --- Database --- */}
       <div className="justify-center px-12 py-6">
         <DataTable columns={columns} data={data} />

@@ -2,6 +2,9 @@
 import React from "react";
 import Sidebar from "./ui/Sidebar";
 import Navbar from "./ui/navbar";
+import { ThemeProvider } from "./ThemeProvider"; // Adjust the import path as necessary
+import SideNavbar from "./SideNavBar";
+import { Nav } from "./ui/nav";
 
 type Props = {
   children: React.ReactNode;
@@ -9,18 +12,22 @@ type Props = {
 
 const Provider = ({ children }: Props) => {
   return (
-    <main className="flex flex-col h-screen">
-      {/* Nav */}
-      <Navbar />
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+    >
+      <main className="flex flex-col min-h-screen bg-background">
+        <div className="flex flex-1">
+          {/* -- Sidebar -- */}
+          <SideNavbar />
 
-      <div className="flex flex-1">
-        {/* -- Sidebar -- */}
-        <Sidebar />
-
-        {/* Main content */}
-        <div className="flex-1">{children}</div>
-      </div>
-    </main>
+          {/* Main content */}
+          <div className="flex-1">{children}</div>
+        </div>
+      </main>
+    </ThemeProvider>
   );
 };
 

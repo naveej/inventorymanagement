@@ -4,9 +4,9 @@ import React, { useState, useEffect } from "react";
 import { DataTable } from "@/components/ui/data-table";
 import Image from "next/image";
 import logo from "../../assets/logo.png";
-import { motion } from "framer-motion";
 
-interface CalibrationSchedule {
+interface DocumentedInformation {
+  _id: string;
   metadata: {
     docNo: string;
     version: string;
@@ -14,28 +14,30 @@ interface CalibrationSchedule {
     reviewedBy: string;
     approvedBy: string;
     departmentName: string;
-  }; // Adjust this type according to MetadataSchema
-  instrumentName: string;
-  instrumentNo: string;
-  frequencyOfCalibration: string;
-  typeOfInstrument: string;
-  lastDoneAt: string;
+  };
+  documentTitle: string;
   refNo: string;
-  nextDueOn: string;
-  comments: string;
+  versionNo: string;
+  area: string;
+  typeOfDocument: string;
+  effectiveDate: string;
+  responsibility: string;
+  mediumOfStorage: string;
+  placeOfStorage: string;
+  retentionPeriod: string;
   lastUpdated: string;
 }
 
-async function getData(): Promise<CalibrationSchedule[]> {
-  const response = await fetch("/api/get/forms/caliberation_Schedule");
+async function getData(): Promise<DocumentedInformation[]> {
+  const response = await fetch("/api/get/forms/documentedInformation");
   if (!response.ok) {
-    throw new Error("Failed to fetch calibration schedule data");
+    throw new Error("Failed to fetch Documented Information");
   }
   return response.json();
 }
 
 const DemoPage: React.FC = () => {
-  const [data, setData] = useState<CalibrationSchedule[]>([]);
+  const [data, setData] = useState<DocumentedInformation[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string>();
@@ -46,8 +48,7 @@ const DemoPage: React.FC = () => {
         const data = await getData();
         const formattedData = data.map((item) => ({
           ...item,
-          lastDoneAt: new Date(item.lastDoneAt).toLocaleDateString(),
-          nextDueOn: new Date(item.nextDueOn).toLocaleDateString(),
+          effectiveDate: new Date(item.effectiveDate).toLocaleDateString(),
           lastUpdated: new Date(item.lastUpdated).toLocaleDateString(),
         }));
         setData(formattedData);
@@ -71,20 +72,12 @@ const DemoPage: React.FC = () => {
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      transition={{
-        duration: 0.8,
-        ease: "easeInOut",
-        staggerChildren: 0.2,
-      }}
-    >
+    <>
       <div className="text-center text-3xl font-bold py-4 text-slate-200">
-        Calibration Schedule
+        List of Documented Information
       </div>
       {/* --- Header --- */}
-      <div className="bg-slate-800 mt-6 text-white p-4 max-w-[88rem] px-4 mx-auto border-2 border-gray-600 rounded-md">
+      <div className="bg-black mt-6 text-white p-4 max-w-[100rem] px-4 mx-auto border-2 border-gray-600 rounded-md">
         <div className="flex text-center mb-4 border-b-2 border-gray-600 pb-2">
           <Image
             src={logo.src}
@@ -98,20 +91,20 @@ const DemoPage: React.FC = () => {
               ST JOSEPH ENGINEERING COLLEGE, VAMANJOOR, MANGALURU - 575028
             </h1>
             <h2 className="text-xl font-semibold mt-2 text-slate-300">
-              PROCESS LEVEL SKILL MATRIX
+              Documented Information
             </h2>
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-4 mb-4">
-          <div className="col-span-1 border border-gray-600 p-2 bg-slate-700">
+          <div className="col-span-1 border border-gray-600 p-2">
             <span className="text-sm font-semibold text-gray-200">
               Doc. No :{" "}
             </span>
             <span className="text-white">{data[0]?.metadata.docNo}</span>
           </div>
-          <div className="col-span-1"></div>
-          <div className="col-span-1 border border-gray-600 p-2 bg-slate-700">
+          <div className="col-span-1 rounded-md"></div>
+          <div className="col-span-1 border border-gray-600 p-2">
             <span className="text-sm font-semibold text-gray-200">
               Version No :{" "}
             </span>
@@ -120,33 +113,33 @@ const DemoPage: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-3 gap-4 mb-6 rounded-md">
-          <div className="border border-gray-600 p-2 bg-slate-700 rounded-md">
-            <h3 className="text-lg font-semibold mb-2 text-center text-slate-300">
+          <div className="border border-gray-600 p-2">
+            <h3 className="text-lg font-semibold mb-2 text-center text-gray-200">
               Prepared By
             </h3>
-            <p className="text-sm text-center text-gray-200">
+            <p className="text-sm text-center">
               {data[0]?.metadata.preparedBy}
             </p>
           </div>
-          <div className="border border-gray-600 p-2 bg-slate-700 rounded-md">
-            <h3 className="text-lg font-semibold mb-2 text-center text-slate-300">
+          <div className="border border-gray-600 p-2">
+            <h3 className="text-lg font-semibold mb-2 text-center text-gray-200">
               Reviewed By
             </h3>
-            <p className="text-sm text-center text-gray-200">
+            <p className="text-sm text-center">
               {data[0]?.metadata.reviewedBy}
             </p>
           </div>
-          <div className="border border-gray-600 p-2 bg-slate-700 rounded-md">
-            <h3 className="text-lg font-semibold mb-2 text-center text-slate-300">
+          <div className="border border-gray-600 p-2">
+            <h3 className="text-lg font-semibold mb-2 text-center text-gray-200">
               Approved By
             </h3>
-            <p className="text-sm text-center text-gray-200">
+            <p className="text-sm text-center">
               {data[0]?.metadata.approvedBy}
             </p>
           </div>
         </div>
 
-        <div className="border border-gray-600 p-2 bg-slate-700 rounded-md">
+        <div className="border border-gray-600 p-2">
           <p className="text-sm mb-2 font-semibold text-gray-200">
             Last Updated On : <span className="text-white">{lastUpdated}</span>
           </p>
@@ -158,12 +151,11 @@ const DemoPage: React.FC = () => {
           </p>
         </div>
       </div>
-
       {/* --- Database --- */}
       <div className="justify-center px-12 py-6">
         <DataTable columns={columns} data={data} />
       </div>
-    </motion.div>
+    </>
   );
 };
 

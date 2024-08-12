@@ -94,18 +94,22 @@ const AssetMaintenanceForm = () => {
   };
 
   return (
-    <div className="w-full h-full text-white flex p-4 justify-center items-center flex-col bg-gray-900">
-      <div className="text-6xl font-bold text-gray-300">
+    <div className="w-full h-full flex p-4 justify-center items-center flex-col dark:text-white text-black">
+      <div className="text-3xl font-bold dark:text-white text-black">
         Asset Maintenance Form
       </div>
 
       <form
         onSubmit={handleSubmit}
-        className="min-w-[500px] px-4 py-4 flex flex-col gap-4 mt-8 bg-gray-800 p-4 rounded-lg"
+        className="min-w-[500px] px-4 py-4 flex flex-col gap-4 mt-8 bg-slate-200 dark:bg-slate-800 p-4 rounded-lg"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/** Form Fields */}
           <div className="flex flex-col gap-2">
-            <label htmlFor="docNo" className="text-slate-300 font-semibold">
+            <label
+              htmlFor="docNo"
+              className="dark:text-slate-300 text-slate-700 font-semibold"
+            >
               Doc No
             </label>
             <Input
@@ -114,12 +118,15 @@ const AssetMaintenanceForm = () => {
               placeholder="Doc No"
               value={docNo}
               onChange={(e) => setDocNo(e.target.value)}
-              className="p-2 rounded text-slate-600 border-gray-300"
+              className="p-2 rounded dark:bg-slate-700 dark:text-white text-slate-600 border-gray-300 dark:border-slate-600"
             />
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="version" className="text-slate-300 font-semibold">
+            <label
+              htmlFor="version"
+              className="dark:text-slate-300 text-slate-700 font-semibold"
+            >
               Version No
             </label>
             <Input
@@ -128,14 +135,14 @@ const AssetMaintenanceForm = () => {
               placeholder="Version No"
               value={version}
               onChange={(e) => setVersion(e.target.value)}
-              className="p-2 text-slate-600 rounded border-gray-300"
+              className="p-2 rounded dark:bg-slate-700 dark:text-white text-slate-600 border-gray-300 dark:border-slate-600"
             />
           </div>
 
           <div className="flex flex-col gap-2">
             <label
               htmlFor="preparedBy"
-              className="text-slate-300 font-semibold"
+              className="dark:text-slate-300 text-slate-700 font-semibold"
             >
               Prepared By
             </label>
@@ -145,14 +152,14 @@ const AssetMaintenanceForm = () => {
               placeholder="Prepared By"
               value={preparedBy}
               onChange={(e) => setPreparedBy(e.target.value)}
-              className="p-2 text-slate-600 rounded border-gray-300"
+              className="p-2 rounded dark:bg-slate-700 dark:text-white text-slate-600 border-gray-300 dark:border-slate-600"
             />
           </div>
 
           <div className="flex flex-col gap-2">
             <label
               htmlFor="reviewedBy"
-              className="text-slate-300 font-semibold"
+              className="dark:text-slate-300 text-slate-700 font-semibold"
             >
               Reviewed By
             </label>
@@ -162,14 +169,14 @@ const AssetMaintenanceForm = () => {
               placeholder="Reviewed By"
               value={reviewedBy}
               onChange={(e) => setReviewedBy(e.target.value)}
-              className="p-2 text-slate-600 rounded border-gray-300"
+              className="p-2 rounded dark:bg-slate-700 dark:text-white text-slate-600 border-gray-300 dark:border-slate-600"
             />
           </div>
 
           <div className="flex flex-col gap-2">
             <label
               htmlFor="approvedBy"
-              className="text-slate-300 font-semibold"
+              className="dark:text-slate-300 text-slate-700 font-semibold"
             >
               Approved By
             </label>
@@ -179,14 +186,14 @@ const AssetMaintenanceForm = () => {
               placeholder="Approved By"
               value={approvedBy}
               onChange={(e) => setApprovedBy(e.target.value)}
-              className="p-2 rounded text-slate-600 border-gray-300"
+              className="p-2 rounded dark:bg-slate-700 dark:text-white text-slate-600 border-gray-300 dark:border-slate-600"
             />
           </div>
 
           <div className="flex flex-col gap-2">
             <label
               htmlFor="departmentName"
-              className="text-slate-300 font-semibold"
+              className="dark:text-slate-300 text-slate-700 font-semibold"
             >
               Department Name
             </label>
@@ -196,12 +203,15 @@ const AssetMaintenanceForm = () => {
               placeholder="Department Name"
               value={departmentName}
               onChange={(e) => setDepartmentName(e.target.value)}
-              className="p-2 rounded text-slate-600 border-gray-300"
+              className="p-2 rounded dark:bg-slate-700 dark:text-white text-slate-600 border-gray-300 dark:border-slate-600"
             />
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="assetName" className="text-slate-300 font-semibold">
+            <label
+              htmlFor="assetName"
+              className="dark:text-slate-300 text-slate-700 font-semibold"
+            >
               Asset Name
             </label>
             <Input
@@ -210,12 +220,15 @@ const AssetMaintenanceForm = () => {
               placeholder="Asset Name"
               value={assetName}
               onChange={(e) => setAssetName(e.target.value)}
-              className="p-2 rounded text-slate-600 border-gray-300"
+              className="p-2 rounded dark:bg-slate-700 dark:text-white text-slate-600 border-gray-300 dark:border-slate-600"
             />
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="assetNo" className="text-slate-300 font-semibold">
+            <label
+              htmlFor="assetNo"
+              className="dark:text-slate-300 text-slate-700 font-semibold"
+            >
               Asset No
             </label>
             <Input
@@ -224,14 +237,14 @@ const AssetMaintenanceForm = () => {
               placeholder="Asset No"
               value={assetNo}
               onChange={(e) => setAssetNo(e.target.value)}
-              className="p-2 rounded text-slate-600 border-gray-300"
+              className="p-2 rounded dark:bg-slate-700 dark:text-white text-slate-600 border-gray-300 dark:border-slate-600"
             />
           </div>
 
           <div className="flex flex-col gap-2">
             <label
               htmlFor="frequencyOfMaintenance"
-              className="text-slate-300 font-semibold"
+              className="dark:text-slate-300 text-slate-700 font-semibold"
             >
               Frequency of Maintenance
             </label>
@@ -241,31 +254,31 @@ const AssetMaintenanceForm = () => {
               placeholder="Frequency of Maintenance"
               value={frequencyOfMaintenance}
               onChange={(e) => setFrequencyOfMaintenance(e.target.value)}
-              className="p-2 rounded text-slate-600 border-gray-300"
+              className="p-2 rounded dark:bg-slate-700 dark:text-white text-slate-600 border-gray-300 dark:border-slate-600"
             />
           </div>
 
           <div className="flex flex-col gap-2">
             <label
               htmlFor="typeOfAsset"
-              className="text-slate-300 font-semibold"
+              className="dark:text-slate-300 text-slate-700 font-semibold"
             >
-              Type of Asset (Internal/External)
+              Type of Asset
             </label>
             <Input
               type="text"
               id="typeOfAsset"
-              placeholder="Type of Asset (Internal/External)"
+              placeholder="Type of Asset"
               value={typeOfAsset}
               onChange={(e) => setTypeOfAsset(e.target.value)}
-              className="p-2 rounded text-slate-600 border-gray-300"
+              className="p-2 rounded dark:bg-slate-700 dark:text-white text-slate-600 border-gray-300 dark:border-slate-600"
             />
           </div>
 
           <div className="flex flex-col gap-2">
             <label
               htmlFor="lastDoneAt"
-              className="text-slate-300 font-semibold"
+              className="dark:text-slate-300 text-slate-700 font-semibold"
             >
               Last Done At
             </label>
@@ -273,14 +286,17 @@ const AssetMaintenanceForm = () => {
               type="date"
               id="lastDoneAt"
               placeholder="Last Done At"
-              value={lastDoneAt ? lastDoneAt.toISOString().split("T")[0] : ""}
-              onChange={(e) => setLastDoneAt(new Date(e.target.value))}
-              className="p-2 rounded text-slate-600 border-gray-300"
+              value={lastDoneAt?.toString()}
+              onChange={(e) => setLastDoneAt(e.target.valueAsDate || undefined)}
+              className="p-2 rounded dark:bg-slate-700 dark:text-white text-slate-600 border-gray-300 dark:border-slate-600"
             />
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="refNo" className="text-slate-300 font-semibold">
+            <label
+              htmlFor="refNo"
+              className="dark:text-slate-300 text-slate-700 font-semibold"
+            >
               Reference No
             </label>
             <Input
@@ -289,26 +305,32 @@ const AssetMaintenanceForm = () => {
               placeholder="Reference No"
               value={refNo}
               onChange={(e) => setRefNo(e.target.value)}
-              className="p-2 rounded text-slate-600 border-gray-300"
+              className="p-2 rounded dark:bg-slate-700 dark:text-white text-slate-600 border-gray-300 dark:border-slate-600"
             />
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="nextDueOn" className="text-slate-300 font-semibold">
+            <label
+              htmlFor="nextDueOn"
+              className="dark:text-slate-300 text-slate-700 font-semibold"
+            >
               Next Due On
             </label>
             <Input
               type="date"
               id="nextDueOn"
               placeholder="Next Due On"
-              value={nextDueOn ? nextDueOn.toISOString().split("T")[0] : ""}
-              onChange={(e) => setNextDueOn(new Date(e.target.value))}
-              className="p-2 rounded text-slate-600 border-gray-300"
+              value={nextDueOn?.toString()}
+              onChange={(e) => setNextDueOn(e.target.valueAsDate || undefined)}
+              className="p-2 rounded dark:bg-slate-700 dark:text-white text-slate-600 border-gray-300 dark:border-slate-600"
             />
           </div>
 
           <div className="flex flex-col gap-2 col-span-full">
-            <label htmlFor="comments" className="text-slate-300 font-semibold">
+            <label
+              htmlFor="comments"
+              className="dark:text-slate-300 text-slate-700 font-semibold"
+            >
               Comments
             </label>
             <Input
@@ -317,27 +339,34 @@ const AssetMaintenanceForm = () => {
               placeholder="Comments"
               value={comments}
               onChange={(e) => setComments(e.target.value)}
-              className="p-2 rounded text-slate-600 border-gray-300"
+              className="p-2 rounded dark:bg-slate-700 dark:text-white text-slate-600 border-gray-300 dark:border-slate-600"
             />
           </div>
         </div>
 
-        {error && <div className="text-red-500">{error}</div>}
+        {error && (
+          <div className="text-red-500 text-center mt-4 font-semibold">
+            {error}
+          </div>
+        )}
 
-        <Button
-          type="submit"
-          disabled={loading}
-          className="mt-6 border-2 w-1/2 mx-auto text-white bg-blue-900 hover:bg-blue-600 transition duration-300 ease-in-out rounded p-2"
-        >
-          {loading ? "Submitting..." : "Submit"}
-        </Button>
+        <div className="flex justify-center mt-4">
+          <Button
+            type="submit"
+            disabled={loading}
+            className="p-2 bg-blue-500 dark:bg-blue-700 text-white rounded hover:bg-blue-600 dark:hover:bg-blue-800 transition-all"
+          >
+            {loading ? "Loading..." : "Submit"}
+          </Button>
+        </div>
       </form>
 
-      <div className="mt-4">
-        <Link href="/" className="text-white underline">
-          Home
-        </Link>
-      </div>
+      <Link
+        href="/"
+        className="mt-4 text-blue-500 dark:text-blue-300 hover:underline"
+      >
+        Back to Home
+      </Link>
     </div>
   );
 };

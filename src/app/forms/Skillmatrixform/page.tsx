@@ -81,8 +81,10 @@ const SkillMatrixForm = () => {
   };
 
   return (
-    <div className="w-full h-screen text-white flex justify-center items-center flex-col bg-gray-900">
-      <div className="text-6xl text-gray-300 font-bold">Skill Matrix Form</div>
+    <div className="w-full flex justify-center items-center flex-col">
+      <h1 className="text-[2.5rem] text-gray-300 font-bold">
+        Skill Matrix Form
+      </h1>
       {/* <form
         onSubmit={handleSubmit}
         className="min-w-[500px] px-4 py-4 flex text-black flex-col gap-4 mt-8 bg-gray-500 p-4 rounded-lg"

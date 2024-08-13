@@ -356,9 +356,18 @@ const NCOutputform = () => {
       </Form>
 
       <div className="mt-4">
-        <Link href="/" className="underline">
-          Home
-        </Link>
+        <motion.div
+          initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{
+            duration: 0.5,
+            ease: "easeInOut",
+          }}
+        >
+          <Link href="/" className="underline">
+            Home
+          </Link>
+        </motion.div>
       </div>
     </div>
   );

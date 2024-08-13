@@ -226,11 +226,11 @@ export default function DemoPage() {
             Name of the Department : <span>{data[0]?.departmentName}</span>
           </p>
         </div>
-      </div>
 
-      {/* --- Database --- */}
-      <div className="justify-center px-12 py-6">
-        <DataTable columns={columns} data={data} />
+        {/* --- Database --- */}
+        <div className="justify-center px-12 py-6">
+          <DataTable columns={columns} data={data} />
+        </div>
       </div>
     </>
   );

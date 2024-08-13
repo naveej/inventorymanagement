@@ -29,7 +29,7 @@ export type DocumentedInformation = {
   versionNo: string;
   area: string;
   typeOfDocument: string;
-  effectiveDate: Date;
+  effectiveDate: string;
   responsibility: string;
   mediumOfStorage: string;
   placeOfStorage: string;

@@ -58,6 +58,7 @@ export default function DemoPage() {
   );
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<string>();
 
   useEffect(() => {
     const getData = async () => {
@@ -75,6 +76,7 @@ export default function DemoPage() {
         });
 
         setData(updatedResult);
+        setLastUpdated(updatedResult[0]?.lastUpdated);
 
         // Determine the maximum number of skills in the fetched data
         const maxSkills = Math.max(...result.map((item) => item.skills.length));
@@ -156,7 +158,7 @@ export default function DemoPage() {
         Skill Matrix
       </div>
       {/* --- Header --- */}
-      <div className="bg-card dark:bg-slate-800 dark:border-slate-700 dark:text-white bg-slate-200 mt-6 text-white p-4 max-w-[88rem] mx-auto border-2 border-gray-600 rounded-md">
+      <div className="bg-slate-100 dark:bg-slate-900 py-4 mt-6 p-4 max-w-[93rem] px-4 mx-auto border-2 border-slate-600 rounded-lg">
         <div className="flex text-center mb-4 border-b-2 border-gray-600 pb-2">
           <Image
             src={logo.src}
@@ -166,64 +168,74 @@ export default function DemoPage() {
             className="w-20 aspect-square"
           />
           <div className="w-full">
-            <h1 className="text-2xl font-bold text-card-foreground dark:text-gray-200">
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
               ST JOSEPH ENGINEERING COLLEGE, VAMANJOOR, MANGALURU - 575028
             </h1>
-            <h2 className="text-xl font-semibold mt-2 text-card-foreground dark:text-gray-300">
+            <h2 className="text-xl font-semibold mt-2 text-slate-800 dark:text-slate-200">
               PROCESS LEVEL SKILL MATRIX
             </h2>
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-4 mb-4">
-          <div className="col-span-1 border dark:border-slate-700 border-gray-600 p-2 bg-card dark:bg-slate-900 rounded-md">
-            <span className="text-sm font-semibold text-card-foreground dark:text-gray-200">
+          <div className="col-span-1 border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
+            <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">
               Doc. No :{" "}
             </span>
-            <span>{data[0]?.docNo}</span>
+            <span className="text-slate-900 dark:text-slate-100">
+              {data[0]?.docNo}
+            </span>
           </div>
           <div className="col-span-1"></div>
-          <div className="col-span-1 border dark:border-slate-700 border-gray-600 p-2 bg-card dark:bg-slate-900 rounded-md">
-            <span className="text-sm font-semibold text-card-foreground dark:text-gray-200">
+          <div className="col-span-1 border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
+            <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">
               Version No :{" "}
             </span>
-            <span>{data[0]?.version}</span>
+            <span className="text-slate-900 dark:text-slate-100">
+              {data[0]?.version}
+            </span>
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-4 mb-6 rounded-md">
-          <div className="border dark:border-slate-700 border-gray-600 p-2 bg-card dark:bg-slate-900 rounded-md">
-            <h3 className="text-lg font-semibold mb-2 text-center text-card-foreground dark:text-gray-300">
+          <div className="border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
+            <h3 className="text-lg font-semibold mb-2 text-center text-slate-900 dark:text-slate-100">
               Prepared By
             </h3>
-            <p className="text-sm text-center text-card-foreground dark:text-gray-400">
-              {data[0]?.reviewedBy}
+            <p className="text-sm text-center text-slate-900 dark:text-slate-100">
+              {data[0]?.preparedBy}
             </p>
           </div>
-          <div className="border dark:border-slate-700 border-gray-600 p-2 bg-card dark:bg-slate-900 rounded-md">
-            <h3 className="text-lg font-semibold mb-2 text-center text-card-foreground dark:text-gray-300">
+          <div className="border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
+            <h3 className="text-lg font-semibold mb-2 text-center text-slate-900 dark:text-slate-100">
               Reviewed By
             </h3>
-            <p className="text-sm text-center text-card-foreground dark:text-gray-400">
+            <p className="text-sm text-center text-slate-900 dark:text-slate-100">
               {data[0]?.reviewedBy}
             </p>
           </div>
-          <div className="border dark:border-slate-700 border-gray-600 p-2 bg-card dark:bg-slate-900 rounded-md">
-            <h3 className="text-lg font-semibold mb-2 text-center text-card-foreground dark:text-gray-300">
+          <div className="border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
+            <h3 className="text-lg font-semibold mb-2 text-center text-slate-900 dark:text-slate-100">
               Approved By
             </h3>
-            <p className="text-sm text-center text-card-foreground dark:text-gray-400">
+            <p className="text-sm text-center text-slate-900 dark:text-slate-100">
               {data[0]?.approvedBy}
             </p>
           </div>
         </div>
 
-        <div className="border dark:border-slate-700 border-gray-600 p-2 bg-card dark:bg-slate-900 rounded-md">
-          <p className="text-sm mb-2 font-semibold text-card-foreground dark:text-gray-200">
-            Last Updated On : <span>{data[0]?.lastUpdated}</span>
+        <div className="border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
+          <p className="text-sm mb-2 font-semibold text-slate-900 dark:text-slate-100">
+            Last Updated On :{" "}
+            <span className="text-slate-900 dark:text-slate-100 font-mono">
+              {lastUpdated}
+            </span>
           </p>
-          <p className="text-sm font-medium text-card-foreground dark:text-gray-300">
-            Name of the Department : <span>{data[0]?.departmentName}</span>
+          <p className="text-sm font-bold text-slate-900 dark:text-slate-100">
+            Name of the Department :{" "}
+            <span className="text-slate-900 dark:text-slate-100 font-normal">
+              {data[0]?.departmentName}
+            </span>
           </p>
         </div>
 

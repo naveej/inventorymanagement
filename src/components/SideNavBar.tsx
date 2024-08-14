@@ -16,6 +16,15 @@ import {
   Library,
   User,
 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Button } from "./ui/button";
 import { useWindowWidth } from "@react-hook/window-size";
 import { ModeToggle } from "./ui/modeTogglebutton";
@@ -131,6 +140,7 @@ export default function SideNavbar({}: Props) {
           },
         ]}
       />
+
       <div className="px-2 space-x-6 py-2">
         <ModeToggle />
       </div>

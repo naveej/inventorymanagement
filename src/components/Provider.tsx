@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import Sidebar from "./ui/Sidebar";
-import Navbar from "./ui/navbar";
 import { ThemeProvider } from "./ThemeProvider"; // Adjust the import path as necessary
 import SideNavbar from "./SideNavBar";
 import { Nav } from "./ui/nav";

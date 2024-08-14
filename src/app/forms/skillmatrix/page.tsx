@@ -5,8 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import Link from "next/link";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, StarIcon, Trash, Trash2Icon } from "lucide-react";
 import FormInput from "@/components/customUI/FormInput";
+import StarRating from "@/components/customUI/StarRaking";
 
 const SkillMatrixForm = () => {
   const [docNo, setDocNo] = useState<string>("IAD003");
@@ -22,7 +23,8 @@ const SkillMatrixForm = () => {
   );
   const [departmentName, setDepartmentName] = useState<string>("");
   const [name, setName] = useState<string>("");
-  const [skills, setSkills] = useState<string[]>([""]);
+  const tempSkills = ["Coding", "Hacking", "Cooking", "Mewing"]
+  const [skills, setSkills] = useState<string[]>(tempSkills);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -235,7 +237,28 @@ const SkillMatrixForm = () => {
 
         <div className="w-full h-[2px] my-8 bg-foreground/10"></div>
 
-        <div className="flex flex-col gap-4 mt-4">
+        {/* <FormInput
+              label={skill}
+              type="number"
+              id={index}
+              placeholder="Enter Skill Rank (0 - 5)"
+              defaultValue={name}
+              className="w-full"
+              onChangeFunction={() => { }} />
+               */}
+        <h2 className="font-bold">Skills Ranking</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-4 mt-4">
+          {skills.map((skill, index) => (
+            <div className="">
+              <span>{skill}</span>
+              <div className="">
+                <StarRating />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* <div className="flex flex-col gap-4 mt-4">
           {skills.map((skill, index) => (
             <div
               key={index}
@@ -274,14 +297,14 @@ const SkillMatrixForm = () => {
           >
             Add Skill
           </Button>
-        </div>
+        </div> */}
 
         {error && <div className="text-red-500">{error}</div>}
 
         <Button
           type="submit"
           disabled={loading}
-          className="mt-6 border-2 w-1/2 mx-auto text-white bg-blue-900 hover:bg-blue-600 transition duration-300 ease-in-out rounded p-2"
+          className="mt-10 px-auto text-foreground w-1/2"
         >
           {loading ? "Submitting..." : "Submit"}
         </Button>

@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import Link from "next/link";
+import { PlusIcon } from "lucide-react";
 
 const SkillMatrixForm = () => {
   const [docNo, setDocNo] = useState<string>("IAD003");
@@ -82,9 +83,17 @@ const SkillMatrixForm = () => {
 
   return (
     <div className="w-full flex justify-center items-center flex-col">
-      <h1 className="text-[2.5rem] text-gray-300 font-bold">
-        Skill Matrix Form
-      </h1>
+
+      <div className="flex justify-between items-center w-full px-8 py-4">
+        <h1 className="text-[2.5rem] text-gray-300 font-bold">
+          Skill Matrix
+        </h1>
+
+        <Link href={"./skillmatrix/create"} className="flex justify-center items-center bg-primary text-white text-[1.2rem] gap-2 px-4 py-2 rounded">
+          <PlusIcon />
+          <span>Create</span>
+        </Link>
+      </div>
       {/* <form
         onSubmit={handleSubmit}
         className="min-w-[500px] px-4 py-4 flex text-black flex-col gap-4 mt-8 bg-gray-500 p-4 rounded-lg"

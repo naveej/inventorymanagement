@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { DataTable } from "@/components/ui/data-table";
 import Image from "next/image";
 import logo from "../../assets/logo.png";
+import { motion } from "framer-motion";
 
 interface NCOutput {
   _id: string;
@@ -72,7 +73,15 @@ const DemoPage: React.FC = () => {
   }
 
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
+      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      transition={{
+        duration: 0.8,
+        ease: "easeInOut",
+        staggerChildren: 0.2,
+      }}
+    >
       <div className="text-center text-3xl font-bold py-4 dark:text-white text-black">
         NC Output
       </div>
@@ -163,7 +172,7 @@ const DemoPage: React.FC = () => {
           <DataTable columns={columns} data={data} />
         </div>
       </div>
-    </>
+    </motion.div>
   );
 };
 

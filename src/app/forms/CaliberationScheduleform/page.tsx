@@ -1,349 +1,372 @@
 "use client";
 
-import React, { FormEvent, useState } from "react";
+import React from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import Link from "next/link";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { toast } from "sonner"; // Import sonnar
+import { motion } from "framer-motion";
 
-const CalibrationScheduleForm = () => {
-  const [docNo, setDocNo] = useState<string>("IAD01O");
-  const [version, setVersion] = useState<string>("01");
-  const [preparedBy, setPreparedBy] = useState<string>(
-    "Dr Pavana Kumara B - Head-IQAC"
-  );
-  const [reviewedBy, setReviewedBy] = useState<string>(
-    "Dr Prakash Pinto - Dean MBA"
-  );
-  const [approvedBy, setApprovedBy] = useState<string>(
-    "Dr Rio D'Souza - Principal"
-  );
-  const [departmentName, setDepartmentName] = useState<string>("");
-  const [instrumentName, setInstrumentName] = useState<string>("");
-  const [instrumentNo, setInstrumentNo] = useState<string>("");
-  const [frequencyOfCalibration, setFrequencyOfCalibration] =
-    useState<string>("");
-  const [typeOfInstrument, setTypeOfInstrument] = useState<string>("");
-  const [lastDoneAt, setLastDoneAt] = useState<Date>();
-  const [refNo, setRefNo] = useState<string>("");
-  const [nextDueOn, setNextDueOn] = useState<Date>();
-  const [comments, setComments] = useState<string>("");
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+// Define the form schema using zod
+const formSchema = z.object({
+  docNo: z.string().min(1, { message: "Doc No is required." }),
+  version: z.string().min(1, { message: "Version No is required." }),
+  preparedBy: z.string().min(1, { message: "Prepared By is required." }),
+  reviewedBy: z.string().min(1, { message: "Reviewed By is required." }),
+  approvedBy: z.string().min(1, { message: "Approved By is required." }),
+  departmentName: z
+    .string()
+    .min(1, { message: "Department Name is required." }),
+  instrumentName: z
+    .string()
+    .min(1, { message: "Instrument Name is required." }),
+  instrumentNo: z.string().min(1, { message: "Instrument No is required." }),
+  frequencyOfCalibration: z
+    .string()
+    .min(1, { message: "Frequency of Calibration is required." }),
+  typeOfInstrument: z
+    .string()
+    .min(1, { message: "Type of Instrument is required." }),
+  lastDoneAt: z.string().min(1, { message: "Last Done At is required." }),
+  refNo: z.string().min(1, { message: "Ref No is required." }),
+  nextDueOn: z.string().min(1, { message: "Next Due On is required." }),
+  comments: z.string().min(1, { message: "Comments are required." }),
+});
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+const CaliberationScheduleForm = () => {
+  // Set up the form using useForm and zodResolver
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      docNo: "IAD011",
+      version: "01",
+      preparedBy: "Dr Pavana Kumara B - Head-IQAC",
+      reviewedBy: "Dr Prakash Pinto - Dean MBA",
+      approvedBy: "Dr Rio D'Souza - Principal",
+      departmentName: "",
+      instrumentName: "",
+      instrumentNo: "",
+      frequencyOfCalibration: "",
+      typeOfInstrument: "",
+      lastDoneAt: "",
+      refNo: "",
+      nextDueOn: "",
+      comments: "",
+    },
+  });
 
-    if (
-      !instrumentName ||
-      !instrumentNo ||
-      !frequencyOfCalibration ||
-      !typeOfInstrument ||
-      !lastDoneAt ||
-      !refNo ||
-      !nextDueOn ||
-      !comments
-    ) {
-      setError("Please fill out all required fields.");
-      return;
-    }
-
+  // Define the submit handler
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const metadata = {
-      docNo,
-      version,
-      preparedBy,
-      reviewedBy,
-      approvedBy,
-      departmentName,
+      docNo: values.docNo,
+      version: values.version,
+      preparedBy: values.preparedBy,
+      reviewedBy: values.reviewedBy,
+      approvedBy: values.approvedBy,
+      departmentName: values.departmentName,
     };
 
     const formData = {
       metadata,
-      instrumentName,
-      instrumentNo,
-      frequencyOfCalibration,
-      typeOfInstrument,
-      lastDoneAt,
-      refNo,
-      nextDueOn,
-      comments,
+      instrumentName: values.instrumentName,
+      instrumentNo: values.instrumentNo,
+      frequencyOfCalibration: values.frequencyOfCalibration,
+      typeOfInstrument: values.typeOfInstrument,
+      lastDoneAt: values.lastDoneAt,
+      refNo: values.refNo,
+      nextDueOn: values.nextDueOn,
+      comments: values.comments,
     };
 
     console.log("Client before Send", formData);
-    setLoading(true);
-    try {
-      const result = await axios.post(
-        "/api/post/create/caliberation_Schedule",
-        formData
-      );
-      console.log("Result", result);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error("Axios error message:", error.message);
-        console.error("Axios error response:", error.response);
-        setError(error.response?.data?.error || "An error occurred");
-      } else {
-        console.error("Unexpected error:", error);
-        setError("An unexpected error occurred");
-      }
-    } finally {
-      setLoading(false);
-    }
+    const promise = axios.post("/api/post/create/ncOutput", formData);
+
+    toast.promise(promise, {
+      loading: "Loading...",
+      success: (result) => {
+        console.log("Result", result);
+        return "Form submitted successfully!";
+      },
+      error: (error) => {
+        if (axios.isAxiosError(error)) {
+          console.error("Axios error message:", error.message);
+          console.error("Axios error response:", error.response);
+          return `Error: ${error.message}`;
+        } else {
+          console.error("Unexpected error:", error);
+          return "Unexpected error occurred.";
+        }
+      },
+    });
   };
-
   return (
-    <div className="w-full h-full text-white flex p-4 justify-center items-center flex-col bg-gray-900">
-      <div className="text-6xl font-bold text-gray-300">
-        Calibration Schedule Form
-      </div>
-
-      <form
-        onSubmit={handleSubmit}
-        className="min-w-[500px] px-4 py-4 flex flex-col gap-4 mt-8 bg-gray-800 p-4 rounded-lg"
-      >
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div className="flex flex-col gap-2">
-            <label htmlFor="docNo" className="text-slate-300 font-semibold">
-              Doc No
-            </label>
-            <Input
-              type="text"
-              id="docNo"
-              placeholder="Doc No"
-              value={docNo}
-              onChange={(e) => setDocNo(e.target.value)}
-              className="p-2 rounded text-slate-600 border-gray-300"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label htmlFor="version" className="text-slate-300 font-semibold">
-              Version No
-            </label>
-            <Input
-              type="text"
-              id="version"
-              placeholder="Version No"
-              value={version}
-              onChange={(e) => setVersion(e.target.value)}
-              className="p-2 text-slate-600 rounded border-gray-300"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label
-              htmlFor="preparedBy"
-              className="text-slate-300 font-semibold"
-            >
-              Prepared By
-            </label>
-            <Input
-              type="text"
-              id="preparedBy"
-              placeholder="Prepared By"
-              value={preparedBy}
-              onChange={(e) => setPreparedBy(e.target.value)}
-              className="p-2 text-slate-600 rounded border-gray-300"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label
-              htmlFor="reviewedBy"
-              className="text-slate-300 font-semibold"
-            >
-              Reviewed By
-            </label>
-            <Input
-              type="text"
-              id="reviewedBy"
-              placeholder="Reviewed By"
-              value={reviewedBy}
-              onChange={(e) => setReviewedBy(e.target.value)}
-              className="p-2 text-slate-600 rounded border-gray-300"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label
-              htmlFor="approvedBy"
-              className="text-slate-300 font-semibold"
-            >
-              Approved By
-            </label>
-            <Input
-              type="text"
-              id="approvedBy"
-              placeholder="Approved By"
-              value={approvedBy}
-              onChange={(e) => setApprovedBy(e.target.value)}
-              className="p-2 rounded text-slate-600 border-gray-300"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label
-              htmlFor="departmentName"
-              className="text-slate-300 font-semibold"
-            >
-              Department Name
-            </label>
-            <Input
-              type="text"
-              id="departmentName"
-              placeholder="Department Name"
-              value={departmentName}
-              onChange={(e) => setDepartmentName(e.target.value)}
-              className="p-2 rounded text-slate-600 border-gray-300"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label
-              htmlFor="instrumentName"
-              className="text-slate-300 font-semibold"
-            >
-              Instrument Name
-            </label>
-            <Input
-              type="text"
-              id="instrumentName"
-              placeholder="Instrument Name"
-              value={instrumentName}
-              onChange={(e) => setInstrumentName(e.target.value)}
-              className="p-2 rounded text-slate-600 border-gray-300"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label
-              htmlFor="instrumentNo"
-              className="text-slate-300 font-semibold"
-            >
-              Instrument No
-            </label>
-            <Input
-              type="text"
-              id="instrumentNo"
-              placeholder="Instrument No"
-              value={instrumentNo}
-              onChange={(e) => setInstrumentNo(e.target.value)}
-              className="p-2 rounded text-slate-600 border-gray-300"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label
-              htmlFor="frequencyOfCalibration"
-              className="text-slate-300 font-semibold"
-            >
-              Frequency of Calibration
-            </label>
-            <Input
-              type="text"
-              id="frequencyOfCalibration"
-              placeholder="Frequency of Calibration"
-              value={frequencyOfCalibration}
-              onChange={(e) => setFrequencyOfCalibration(e.target.value)}
-              className="p-2 rounded text-slate-600 border-gray-300"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label
-              htmlFor="typeOfInstrument"
-              className="text-slate-300 font-semibold"
-            >
-              Type of Instrument (Internal/External)
-            </label>
-            <Input
-              type="text"
-              id="typeOfInstrument"
-              placeholder="Type of Instrument (Internal/External)"
-              value={typeOfInstrument}
-              onChange={(e) => setTypeOfInstrument(e.target.value)}
-              className="p-2 rounded text-slate-600 border-gray-300"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label
-              htmlFor="lastDoneAt"
-              className="text-slate-300 font-semibold"
-            >
-              Last Done At
-            </label>
-            <Input
-              type="date"
-              id="lastDoneAt"
-              placeholder="Last Done At"
-              value={lastDoneAt ? lastDoneAt.toISOString().split("T")[0] : ""}
-              onChange={(e) => setLastDoneAt(new Date(e.target.value))}
-              className="p-2 rounded text-slate-600 border-gray-300"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label htmlFor="refNo" className="text-slate-300 font-semibold">
-              Reference No
-            </label>
-            <Input
-              type="text"
-              id="refNo"
-              placeholder="Reference No"
-              value={refNo}
-              onChange={(e) => setRefNo(e.target.value)}
-              className="p-2 rounded text-slate-600 border-gray-300"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label htmlFor="nextDueOn" className="text-slate-300 font-semibold">
-              Next Due On
-            </label>
-            <Input
-              type="date"
-              id="nextDueOn"
-              placeholder="Next Due On"
-              value={nextDueOn ? nextDueOn.toISOString().split("T")[0] : ""}
-              onChange={(e) => setNextDueOn(new Date(e.target.value))}
-              className="p-2 rounded text-slate-600 border-gray-300"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2 col-span-full">
-            <label htmlFor="comments" className="text-slate-300 font-semibold">
-              Comments
-            </label>
-            <Input
-              type="text"
-              id="comments"
-              placeholder="Comments"
-              value={comments}
-              onChange={(e) => setComments(e.target.value)}
-              className="p-2 rounded text-slate-600 border-gray-300"
-            />
-          </div>
-        </div>
-
-        {error && <div className="text-red-500">{error}</div>}
-
-        <Button
-          type="submit"
-          disabled={loading}
-          className="mt-6 border-2 w-1/2 mx-auto text-white bg-blue-900 hover:bg-blue-600 transition duration-300 ease-in-out rounded p-2"
+    <motion.div
+      initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
+      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      transition={{
+        duration: 0.8,
+        ease: "easeInOut",
+        staggerChildren: 0.2,
+      }}
+    >
+      <div className="w-full h-full flex p-4 justify-center items-center flex-col">
+        <motion.div
+          className="text-6xl font-bold"
+          initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{
+            duration: 0.7,
+            ease: "easeInOut",
+          }}
         >
-          {loading ? "Submitting..." : "Submit"}
-        </Button>
-      </form>
+          Calibraton Schedule Form
+        </motion.div>
 
-      <div className="mt-4">
-        <Link href="/" className="text-white underline">
-          Home
-        </Link>
+        <Form {...form}>
+          <motion.form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="min-w-[680px] px-4 py-4 flex flex-col gap-4 mt-8 p-4 rounded-lg border-solid border-2 border-current"
+            initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={{
+              duration: 0.5,
+              ease: "easeInOut",
+            }}
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <FormField
+                control={form.control}
+                name="docNo"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Doc No</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Doc No" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="version"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Version No</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Version No" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="preparedBy"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Prepared By</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Prepared By" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="reviewedBy"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Reviewed By</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Reviewed By" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="approvedBy"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Approved By</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Approved By" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="departmentName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Department Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Department Name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="instrumentName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Instrument Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Instrument Name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="instrumentNo"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Instrument No</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Instrument No" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="frequencyOfCalibration"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Frequency Of Calibration</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Frequency Of Calibration"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="typeOfInstrument"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Type Of Instrument</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Type Of Instrument" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="lastDoneAt"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Last Done At</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="date"
+                        placeholder="Last Done At"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="refNo"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Ref No</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Ref No" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="nextDueOn"
+                render={({ field }) => (
+                  <FormItem className="space-y-3">
+                    <FormLabel>Next Due On</FormLabel>
+                    <FormControl>
+                      <Input type="date" placeholder="Next Due On" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="comments"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Comments</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Comments" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <Button
+              type="submit"
+              disabled={form.formState.isSubmitting}
+              className="mt-6 border-2 rounded-2xl  w-1/2 mx-auto text-white bg-blue-900 hover:bg-blue-600 transition duration-300 ease-in-out p-2"
+            >
+              {form.formState.isSubmitting ? "Submitting..." : "Submit"}
+            </Button>
+          </motion.form>
+        </Form>
+
+        <div className="mt-4">
+          <Link href="/" className="underline">
+            Home
+          </Link>
+        </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
-export default CalibrationScheduleForm;
+export default CaliberationScheduleForm;

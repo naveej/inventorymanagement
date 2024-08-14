@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ExtendedColumnDef } from "@/app/_types/utility.types";
+import { motion } from "framer-motion";
 
 interface SkillMatrixForm {
   _id: string;
@@ -153,7 +154,15 @@ export default function DemoPage() {
   }
 
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
+      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      transition={{
+        duration: 0.8,
+        ease: "easeInOut",
+        staggerChildren: 0.2,
+      }}
+    >
       <div className="text-center text-3xl font-bold py-4 dark:text-white text-black">
         Skill Matrix
       </div>
@@ -244,6 +253,6 @@ export default function DemoPage() {
           <DataTable columns={columns} data={data} />
         </div>
       </div>
-    </>
+    </motion.div>
   );
 }

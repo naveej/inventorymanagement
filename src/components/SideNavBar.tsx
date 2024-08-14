@@ -15,19 +15,17 @@ import {
   House,
   Library,
   User,
+  BookPlus,
 } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Button } from "./ui/button";
 import { useWindowWidth } from "@react-hook/window-size";
 import { ModeToggle } from "./ui/modeTogglebutton";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
 
 type Props = {};
 
@@ -91,36 +89,6 @@ export default function SideNavbar({}: Props) {
             variant: "ghost",
           },
           {
-            title: "Skill Matrix",
-            href: "/dashboard/skillmatrix",
-            icon: BookText,
-            variant: "ghost",
-          },
-          {
-            title: "Asset Maintenance",
-            href: "/dashboard/assetMaintenance",
-            icon: BookText,
-            variant: "ghost",
-          },
-          {
-            title: "Calibration Schedule",
-            href: "/dashboard/caliberation_Schedule",
-            icon: BookText,
-            variant: "ghost",
-          },
-          {
-            title: "NC Output",
-            href: "/dashboard/ncOutput",
-            icon: BookText,
-            variant: "ghost",
-          },
-          {
-            title: "Documented Information",
-            href: "/dashboard/documentedInformation",
-            icon: BookText,
-            variant: "ghost",
-          },
-          {
             title: "Home",
             href: "#",
             icon: House,
@@ -140,77 +108,60 @@ export default function SideNavbar({}: Props) {
           },
         ]}
       />
-      <Nav
-        isCollapsed={mobileWidth ? true : isCollapsed}
-        links={[
-          {
-            title: "Dashboard",
-            href: "/",
-            icon: LayoutDashboard,
-            variant: "default",
-          },
-          {
-            title: "Users",
-            href: "#",
-            icon: UsersRound,
-            variant: "ghost",
-          },
-          {
-            title: "Settings",
-            href: "#",
-            icon: Settings,
-            variant: "ghost",
-          },
-          {
-            title: "Skill Matrix",
-            href: "/dashboard/skillmatrix",
-            icon: BookText,
-            variant: "ghost",
-          },
-          {
-            title: "Asset Maintenance",
-            href: "/dashboard/assetMaintenance",
-            icon: BookText,
-            variant: "ghost",
-          },
-          {
-            title: "Calibration Schedule",
-            href: "/dashboard/caliberation_Schedule",
-            icon: BookText,
-            variant: "ghost",
-          },
-          {
-            title: "NC Output",
-            href: "/dashboard/ncOutput",
-            icon: BookText,
-            variant: "ghost",
-          },
-          {
-            title: "Documented Information",
-            href: "/dashboard/documentedInformation",
-            icon: BookText,
-            variant: "ghost",
-          },
-          {
-            title: "Home",
-            href: "#",
-            icon: House,
-            variant: "ghost",
-          },
-          {
-            title: "Accounts",
-            href: "#",
-            icon: User,
-            variant: "ghost",
-          },
-          {
-            title: "Categories",
-            href: "#",
-            icon: Library,
-            variant: "ghost",
-          },
-        ]}
-      />
+      <div className="mr-4">
+        <div className="self-start px-2 py-2">
+          <Accordion
+            data-state="closed"
+            type="single"
+            collapsible={isCollapsed}
+            className="w-full bg-red-500 rounded"
+          >
+            <AccordionItem value="documentation">
+              <AccordionTrigger className="self-start">
+                <BookPlus className="size-4" />
+                <span className="!hover:no-underline p-2">Forms</span>
+              </AccordionTrigger>
+              <AccordionContent>
+                <Link
+                  href="/dashboard/skillmatrix"
+                  className="flex items-center py-1"
+                >
+                  <BookText className="mr-2 h-4 w-4" />
+                  Skill Matrix
+                </Link>
+                <Link
+                  href="/dashboard/assetMaintenance"
+                  className="flex items-center py-1"
+                >
+                  <BookText className="mr-2 h-4 w-4" />
+                  Asset Maintenance
+                </Link>
+                <Link
+                  href="/dashboard/caliberation_Schedule"
+                  className="flex items-center py-1"
+                >
+                  <BookText className="mr-2 h-4 w-4" />
+                  Calibration Schedule
+                </Link>
+                <Link
+                  href="/dashboard/ncOutput"
+                  className="flex items-center py-1"
+                >
+                  <BookText className="mr-2 h-4 w-4" />
+                  NC Output
+                </Link>
+                <Link
+                  href="/dashboard/documentedInformation"
+                  className="flex items-center py-1"
+                >
+                  <BookText className="mr-2 h-4 w-4" />
+                  Documented Information
+                </Link>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </div>
+      </div>
       <div className="px-2 space-x-6 py-2">
         <ModeToggle />
       </div>

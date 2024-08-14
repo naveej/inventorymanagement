@@ -86,7 +86,7 @@ const NCOutputform = () => {
 
     console.log("Client before Send", formData);
     const promise = axios.post("/api/post/create/ncOutput", formData);
-
+    form.reset();
     toast.promise(promise, {
       loading: "Loading...",
       success: (result) => {

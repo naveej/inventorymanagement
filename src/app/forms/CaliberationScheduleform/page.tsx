@@ -131,7 +131,7 @@ const CaliberationScheduleForm = () => {
             ease: "easeInOut",
           }}
         >
-          Calibraton Schedule Form
+          Calibration Schedule Form
         </motion.div>
 
         <Form {...form}>

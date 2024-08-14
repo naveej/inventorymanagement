@@ -99,7 +99,7 @@ const DemoPage: React.FC = () => {
               ST JOSEPH ENGINEERING COLLEGE, VAMANJOOR, MANGALURU - 575028
             </h1>
             <h2 className="text-xl font-semibold mt-2 text-slate-300">
-              Caliberation Schedule
+              Calibration Schedule
             </h2>
           </div>
         </div>

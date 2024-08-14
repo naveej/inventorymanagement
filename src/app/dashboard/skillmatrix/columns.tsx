@@ -52,6 +52,7 @@ export default function Columns() {
         const maxSkills = Math.max(
           ...fetchedData.map((item) => item.skills.length)
         );
+        console.log("maxSkills: ", maxSkills);
 
         // Update the columns array to reflect the fields in the SkillMatrixForm
         const updatedColumns: ColumnDef<SkillMatrixForm>[] = [

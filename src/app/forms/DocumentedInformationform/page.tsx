@@ -114,7 +114,7 @@ const DocumentedInformationForm = () => {
       "/api/post/create/documentedInformation",
       formData
     );
-
+    form.reset();
     toast.promise(promise, {
       loading: "Loading...",
       success: (result) => {

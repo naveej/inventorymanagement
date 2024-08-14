@@ -26,14 +26,18 @@ const formSchema = z.object({
   preparedBy: z.string().min(1, { message: "Prepared By is required." }),
   reviewedBy: z.string().min(1, { message: "Reviewed By is required." }),
   approvedBy: z.string().min(1, { message: "Approved By is required." }),
-  departmentName: z.string().min(1, { message: "Department Name is required." }),
+  departmentName: z
+    .string()
+    .min(1, { message: "Department Name is required." }),
   assetName: z.string().min(1, { message: "Asset Name is required." }),
   assetNo: z.string().min(1, { message: "Asset No is required." }),
-  frequencyOfMaintenance: z.string().min(1, { message: "Frequency of Maintenance is required." }),
+  frequencyOfMaintenance: z
+    .string()
+    .min(1, { message: "Frequency of Maintenance is required." }),
   typeOfAsset: z.string().min(1, { message: "Type of Asset is required." }),
-  lastDoneAt: z.string().min(1,{ message: "Last Done At is required." }),
+  lastDoneAt: z.string().min(1, { message: "Last Done At is required." }),
   refNo: z.string().min(1, { message: "Ref No is required." }),
-  nextDueOn: z.string().min(1,{ message: "Next Due On is required." }),
+  nextDueOn: z.string().min(1, { message: "Next Due On is required." }),
   comments: z.string().min(1, { message: "Comments are required." }),
 });
 
@@ -48,14 +52,14 @@ const AssetMaintenanceForm = () => {
       reviewedBy: "Dr Prakash Pinto - Dean MBA",
       approvedBy: "Dr Rio D'Souza - Principal",
       departmentName: "",
-    assetName: "",
-    assetNo: "",
-    frequencyOfMaintenance: "",
-    typeOfAsset: "",
-    lastDoneAt: '',
-    refNo: "",
-    nextDueOn: '',
-    comments: "",
+      assetName: "",
+      assetNo: "",
+      frequencyOfMaintenance: "",
+      typeOfAsset: "",
+      lastDoneAt: "",
+      refNo: "",
+      nextDueOn: "",
+      comments: "",
     },
   });
 
@@ -73,18 +77,18 @@ const AssetMaintenanceForm = () => {
     const formData = {
       metadata,
       assetName: values.assetName,
-    assetNo: values.assetNo,
-    frequencyOfMaintenance: values.frequencyOfMaintenance,
-    typeOfAsset: values.typeOfAsset,
-    lastDoneAt: values.lastDoneAt,
-    refNo: values.refNo,
-    nextDueOn: values.nextDueOn,
-    comments: values.comments,
+      assetNo: values.assetNo,
+      frequencyOfMaintenance: values.frequencyOfMaintenance,
+      typeOfAsset: values.typeOfAsset,
+      lastDoneAt: values.lastDoneAt,
+      refNo: values.refNo,
+      nextDueOn: values.nextDueOn,
+      comments: values.comments,
     };
 
     console.log("Client before Send", formData);
     const promise = axios.post("/api/post/create/ncOutput", formData);
-
+    form.reset();
     toast.promise(promise, {
       loading: "Loading...",
       success: (result) => {
@@ -303,7 +307,7 @@ const AssetMaintenanceForm = () => {
                 <FormItem className="space-y-3">
                   <FormLabel>Next Due On</FormLabel>
                   <FormControl>
-                  <Input type="date" placeholder="Next Due On" {...field} />
+                    <Input type="date" placeholder="Next Due On" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

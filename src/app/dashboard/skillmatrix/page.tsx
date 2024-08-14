@@ -4,7 +4,7 @@ import { DataTable } from "@/components/ui/data-table";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import logo from "../../assets/logo.png";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -83,7 +83,23 @@ export default function DemoPage() {
         const maxSkills = Math.max(...result.map((item) => item.skills.length));
 
         const updatedColumns: ExtendedColumnDef<SkillMatrixForm>[] = [
-          { accessorKey: "name", header: "Name" },
+          {
+            accessorKey: "name",
+            header: ({ column }) => {
+              return (
+                <Button
+                  className="p-0"
+                  variant="ghost"
+                  onClick={() =>
+                    column.toggleSorting(column.getIsSorted() === "asc")
+                  }
+                >
+                  Name
+                  <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+              );
+            },
+          },
           // Dynamically generate columns for skills based on the maximum number of skills
           ...Array.from({ length: maxSkills }).map((_, i) => ({
             accessorKey: `skill${i}`,

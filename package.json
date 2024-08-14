@@ -23,7 +23,7 @@
     "@tanstack/react-table": "^8.20.1",
     "@typescript-eslint/parser": "^8.0.1",
     "are-we-there-yet": "^4.0.2",
-    "axios": "^1.7.3",
+    "axios": "^1.7.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",

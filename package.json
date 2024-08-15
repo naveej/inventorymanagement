@@ -25,6 +25,7 @@
     "@typescript-eslint/parser": "^8.1.0",
     "are-we-there-yet": "^4.0.2",
     "axios": "^1.7.4",
+    "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
@@ -35,6 +36,7 @@
     "gauge": "^5.0.2",
     "glob": "^11.0.0",
     "inflight": "^1.0.6",
+    "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.424.0",
     "moment-timezone": "^0.5.45",
     "mongoose": "^8.5.3",
@@ -57,7 +59,9 @@
     "zustand": "^4.5.5"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/bun": "latest",
+    "@types/jsonwebtoken": "^9.0.6",
     "@types/mongoose-sequence": "^3.0.11",
     "@types/node": "^22.3.0",
     "@types/react": "^18.3.3",

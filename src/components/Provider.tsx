@@ -1,9 +1,7 @@
 "use client";
 import React from "react";
-import Sidebar from "./ui/Sidebar";
 import { ThemeProvider } from "./ThemeProvider"; // Adjust the import path as necessary
 import SideNavbar from "./SideNavBar";
-import { Nav } from "./ui/nav";
 
 type Props = {
   children: React.ReactNode;

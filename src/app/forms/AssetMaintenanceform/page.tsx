@@ -124,7 +124,7 @@ const AssetMaintenanceForm = () => {
       <Form {...form}>
         <motion.form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="min-w-[680px] px-4 py-4 flex flex-col gap-4 mt-8 p-4 rounded-lg border-solid border-2 border-current"
+          className="min-w-[1400px] px-4 py-4 flex flex-col gap-4 mt-8 p-4 bg-slate-200 dark:bg-slate-800 rounded-lg border-solid border-2 border-current"
           initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{
@@ -332,7 +332,7 @@ const AssetMaintenanceForm = () => {
           <Button
             type="submit"
             disabled={form.formState.isSubmitting}
-            className="mt-6 border-2 rounded-2xl  w-1/2 mx-auto text-white bg-blue-900 hover:bg-blue-600 transition duration-300 ease-in-out p-2"
+            className="mt-6 border-2 rounded-2xl w-[15rem] mx-auto text-white bg-blue-900 hover:bg-blue-600 transition duration-300 ease-in-out p-2"
           >
             {form.formState.isSubmitting ? "Submitting..." : "Submit"}
           </Button>
@@ -340,9 +340,18 @@ const AssetMaintenanceForm = () => {
       </Form>
 
       <div className="mt-4">
-        <Link href="/" className="underline">
-          Home
-        </Link>
+        <motion.div
+          initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{
+            duration: 0.5,
+            ease: "easeInOut",
+          }}
+        >
+          <Link href="/" className="underline">
+            Home
+          </Link>
+        </motion.div>
       </div>
     </div>
   );

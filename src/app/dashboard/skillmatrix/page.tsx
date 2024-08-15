@@ -75,9 +75,14 @@ export default function DemoPage() {
             ...updatedSkill.reduce((acc, cur) => ({ ...acc, ...cur }), {}),
           };
         });
+        // Find the latest lastUpdated date
+        const latestLastUpdated = updatedResult.reduce((latest, item) => {
+          const itemDate = new Date(item.lastUpdated);
+          return itemDate > new Date(latest) ? item.lastUpdated : latest;
+        }, updatedResult[0]?.lastUpdated || "");
 
         setData(updatedResult);
-        setLastUpdated(updatedResult[0]?.lastUpdated);
+        setLastUpdated(latestLastUpdated);
 
         // Determine the maximum number of skills in the fetched data
         const maxSkills = Math.max(...result.map((item) => item.skills.length));

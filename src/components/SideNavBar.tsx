@@ -30,7 +30,7 @@ import {
 type Props = {};
 
 export default function SideNavbar({}: Props) {
-  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const onlyWidth = useWindowWidth();
   const mobileWidth = onlyWidth < 768;
@@ -92,10 +92,10 @@ export default function SideNavbar({}: Props) {
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="forms">
+          <AccordionItem value="Tables">
             <AccordionTrigger>
               <BookPlus className="mr-2 h-4 w-4" />
-              {!isCollapsed && "Forms"}
+              {!isCollapsed && "Tables"}
             </AccordionTrigger>
             <AccordionContent>
               <Link
@@ -128,6 +128,50 @@ export default function SideNavbar({}: Props) {
               </Link>
               <Link
                 href="/dashboard/documentedInformation"
+                className="flex items-center py-1"
+              >
+                <BookText className="mr-2 h-4 w-4" />
+                {!isCollapsed && "Documented Information"}
+              </Link>
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="Forms">
+            <AccordionTrigger>
+              <BookPlus className="mr-2 h-4 w-4" />
+              {!isCollapsed && "Forms"}
+            </AccordionTrigger>
+            <AccordionContent>
+              <Link
+                href="/forms/skillmatrix"
+                className="flex items-center py-1"
+              >
+                <BookText className="mr-2 h-4 w-4" />
+                {!isCollapsed && "Skill Matrix"}
+              </Link>
+              <Link
+                href="/forms/AssetMaintenanceform"
+                className="flex items-center py-1"
+              >
+                <BookText className="mr-2 h-4 w-4" />
+                {!isCollapsed && "Asset Maintenance"}
+              </Link>
+              <Link
+                href="/forms/CaliberationScheduleform"
+                className="flex items-center py-1"
+              >
+                <BookText className="mr-2 h-4 w-4" />
+                {!isCollapsed && "Calibration Schedule"}
+              </Link>
+              <Link
+                href="/forms/NC-Outputform"
+                className="flex items-center py-1"
+              >
+                <BookText className="mr-2 h-4 w-4" />
+                {!isCollapsed && "NC Output"}
+              </Link>
+              <Link
+                href="/forms/DocumentedInformationform"
                 className="flex items-center py-1"
               >
                 <BookText className="mr-2 h-4 w-4" />

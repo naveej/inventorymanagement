@@ -52,8 +52,15 @@ const DemoPage: React.FC = () => {
           targetDate: new Date(item.targetDate).toLocaleDateString(),
           lastUpdated: new Date(item.lastUpdated).toLocaleDateString(),
         }));
+
+        // Find the latest lastUpdated date
+        const latestLastUpdated = formattedData.reduce((latest, item) => {
+          const itemDate = new Date(item.lastUpdated);
+          return itemDate > new Date(latest) ? item.lastUpdated : latest;
+        }, formattedData[0]?.lastUpdated || "");
+
         setData(formattedData);
-        setLastUpdated(formattedData[0]?.lastUpdated);
+        setLastUpdated(latestLastUpdated);
       } catch (error) {
         setError((error as Error).message);
       } finally {

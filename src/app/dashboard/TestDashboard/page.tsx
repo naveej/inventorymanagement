@@ -52,7 +52,6 @@ const TestPage: React.FC = () => {
           targetDate: new Date(item.targetDate).toLocaleDateString(),
           lastUpdated: new Date(item.lastUpdated).toLocaleDateString(),
         }));
-        setData(formattedData);
 
         // Find the latest lastUpdated date
         const latestLastUpdated = formattedData.reduce((latest, item) => {
@@ -60,6 +59,7 @@ const TestPage: React.FC = () => {
           return itemDate > new Date(latest) ? item.lastUpdated : latest;
         }, formattedData[0]?.lastUpdated || "");
 
+        setData(formattedData);
         setLastUpdated(latestLastUpdated);
       } catch (error) {
         setError((error as Error).message);

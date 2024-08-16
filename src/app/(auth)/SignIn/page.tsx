@@ -8,6 +8,7 @@ import { type userTypes } from "@/store/useUserStore";
 const Login = () => {
   const { setUser, setIsAdmin } = useUserStore();
 
+  
   // const handleLogin = async () => {
   //   const result = await fetch("./some/login/path")
   //   const user: userTypes = {

@@ -3,14 +3,13 @@ import jwt, { sign } from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { NextResponse } from 'next/server';
 import dotenv from "dotenv";
-
+import { connectDB } from '@/lib/database';
 dotenv.config();
 
 type RequestBody = {
   email: string;
   password: string;
 };
-
 
 export async function POST(request: Request) {
   try {
@@ -20,7 +19,7 @@ export async function POST(request: Request) {
     if (!email || !password) {
       return NextResponse.json({ error: "Email and password are required" }, { status: 400 });
     }
-
+await connectDB();
     // Find user by email
     const user = await AuthUser.findOne({ email });
     if (!user) {
@@ -32,24 +31,23 @@ export async function POST(request: Request) {
     if (!isPasswordValid) {
       return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
     }
-    const accessKey = process.env.ACCESS_TOKEN_SECRET
     // Generate tokens
-    const accessToken = jwt.sign({ userId: user._id }, process.env.ACCESS_TOKEN_SECRET!, { expiresIn: '1h' });
-    const refreshToken = jwt.sign({ userId: user._id }, process.env.REFRESH_TOKEN_SECRET!, { expiresIn: '30d' });
+    const accessToken = jwt.sign({ email: user.email }, process.env.ACCESS_TOKEN_SECRET!, { expiresIn: '1h' });
+    const refreshToken = jwt.sign({ email: user.email }, process.env.REFRESH_TOKEN_SECRET!, { expiresIn: '30d' });
 
     // Save refresh token in the database
     user.refreshToken = refreshToken;
     await user.save();
 
-    const response = NextResponse.json({ accessToken }, { status: 200 });
+    const response = NextResponse.json({ accessToken}, { status: 200 });
     response.cookies.set('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-      maxAge: 7 * 24 * 60 * 60, // 7 days
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/',
     });
 
-    return NextResponse.json({ accessToken, refreshToken }, { status: 200 });
+    return response;
   } catch (error) {
     console.error("Error logging in:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

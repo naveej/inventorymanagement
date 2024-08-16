@@ -16,6 +16,7 @@ import {
   Library,
   User,
   BookPlus,
+  Shield,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { useWindowWidth } from "@react-hook/window-size";
@@ -94,7 +95,7 @@ export default function SideNavbar({}: Props) {
 
           <AccordionItem value="Tables">
             <AccordionTrigger>
-              <BookPlus className="mr-2 h-4 w-4" />
+              <BookPlus className="mr-1 h-4 w-4" />
               {!isCollapsed && "Tables"}
             </AccordionTrigger>
             <AccordionContent>
@@ -184,6 +185,18 @@ export default function SideNavbar({}: Props) {
 
       <div className="px-2 space-x-6 py-2">
         <ModeToggle />
+      </div>
+      <div className="px-2 py-2 cursor-pointer border border-border hover:bg-primary/20 rounded-lg">
+        {isCollapsed ? (
+          <Shield color="#ff2600" />
+        ) : (
+          <Link
+            href="/adminDashboard"
+            className="flex gap-2 text-red-600 text-sm items-center rounded-lg transition ease-in duration-200"
+          >
+            <Shield /> Admin <br></br>Dashboard
+          </Link>
+        )}
       </div>
     </div>
   );

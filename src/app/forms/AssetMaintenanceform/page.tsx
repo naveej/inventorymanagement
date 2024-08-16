@@ -1,372 +1,358 @@
 "use client";
 
-import React, { FormEvent, useState } from "react";
+import React from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import Link from "next/link";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { toast } from "sonner"; // Import sonnar
+import { motion } from "framer-motion";
+
+// Define the form schema using zod
+const formSchema = z.object({
+  docNo: z.string().min(1, { message: "Doc No is required." }),
+  version: z.string().min(1, { message: "Version No is required." }),
+  preparedBy: z.string().min(1, { message: "Prepared By is required." }),
+  reviewedBy: z.string().min(1, { message: "Reviewed By is required." }),
+  approvedBy: z.string().min(1, { message: "Approved By is required." }),
+  departmentName: z
+    .string()
+    .min(1, { message: "Department Name is required." }),
+  assetName: z.string().min(1, { message: "Asset Name is required." }),
+  assetNo: z.string().min(1, { message: "Asset No is required." }),
+  frequencyOfMaintenance: z
+    .string()
+    .min(1, { message: "Frequency of Maintenance is required." }),
+  typeOfAsset: z.string().min(1, { message: "Type of Asset is required." }),
+  lastDoneAt: z.string().min(1, { message: "Last Done At is required." }),
+  refNo: z.string().min(1, { message: "Ref No is required." }),
+  nextDueOn: z.string().min(1, { message: "Next Due On is required." }),
+  comments: z.string().min(1, { message: "Comments are required." }),
+});
 
 const AssetMaintenanceForm = () => {
-  const [docNo, setDocNo] = useState<string>("IAD009");
-  const [version, setVersion] = useState<string>("01");
-  const [preparedBy, setPreparedBy] = useState<string>(
-    "Dr Pavana Kumara B - Head-IQAC"
-  );
-  const [reviewedBy, setReviewedBy] = useState<string>(
-    "Dr Prakash Pinto - Dean MBA"
-  );
-  const [approvedBy, setApprovedBy] = useState<string>(
-    "Dr Rio D'Souza - Principal"
-  );
-  const [departmentName, setDepartmentName] = useState<string>("");
-  const [assetName, setAssetName] = useState<string>("");
-  const [assetNo, setAssetNo] = useState<string>("");
-  const [frequencyOfMaintenance, setFrequencyOfMaintenance] =
-    useState<string>("");
-  const [typeOfAsset, setTypeOfAsset] = useState<string>("");
-  const [lastDoneAt, setLastDoneAt] = useState<Date>();
-  const [refNo, setRefNo] = useState<string>("");
-  const [nextDueOn, setNextDueOn] = useState<Date>();
-  const [comments, setComments] = useState<string>("");
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  // Set up the form using useForm and zodResolver
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      docNo: "IAD011",
+      version: "01",
+      preparedBy: "Dr Pavana Kumara B - Head-IQAC",
+      reviewedBy: "Dr Prakash Pinto - Dean MBA",
+      approvedBy: "Dr Rio D'Souza - Principal",
+      departmentName: "",
+      assetName: "",
+      assetNo: "",
+      frequencyOfMaintenance: "",
+      typeOfAsset: "",
+      lastDoneAt: "",
+      refNo: "",
+      nextDueOn: "",
+      comments: "",
+    },
+  });
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    // Validate required fields
-    if (
-      !departmentName ||
-      !assetName ||
-      !assetNo ||
-      !frequencyOfMaintenance ||
-      !typeOfAsset ||
-      !lastDoneAt ||
-      !refNo ||
-      !nextDueOn ||
-      !comments
-    ) {
-      setError("Please fill out all required fields.");
-      return;
-    }
+  // Define the submit handler
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const metadata = {
-      docNo,
-      version,
-      preparedBy,
-      reviewedBy,
-      approvedBy,
-      departmentName,
+      docNo: values.docNo,
+      version: values.version,
+      preparedBy: values.preparedBy,
+      reviewedBy: values.reviewedBy,
+      approvedBy: values.approvedBy,
+      departmentName: values.departmentName,
     };
 
     const formData = {
       metadata,
-      assetName,
-      assetNo,
-      frequencyOfMaintenance,
-      typeOfAsset,
-      lastDoneAt,
-      refNo,
-      nextDueOn,
-      comments,
+      assetName: values.assetName,
+      assetNo: values.assetNo,
+      frequencyOfMaintenance: values.frequencyOfMaintenance,
+      typeOfAsset: values.typeOfAsset,
+      lastDoneAt: values.lastDoneAt,
+      refNo: values.refNo,
+      nextDueOn: values.nextDueOn,
+      comments: values.comments,
     };
 
     console.log("Client before Send", formData);
-    setLoading(true);
-    try {
-      const result = await axios.post(
-        "/api/post/create/assetMaintenance",
-        formData
-      );
-      console.log("Result", result);
-      setError(null); // Clear any previous errors
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error("Axios error message:", error.message);
-        console.error("Axios error response:", error.response);
-        setError(error.response?.data?.error || "An error occurred");
-      } else {
-        console.error("Unexpected error:", error);
-        setError("An unexpected error occurred");
-      }
-    } finally {
-      setLoading(false);
-    }
+    const promise = axios.post("/api/post/create/ncOutput", formData);
+    form.reset();
+    toast.promise(promise, {
+      loading: "Loading...",
+      success: (result) => {
+        console.log("Result", result);
+        return "Form submitted successfully!";
+      },
+      error: (error) => {
+        if (axios.isAxiosError(error)) {
+          console.error("Axios error message:", error.message);
+          console.error("Axios error response:", error.response);
+          return `Error: ${error.message}`;
+        } else {
+          console.error("Unexpected error:", error);
+          return "Unexpected error occurred.";
+        }
+      },
+    });
   };
-
   return (
-    <div className="w-full h-full flex p-4 justify-center items-center flex-col dark:text-white text-black">
-      <div className="text-3xl font-bold dark:text-white text-black">
-        Asset Maintenance Form
-      </div>
-
-      <form
-        onSubmit={handleSubmit}
-        className="min-w-[500px] px-4 py-4 flex flex-col gap-4 mt-8 bg-slate-200 dark:bg-slate-800 p-4 rounded-lg"
+    <div className="w-full h-full flex p-4 justify-center items-center flex-col">
+      <motion.div
+        className="text-6xl font-bold"
+        initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        transition={{
+          duration: 0.7,
+          ease: "easeInOut",
+        }}
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {/** Form Fields */}
-          <div className="flex flex-col gap-2">
-            <label
-              htmlFor="docNo"
-              className="dark:text-slate-300 text-slate-700 font-semibold"
-            >
-              Doc No
-            </label>
-            <Input
-              type="text"
-              id="docNo"
-              placeholder="Doc No"
-              value={docNo}
-              onChange={(e) => setDocNo(e.target.value)}
-              className="p-2 rounded dark:bg-slate-700 dark:text-white text-slate-600 border-gray-300 dark:border-slate-600"
+        Asset Maintenance Form
+      </motion.div>
+
+      <Form {...form}>
+        <motion.form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="min-w-[1400px] px-4 py-4 flex flex-col gap-4 mt-8 p-4 bg-slate-200 dark:bg-slate-800 rounded-lg border-solid border-2 border-current"
+          initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{
+            duration: 0.5,
+            ease: "easeInOut",
+          }}
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <FormField
+              control={form.control}
+              name="docNo"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Doc No</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Doc No" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="version"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Version No</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Version No" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="preparedBy"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Prepared By</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Prepared By" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="reviewedBy"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Reviewed By</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Reviewed By" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="approvedBy"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Approved By</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Approved By" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="departmentName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Department Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Department Name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="assetName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Asset Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Asset Name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="assetNo"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Asset No</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Asset No" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="frequencyOfMaintenance"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Frequency Of Maintenance</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Frequency Of Maintenance" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="typeOfAsset"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Type Of Asset</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Type Of Asset" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="lastDoneAt"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Last Done At</FormLabel>
+                  <FormControl>
+                    <Input type="date" placeholder="Last Done At" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="refNo"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Ref No</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Ref No" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="nextDueOn"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>Next Due On</FormLabel>
+                  <FormControl>
+                    <Input type="date" placeholder="Next Due On" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="comments"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Comments</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Comments" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label
-              htmlFor="version"
-              className="dark:text-slate-300 text-slate-700 font-semibold"
-            >
-              Version No
-            </label>
-            <Input
-              type="text"
-              id="version"
-              placeholder="Version No"
-              value={version}
-              onChange={(e) => setVersion(e.target.value)}
-              className="p-2 rounded dark:bg-slate-700 dark:text-white text-slate-600 border-gray-300 dark:border-slate-600"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label
-              htmlFor="preparedBy"
-              className="dark:text-slate-300 text-slate-700 font-semibold"
-            >
-              Prepared By
-            </label>
-            <Input
-              type="text"
-              id="preparedBy"
-              placeholder="Prepared By"
-              value={preparedBy}
-              onChange={(e) => setPreparedBy(e.target.value)}
-              className="p-2 rounded dark:bg-slate-700 dark:text-white text-slate-600 border-gray-300 dark:border-slate-600"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label
-              htmlFor="reviewedBy"
-              className="dark:text-slate-300 text-slate-700 font-semibold"
-            >
-              Reviewed By
-            </label>
-            <Input
-              type="text"
-              id="reviewedBy"
-              placeholder="Reviewed By"
-              value={reviewedBy}
-              onChange={(e) => setReviewedBy(e.target.value)}
-              className="p-2 rounded dark:bg-slate-700 dark:text-white text-slate-600 border-gray-300 dark:border-slate-600"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label
-              htmlFor="approvedBy"
-              className="dark:text-slate-300 text-slate-700 font-semibold"
-            >
-              Approved By
-            </label>
-            <Input
-              type="text"
-              id="approvedBy"
-              placeholder="Approved By"
-              value={approvedBy}
-              onChange={(e) => setApprovedBy(e.target.value)}
-              className="p-2 rounded dark:bg-slate-700 dark:text-white text-slate-600 border-gray-300 dark:border-slate-600"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label
-              htmlFor="departmentName"
-              className="dark:text-slate-300 text-slate-700 font-semibold"
-            >
-              Department Name
-            </label>
-            <Input
-              type="text"
-              id="departmentName"
-              placeholder="Department Name"
-              value={departmentName}
-              onChange={(e) => setDepartmentName(e.target.value)}
-              className="p-2 rounded dark:bg-slate-700 dark:text-white text-slate-600 border-gray-300 dark:border-slate-600"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label
-              htmlFor="assetName"
-              className="dark:text-slate-300 text-slate-700 font-semibold"
-            >
-              Asset Name
-            </label>
-            <Input
-              type="text"
-              id="assetName"
-              placeholder="Asset Name"
-              value={assetName}
-              onChange={(e) => setAssetName(e.target.value)}
-              className="p-2 rounded dark:bg-slate-700 dark:text-white text-slate-600 border-gray-300 dark:border-slate-600"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label
-              htmlFor="assetNo"
-              className="dark:text-slate-300 text-slate-700 font-semibold"
-            >
-              Asset No
-            </label>
-            <Input
-              type="text"
-              id="assetNo"
-              placeholder="Asset No"
-              value={assetNo}
-              onChange={(e) => setAssetNo(e.target.value)}
-              className="p-2 rounded dark:bg-slate-700 dark:text-white text-slate-600 border-gray-300 dark:border-slate-600"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label
-              htmlFor="frequencyOfMaintenance"
-              className="dark:text-slate-300 text-slate-700 font-semibold"
-            >
-              Frequency of Maintenance
-            </label>
-            <Input
-              type="text"
-              id="frequencyOfMaintenance"
-              placeholder="Frequency of Maintenance"
-              value={frequencyOfMaintenance}
-              onChange={(e) => setFrequencyOfMaintenance(e.target.value)}
-              className="p-2 rounded dark:bg-slate-700 dark:text-white text-slate-600 border-gray-300 dark:border-slate-600"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label
-              htmlFor="typeOfAsset"
-              className="dark:text-slate-300 text-slate-700 font-semibold"
-            >
-              Type of Asset
-            </label>
-            <Input
-              type="text"
-              id="typeOfAsset"
-              placeholder="Type of Asset"
-              value={typeOfAsset}
-              onChange={(e) => setTypeOfAsset(e.target.value)}
-              className="p-2 rounded dark:bg-slate-700 dark:text-white text-slate-600 border-gray-300 dark:border-slate-600"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label
-              htmlFor="lastDoneAt"
-              className="dark:text-slate-300 text-slate-700 font-semibold"
-            >
-              Last Done At
-            </label>
-            <Input
-              type="date"
-              id="lastDoneAt"
-              placeholder="Last Done At"
-              value={lastDoneAt?.toString()}
-              onChange={(e) => setLastDoneAt(e.target.valueAsDate || undefined)}
-              className="p-2 rounded dark:bg-slate-700 dark:text-white text-slate-600 border-gray-300 dark:border-slate-600"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label
-              htmlFor="refNo"
-              className="dark:text-slate-300 text-slate-700 font-semibold"
-            >
-              Reference No
-            </label>
-            <Input
-              type="text"
-              id="refNo"
-              placeholder="Reference No"
-              value={refNo}
-              onChange={(e) => setRefNo(e.target.value)}
-              className="p-2 rounded dark:bg-slate-700 dark:text-white text-slate-600 border-gray-300 dark:border-slate-600"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label
-              htmlFor="nextDueOn"
-              className="dark:text-slate-300 text-slate-700 font-semibold"
-            >
-              Next Due On
-            </label>
-            <Input
-              type="date"
-              id="nextDueOn"
-              placeholder="Next Due On"
-              value={nextDueOn?.toString()}
-              onChange={(e) => setNextDueOn(e.target.valueAsDate || undefined)}
-              className="p-2 rounded dark:bg-slate-700 dark:text-white text-slate-600 border-gray-300 dark:border-slate-600"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2 col-span-full">
-            <label
-              htmlFor="comments"
-              className="dark:text-slate-300 text-slate-700 font-semibold"
-            >
-              Comments
-            </label>
-            <Input
-              type="text"
-              id="comments"
-              placeholder="Comments"
-              value={comments}
-              onChange={(e) => setComments(e.target.value)}
-              className="p-2 rounded dark:bg-slate-700 dark:text-white text-slate-600 border-gray-300 dark:border-slate-600"
-            />
-          </div>
-        </div>
-
-        {error && (
-          <div className="text-red-500 text-center mt-4 font-semibold">
-            {error}
-          </div>
-        )}
-
-        <div className="flex justify-center mt-4">
           <Button
             type="submit"
-            disabled={loading}
-            className="p-2 bg-blue-500 dark:bg-blue-700 text-white rounded hover:bg-blue-600 dark:hover:bg-blue-800 transition-all"
+            disabled={form.formState.isSubmitting}
+            className="mt-6 border-2 rounded-2xl w-[15rem] mx-auto text-white bg-blue-900 hover:bg-blue-600 transition duration-300 ease-in-out p-2"
           >
-            {loading ? "Loading..." : "Submit"}
+            {form.formState.isSubmitting ? "Submitting..." : "Submit"}
           </Button>
-        </div>
-      </form>
+        </motion.form>
+      </Form>
 
-      <Link
-        href="/"
-        className="mt-4 text-blue-500 dark:text-blue-300 hover:underline"
-      >
-        Back to Home
-      </Link>
+      <div className="mt-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{
+            duration: 0.5,
+            ease: "easeInOut",
+          }}
+        >
+          <Link href="/" className="underline">
+            Home
+          </Link>
+        </motion.div>
+      </div>
     </div>
   );
 };

@@ -24,9 +24,10 @@ interface NavProps {
     variant: "default" | "ghost";
     href: string;
   }[];
+  children?: React.ReactNode; // Add this line
 }
 
-export function Nav({ links, isCollapsed }: NavProps) {
+export function Nav({ links, isCollapsed, children }: NavProps) {
   const pathName = usePathname();
   return (
     <TooltipProvider>
@@ -98,6 +99,7 @@ export function Nav({ links, isCollapsed }: NavProps) {
             )
           )}
         </nav>
+        {children && <div>{children}</div>} {/* Render children if provided */}
       </div>
     </TooltipProvider>
   );

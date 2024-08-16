@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import React from "react";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -39,7 +39,17 @@ export type NCOutput = {
 export const columns: ColumnDef<NCOutput, unknown>[] = [
   {
     accessorKey: "date",
-    header: "Date",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Date
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => (
       <span>{new Date(row.original.date).toLocaleDateString()}</span>
     ),

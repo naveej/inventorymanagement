@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { DataTable } from "@/components/ui/data-table";
 import Image from "next/image";
 import logo from "../../assets/logo.png";
+import { motion } from "framer-motion";
 
 interface NCOutput {
   _id: string;
@@ -51,7 +52,6 @@ const TestPage: React.FC = () => {
           targetDate: new Date(item.targetDate).toLocaleDateString(),
           lastUpdated: new Date(item.lastUpdated).toLocaleDateString(),
         }));
-        setData(formattedData);
 
         // Find the latest lastUpdated date
         const latestLastUpdated = formattedData.reduce((latest, item) => {
@@ -59,6 +59,7 @@ const TestPage: React.FC = () => {
           return itemDate > new Date(latest) ? item.lastUpdated : latest;
         }, formattedData[0]?.lastUpdated || "");
 
+        setData(formattedData);
         setLastUpdated(latestLastUpdated);
       } catch (error) {
         setError((error as Error).message);
@@ -79,7 +80,15 @@ const TestPage: React.FC = () => {
   }
 
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
+      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      transition={{
+        duration: 0.8,
+        ease: "easeInOut",
+        staggerChildren: 0.2,
+      }}
+    >
       <div className="text-center text-3xl font-bold py-4 dark:text-white text-black">
         NC Output
       </div>
@@ -170,7 +179,7 @@ const TestPage: React.FC = () => {
           <DataTable columns={columns} data={data} />
         </div>
       </div>
-    </>
+    </motion.div>
   );
 };
 

@@ -15,24 +15,22 @@ import {
   House,
   Library,
   User,
+  BookPlus,
 } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Button } from "./ui/button";
 import { useWindowWidth } from "@react-hook/window-size";
 import { ModeToggle } from "./ui/modeTogglebutton";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
 
 type Props = {};
 
 export default function SideNavbar({}: Props) {
-  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const onlyWidth = useWindowWidth();
   const mobileWidth = onlyWidth < 768;
@@ -42,9 +40,9 @@ export default function SideNavbar({}: Props) {
   }
 
   return (
-    <div className="flex justify-start item-center flex-col relative min-w-[80px] border-r border-secondary px-3 py-4 ">
+    <div className="flex justify-start items-center flex-col relative min-w-[80px] border-r border-secondary px-3 py-4">
       {!mobileWidth && (
-        <div className="flex justify-center item-center">
+        <div className="flex justify-center items-center">
           <Button
             onClick={toggleSidebar}
             variant="secondary"
@@ -58,7 +56,7 @@ export default function SideNavbar({}: Props) {
         </div>
       )}
 
-      <div className="flex justify-center item-center mt-8">
+      <div className="flex justify-center items-center mt-8">
         <Image
           src={logo.src}
           alt="logo"
@@ -69,77 +67,120 @@ export default function SideNavbar({}: Props) {
         />
       </div>
 
-      <Nav
-        isCollapsed={mobileWidth ? true : isCollapsed}
-        links={[
-          {
-            title: "Dashboard",
-            href: "/",
-            icon: LayoutDashboard,
-            variant: "default",
-          },
-          {
-            title: "Users",
-            href: "#",
-            icon: UsersRound,
-            variant: "ghost",
-          },
-          {
-            title: "Settings",
-            href: "#",
-            icon: Settings,
-            variant: "ghost",
-          },
-          {
-            title: "Skill Matrix",
-            href: "/dashboard/skillmatrix",
-            icon: BookText,
-            variant: "ghost",
-          },
-          {
-            title: "Asset Maintenance",
-            href: "/dashboard/assetMaintenance",
-            icon: BookText,
-            variant: "ghost",
-          },
-          {
-            title: "Calibration Schedule",
-            href: "/dashboard/caliberation_Schedule",
-            icon: BookText,
-            variant: "ghost",
-          },
-          {
-            title: "NC Output",
-            href: "/dashboard/ncOutput",
-            icon: BookText,
-            variant: "ghost",
-          },
-          {
-            title: "Documented Information",
-            href: "/dashboard/documentedInformation",
-            icon: BookText,
-            variant: "ghost",
-          },
-          {
-            title: "Home",
-            href: "#",
-            icon: House,
-            variant: "ghost",
-          },
-          {
-            title: "Accounts",
-            href: "#",
-            icon: User,
-            variant: "ghost",
-          },
-          {
-            title: "Categories",
-            href: "#",
-            icon: Library,
-            variant: "ghost",
-          },
-        ]}
-      />
+      <Nav isCollapsed={mobileWidth ? true : isCollapsed} links={[]}>
+        <Accordion type="single" collapsible>
+          <AccordionItem value="main">
+            <AccordionTrigger>
+              <LayoutDashboard className="mr-2 h-4 w-4" />
+              {!isCollapsed && "Main"}
+            </AccordionTrigger>
+            <AccordionContent>
+              {
+                <Link href="/" className="flex items-center py-1">
+                  <House className="mr-2 h-4 w-4" />
+                  {!isCollapsed && "Home"}
+                </Link>
+              }
+              <Link href="#" className="flex items-center py-1">
+                <UsersRound className="mr-2 h-4 w-4" />
+                {!isCollapsed && "Users"}
+              </Link>
+              <Link href="#" className="flex items-center py-1">
+                <Settings className="mr-2 h-4 w-4" />
+                {!isCollapsed && "Settings"}
+              </Link>
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="Tables">
+            <AccordionTrigger>
+              <BookPlus className="mr-2 h-4 w-4" />
+              {!isCollapsed && "Tables"}
+            </AccordionTrigger>
+            <AccordionContent>
+              <Link
+                href="/dashboard/skillmatrix"
+                className="flex items-center py-1"
+              >
+                <BookText className="mr-2 h-4 w-4" />
+                {!isCollapsed && "Skill Matrix"}
+              </Link>
+              <Link
+                href="/dashboard/assetMaintenance"
+                className="flex items-center py-1"
+              >
+                <BookText className="mr-2 h-4 w-4" />
+                {!isCollapsed && "Asset Maintenance"}
+              </Link>
+              <Link
+                href="/dashboard/caliberation_Schedule"
+                className="flex items-center py-1"
+              >
+                <BookText className="mr-2 h-4 w-4" />
+                {!isCollapsed && "Calibration Schedule"}
+              </Link>
+              <Link
+                href="/dashboard/ncOutput"
+                className="flex items-center py-1"
+              >
+                <BookText className="mr-2 h-4 w-4" />
+                {!isCollapsed && "NC Output"}
+              </Link>
+              <Link
+                href="/dashboard/documentedInformation"
+                className="flex items-center py-1"
+              >
+                <BookText className="mr-2 h-4 w-4" />
+                {!isCollapsed && "Documented Information"}
+              </Link>
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="Forms">
+            <AccordionTrigger>
+              <BookPlus className="mr-2 h-4 w-4" />
+              {!isCollapsed && "Forms"}
+            </AccordionTrigger>
+            <AccordionContent>
+              <Link
+                href="/forms/skillmatrix"
+                className="flex items-center py-1"
+              >
+                <BookText className="mr-2 h-4 w-4" />
+                {!isCollapsed && "Skill Matrix"}
+              </Link>
+              <Link
+                href="/forms/AssetMaintenanceform"
+                className="flex items-center py-1"
+              >
+                <BookText className="mr-2 h-4 w-4" />
+                {!isCollapsed && "Asset Maintenance"}
+              </Link>
+              <Link
+                href="/forms/CaliberationScheduleform"
+                className="flex items-center py-1"
+              >
+                <BookText className="mr-2 h-4 w-4" />
+                {!isCollapsed && "Calibration Schedule"}
+              </Link>
+              <Link
+                href="/forms/NC-Outputform"
+                className="flex items-center py-1"
+              >
+                <BookText className="mr-2 h-4 w-4" />
+                {!isCollapsed && "NC Output"}
+              </Link>
+              <Link
+                href="/forms/DocumentedInformationform"
+                className="flex items-center py-1"
+              >
+                <BookText className="mr-2 h-4 w-4" />
+                {!isCollapsed && "Documented Information"}
+              </Link>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </Nav>
 
       <div className="px-2 space-x-6 py-2">
         <ModeToggle />

@@ -1,15 +1,14 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import React, { useState, useEffect } from "react";
-import { MoreHorizontal } from "lucide-react";
+import React, { useState } from "react";
+import { MoreHorizontal, ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
@@ -25,7 +24,7 @@ export type CalibrationSchedule = {
     reviewedBy: string;
     approvedBy: string;
     departmentName: string;
-  }; // Adjust this type according to MetadataSchema
+  };
   instrumentName: string;
   instrumentNo: string;
   frequencyOfCalibration: string;
@@ -37,7 +36,7 @@ export type CalibrationSchedule = {
   lastUpdated: string;
 };
 
-async function deleteRow(id: string) {
+async function deleteRow(id: string, fetchData: () => void) {
   try {
     const response = await axios.delete(
       `/api/post/delete/caliberationSchedule`,
@@ -47,6 +46,7 @@ async function deleteRow(id: string) {
     );
     if (response.status === 200) {
       toast.success("Row deleted successfully!");
+      fetchData(); // Refresh the table data
     } else {
       throw new Error(response.data.message || "Failed to delete the row");
     }
@@ -62,7 +62,9 @@ async function deleteRow(id: string) {
   }
 }
 
-export const columns: ColumnDef<CalibrationSchedule, unknown>[] = [
+export const columns = (
+  fetchData: () => void
+): ColumnDef<CalibrationSchedule, unknown>[] => [
   {
     accessorKey: "instrumentName",
     header: "Instrument Name",
@@ -85,7 +87,18 @@ export const columns: ColumnDef<CalibrationSchedule, unknown>[] = [
   },
   {
     accessorKey: "lastDoneAt",
-    header: "Last Done At",
+    header: ({ column }) => {
+      return (
+        <Button
+          className="p-0"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Last Done At
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => (
       <span>{new Date(row.original.lastDoneAt).toLocaleDateString()}</span>
     ),
@@ -97,7 +110,18 @@ export const columns: ColumnDef<CalibrationSchedule, unknown>[] = [
   },
   {
     accessorKey: "nextDueOn",
-    header: "Next Due On",
+    header: ({ column }) => {
+      return (
+        <Button
+          className="p-0"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Next Due On
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => (
       <span>{new Date(row.original.nextDueOn).toLocaleDateString()}</span>
     ),
@@ -110,17 +134,16 @@ export const columns: ColumnDef<CalibrationSchedule, unknown>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const [data, setData] = useState(row.original);
       const [loading, setLoading] = useState(false);
 
       const handleDelete = async (id: string) => {
         if (window.confirm("Are you sure you want to delete this item?")) {
           setLoading(true);
-          await deleteRow(id);
-          // Refresh the table data here if necessary
+          await deleteRow(id, fetchData);
           setLoading(false);
         }
       };
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -140,8 +163,8 @@ export const columns: ColumnDef<CalibrationSchedule, unknown>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => {
-                if (data._id) {
-                  navigator.clipboard.writeText(data._id);
+                if (row.original._id) {
+                  navigator.clipboard.writeText(row.original._id);
                 } else {
                   console.error("_id is undefined");
                 }
@@ -152,8 +175,8 @@ export const columns: ColumnDef<CalibrationSchedule, unknown>[] = [
             <DropdownMenuItem>Update</DropdownMenuItem>
             <DropdownMenuItem
               onClick={async () => {
-                if (data._id) {
-                  await handleDelete(data._id);
+                if (row.original._id) {
+                  await handleDelete(row.original._id);
                 } else {
                   console.error("_id is undefined");
                 }

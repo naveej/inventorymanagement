@@ -15,7 +15,7 @@ interface CalibrationSchedule {
     reviewedBy: string;
     approvedBy: string;
     departmentName: string;
-  }; // Adjust this type according to MetadataSchema
+  };
   instrumentName: string;
   instrumentNo: string;
   frequencyOfCalibration: string;
@@ -41,31 +41,32 @@ const DemoPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string>();
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const data = await getData();
-        const formattedData = data.map((item) => ({
-          ...item,
-          lastDoneAt: new Date(item.lastDoneAt).toLocaleDateString(),
-          nextDueOn: new Date(item.nextDueOn).toLocaleDateString(),
-          lastUpdated: new Date(item.lastUpdated).toLocaleDateString(),
-        }));
-        // Find the latest lastUpdated date
-        const latestLastUpdated = formattedData.reduce((latest, item) => {
-          const itemDate = new Date(item.lastUpdated);
-          return itemDate > new Date(latest) ? item.lastUpdated : latest;
-        }, formattedData[0]?.lastUpdated || "");
+  const fetchData = async () => {
+    try {
+      const data = await getData();
+      const formattedData = data.map((item) => ({
+        ...item,
+        lastDoneAt: new Date(item.lastDoneAt).toLocaleDateString(),
+        nextDueOn: new Date(item.nextDueOn).toLocaleDateString(),
+        lastUpdated: new Date(item.lastUpdated).toLocaleDateString(),
+      }));
 
-        setData(formattedData);
-        setLastUpdated(latestLastUpdated);
-      } catch (error) {
-        setError((error as Error).message);
-      } finally {
-        setLoading(false);
-      }
+      // Find the latest lastUpdated date
+      const latestLastUpdated = formattedData.reduce((latest, item) => {
+        const itemDate = new Date(item.lastUpdated);
+        return itemDate > new Date(latest) ? item.lastUpdated : latest;
+      }, formattedData[0]?.lastUpdated || "");
+
+      setData(formattedData);
+      setLastUpdated(latestLastUpdated);
+    } catch (error) {
+      setError((error as Error).message);
+    } finally {
+      setLoading(false);
     }
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -171,9 +172,10 @@ const DemoPage: React.FC = () => {
             </span>
           </p>
         </div>
+
         {/* --- Database --- */}
         <div className="justify-center px-12 py-6">
-          <DataTable columns={columns} data={data} />
+          <DataTable columns={columns(fetchData)} data={data} />
         </div>
       </div>
     </motion.div>

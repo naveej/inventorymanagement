@@ -1,8 +1,7 @@
 "use client";
-
 import { ColumnDef } from "@tanstack/react-table";
-import React, { useState, useEffect } from "react";
-import { MoreHorizontal } from "lucide-react";
+import React, { useState } from "react";
+import { MoreHorizontal, ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -15,7 +14,6 @@ import {
 import { toast } from "sonner";
 import axios from "axios";
 
-// This type is used to define the shape of our data.
 export type DocumentedInformation = {
   _id: string;
   metadata: {
@@ -39,7 +37,7 @@ export type DocumentedInformation = {
   lastUpdated: string;
 };
 
-async function deleteRow(id: string) {
+async function deleteRow(id: string, fetchData: () => void) {
   try {
     const response = await axios.delete(
       `/api/post/delete/documentedInformation`,
@@ -49,6 +47,7 @@ async function deleteRow(id: string) {
     );
     if (response.status === 200) {
       toast.success("Row deleted successfully!");
+      fetchData(); // Refresh the table data
     } else {
       throw new Error(response.data.message || "Failed to delete the row");
     }
@@ -64,7 +63,9 @@ async function deleteRow(id: string) {
   }
 }
 
-export const columns: ColumnDef<DocumentedInformation, unknown>[] = [
+export const columns = (
+  fetchData: () => void
+): ColumnDef<DocumentedInformation, unknown>[] => [
   {
     accessorKey: "documentTitle",
     header: "Document Title",
@@ -72,27 +73,38 @@ export const columns: ColumnDef<DocumentedInformation, unknown>[] = [
   },
   {
     accessorKey: "refNo",
-    header: "Reference Number",
+    header: "Reference No",
     cell: ({ row }) => <span>{row.original.refNo}</span>,
   },
   {
     accessorKey: "versionNo",
-    header: "Version Number",
+    header: "Version No",
     cell: ({ row }) => <span>{row.original.versionNo}</span>,
   },
   {
     accessorKey: "area",
-    header: "Internal/External",
+    header: "Area",
     cell: ({ row }) => <span>{row.original.area}</span>,
   },
   {
     accessorKey: "typeOfDocument",
-    header: "Document/Record",
+    header: "Type of Document",
     cell: ({ row }) => <span>{row.original.typeOfDocument}</span>,
   },
   {
     accessorKey: "effectiveDate",
-    header: "Effective Date",
+    header: ({ column }) => {
+      return (
+        <Button
+          className="p-0"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Effective Date
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => (
       <span>{new Date(row.original.effectiveDate).toLocaleDateString()}</span>
     ),
@@ -117,21 +129,37 @@ export const columns: ColumnDef<DocumentedInformation, unknown>[] = [
     header: "Retention Period",
     cell: ({ row }) => <span>{row.original.retentionPeriod}</span>,
   },
-
+  {
+    accessorKey: "lastUpdated",
+    header: ({ column }) => {
+      return (
+        <Button
+          className="p-0"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Last Updated
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => (
+      <span>{new Date(row.original.lastUpdated).toLocaleDateString()}</span>
+    ),
+  },
   {
     id: "actions",
     cell: ({ row }) => {
-      const [data, setData] = useState(row.original);
       const [loading, setLoading] = useState(false);
 
       const handleDelete = async (id: string) => {
         if (window.confirm("Are you sure you want to delete this item?")) {
           setLoading(true);
-          await deleteRow(id);
-          // Refresh the table data here if necessary
+          await deleteRow(id, fetchData);
           setLoading(false);
         }
       };
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -151,8 +179,8 @@ export const columns: ColumnDef<DocumentedInformation, unknown>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => {
-                if (data._id) {
-                  navigator.clipboard.writeText(data._id);
+                if (row.original._id) {
+                  navigator.clipboard.writeText(row.original._id);
                 } else {
                   console.error("_id is undefined");
                 }
@@ -163,8 +191,8 @@ export const columns: ColumnDef<DocumentedInformation, unknown>[] = [
             <DropdownMenuItem>Update</DropdownMenuItem>
             <DropdownMenuItem
               onClick={async () => {
-                if (data._id) {
-                  await handleDelete(data._id);
+                if (row.original._id) {
+                  await handleDelete(row.original._id);
                 } else {
                   console.error("_id is undefined");
                 }

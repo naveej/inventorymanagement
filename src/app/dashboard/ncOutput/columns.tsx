@@ -39,11 +39,9 @@ export type NCOutput = {
 
 async function deleteRow(id: string) {
   try {
-    console.log(`Sending DELETE request to /api/post/delete/ncOutput?id=${id}`);
     const response = await axios.delete(`/api/post/delete/ncOutput`, {
       data: { id },
     });
-    console.log(`Received response:`, response);
     if (response.status === 200) {
       toast.success("Row deleted successfully!");
     } else {

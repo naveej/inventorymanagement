@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +12,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { toast } from "sonner";
+import axios from "axios";
 
 // This type is used to define the shape of our data.
 export type Asset = {
@@ -34,6 +36,28 @@ export type Asset = {
   comments: string;
   lastUpdated: string;
 };
+
+async function deleteRow(id: string) {
+  try {
+    const response = await axios.delete(`/api/post/delete/assetMaintenance`, {
+      data: { id },
+    });
+    if (response.status === 200) {
+      toast.success("Row deleted successfully!");
+    } else {
+      throw new Error(response.data.message || "Failed to delete the row");
+    }
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      // Handle known errors from the server
+      toast.error(`Failed to delete row: ${error.response.data.message}`);
+    } else {
+      // Handle unknown errors
+      toast.error("Failed to delete row. Please try again later.");
+    }
+    console.error("Error deleting row:", error);
+  }
+}
 
 export const columns: ColumnDef<Asset, unknown>[] = [
   {
@@ -83,7 +107,18 @@ export const columns: ColumnDef<Asset, unknown>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const data = row.original;
+      const [data, setData] = useState(row.original);
+      const [loading, setLoading] = useState(false);
+
+      const handleDelete = async (id: string) => {
+        if (window.confirm("Are you sure you want to delete this item?")) {
+          setLoading(true);
+          await deleteRow(id);
+          // Refresh the table data here if necessary
+          setLoading(false);
+        }
+      };
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -113,7 +148,17 @@ export const columns: ColumnDef<Asset, unknown>[] = [
               Copy Entry ID
             </DropdownMenuItem>
             <DropdownMenuItem>Update</DropdownMenuItem>
-            <DropdownMenuItem>Delete</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={async () => {
+                if (data._id) {
+                  await handleDelete(data._id);
+                } else {
+                  console.error("_id is undefined");
+                }
+              }}
+            >
+              Delete
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

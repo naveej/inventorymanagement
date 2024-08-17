@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ExtendedColumnDef } from "@/app/_types/utility.types";
 import { motion } from "framer-motion";
+import axios from "axios";
+import { toast } from "sonner";
 
 interface SkillMatrixForm {
   _id: string;
@@ -50,6 +52,28 @@ async function fetchData(): Promise<SkillMatrixForm[]> {
     skills: item.skills,
     lastUpdated: new Date(item.lastUpdated).toLocaleDateString(),
   }));
+}
+
+async function deleteRow(id: string) {
+  try {
+    const response = await axios.delete(`/api/post/delete/skillMatrix`, {
+      data: { id },
+    });
+    if (response.status === 200) {
+      toast.success("Row deleted successfully!");
+    } else {
+      throw new Error(response.data.message || "Failed to delete the row");
+    }
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      // Handle known errors from the server
+      toast.error(`Failed to delete row: ${error.response.data.message}`);
+    } else {
+      // Handle unknown errors
+      toast.error("Failed to delete row. Please try again later.");
+    }
+    console.error("Error deleting row:", error);
+  }
 }
 
 export default function DemoPage() {
@@ -114,7 +138,20 @@ export default function DemoPage() {
             id: "actions",
             className: "text-right",
             cell: ({ row }) => {
-              const data = row.original;
+              const [data, setData] = useState(row.original);
+              const [loading, setLoading] = useState(false);
+
+              const handleDelete = async (id: string) => {
+                if (
+                  window.confirm("Are you sure you want to delete this item?")
+                ) {
+                  setLoading(true);
+                  await deleteRow(id);
+                  // Refresh the table data here if necessary
+                  setLoading(false);
+                }
+              };
+
               return (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -145,7 +182,15 @@ export default function DemoPage() {
                     <DropdownMenuItem className="dark:hover:bg-slate-700 hover:bg-gray-100">
                       Update
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="dark:hover:bg-slate-700 hover:bg-gray-100">
+                    <DropdownMenuItem
+                      onClick={async () => {
+                        if (data._id) {
+                          await handleDelete(data._id);
+                        } else {
+                          console.error("_id is undefined");
+                        }
+                      }}
+                    >
                       Delete
                     </DropdownMenuItem>
                   </DropdownMenuContent>

@@ -88,36 +88,30 @@ export function DataTable<TData, TValue>({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => {
-                console.log(
-                  "ColumnsData:",
-                  row.getVisibleCells()[1].getValue()
-                );
-                return (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                  >
-                    {row.getVisibleCells().map((cell, index) => {
-                      // console.log("CellData:", cell.getValue());
-                      return (
-                        <>
-                          <TableCell
-                            key={cell.id}
-                            className={columns[index]?.className}
-                          >
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
-                            )}
-                          </TableCell>
-                          {console.log(columns, index, "⚗️⚗️⚗️")}
-                        </>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })
+              table.getRowModel().rows.map((row, index) => (
+                <TableRow
+                  key={index}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell, index) => {
+                    // console.log("CellData:", cell.getValue());
+                    return (
+                      <>
+                        <TableCell
+                          key={cell.id}
+                          className={columns[index]?.className}
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                        {console.log(columns, index, "⚗️⚗️⚗️")}
+                      </>
+                    );
+                  })}
+                </TableRow>
+              ))
             ) : (
               <TableRow>
                 <TableCell

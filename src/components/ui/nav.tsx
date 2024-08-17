@@ -27,7 +27,7 @@ interface NavProps {
   children?: React.ReactNode; // Add this line
 }
 
-export function Nav({ links, isCollapsed, children }: NavProps) {
+export function Nav({ links, isCollapsed = false, children }: NavProps) {
   const pathName = usePathname();
   return (
     <TooltipProvider>

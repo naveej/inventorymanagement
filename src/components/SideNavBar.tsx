@@ -42,7 +42,7 @@ export default function SideNavbar({}: Props) {
 
   return (
     <div className="flex justify-start items-center flex-col relative min-w-[80px] border-r border-secondary px-3 py-4">
-      {!mobileWidth && (
+      {!mobileWidth ? (
         <div className="flex justify-center items-center">
           <Button
             onClick={toggleSidebar}
@@ -53,6 +53,20 @@ export default function SideNavbar({}: Props) {
               style={{ rotate: isCollapsed ? "0deg" : "180deg" }}
               className="transition-all duration-500"
             />
+          </Button>
+        </div>
+      ) : (
+        <div className="flex justify-center items-center">
+          <Button
+            onClick={toggleSidebar}
+            variant="secondary"
+            className="rounded-full p-2"
+          >
+            <ChevronRight
+              style={{ rotate: isCollapsed ? "0deg" : "180deg" }}
+              className="transition-all duration-500"
+            />
+            <span>Mobile Btn</span>
           </Button>
         </div>
       )}

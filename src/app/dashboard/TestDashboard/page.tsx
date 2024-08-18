@@ -7,6 +7,7 @@ import logo from "../../assets/logo.png";
 import { motion } from "framer-motion";
 import { useReactToPrint } from "react-to-print";
 import "../print.css";
+import SkeletonLoader from "@/components/customUI/SkeletonLoader";
 
 interface NCOutput {
   _id: string;
@@ -79,7 +80,7 @@ const DemoPage: React.FC = () => {
   });
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <SkeletonLoader />;
   }
 
   if (error) {

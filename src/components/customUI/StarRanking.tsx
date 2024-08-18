@@ -15,8 +15,8 @@ const StarRating = ({ onChange }: Props) => {
 
     return (
         <div className='flex justify-start items-center gap-4 py-2'>
-            {[0, 1, 2, 3, 4, 5].map((value) => (
-                <div className="flex flex-col justify-center items-center gap-2">
+            {[0, 1, 2, 3, 4, 5].map((value, index) => (
+                <div key={index} className="flex flex-col justify-center items-center gap-2">
                     <StarIcon
                         key={value}
                         size={24}

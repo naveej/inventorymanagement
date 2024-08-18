@@ -8,6 +8,8 @@ import { motion } from "framer-motion";
 import { useReactToPrint } from "react-to-print";
 import "../print.css";
 import SkeletonLoader from "@/components/customUI/SkeletonLoader";
+import { Button } from "@/components/ui/button";
+import { Printer } from "lucide-react";
 
 interface NCOutput {
   _id: string;
@@ -193,13 +195,15 @@ const DemoPage: React.FC = () => {
         </div>
       </div>
       {/* --- Print Button --- */}
-      <div className="flex justify-center mt-4">
-        <button
+      <div className="flex justify-end mt-4 mr-4">
+        <Button
           onClick={handlePrint}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          variant="secondary"
+          className="rounded-lg"
         >
+          <Printer color="#f1f5f9" className="mr-2 h-5 w-5" />
           Print PDF
-        </button>
+        </Button>
       </div>
     </motion.div>
   );

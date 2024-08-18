@@ -19,7 +19,7 @@ export async function POST(request: Request) {
     if (!email || !password) {
       return NextResponse.json({ error: "Email and password are required" }, { status: 400 });
     }
-await connectDB();
+    await connectDB();
     // Find user by email
     const user = await AuthUser.findOne({ email });
     if (!user) {
@@ -39,7 +39,7 @@ await connectDB();
     user.refreshToken = refreshToken;
     await user.save();
 
-    const response = NextResponse.json({ accessToken}, { status: 200 });
+    const response = NextResponse.json({ accessToken }, { status: 200 });
     response.cookies.set('refreshToken', refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',

@@ -3,12 +3,7 @@ import UserModel from "@/models/UserModel"
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import bcrypt from "bcrypt"
-import { userTypes } from "@/store/useUserStore"
-
-type credentialsType = {
-    email: string,
-    password: string
-}
+import { signToken } from "@/lib/authUtils"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [
@@ -19,7 +14,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             },
             authorize: async (credentials) => {
                 let user = null
-
+                console.log("Authorizing User")
                 try {
                     if (!credentials.email || !credentials.password) {
                         return null
@@ -27,33 +22,62 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
                     await connectDB()
                     const userExists = await UserModel.findOne({ email: credentials?.email })
-                    const matchpassword = bcrypt.compare(userExists?.password, credentials?.password as string)
+                    const matchpassword = await bcrypt.compare(userExists?.password, credentials?.password as string)
 
                     if (!userExists || !matchpassword) {
                         throw new Error("Invalid User Credentials")
                     }
 
-                    user = {
+                    const userInfo = {
                         firstName: userExists?.firstName,
                         lastName: userExists?.lastName,
                         registerNo: userExists?.registerNo,
                         email: userExists?.email,
-                        deptName: userExists?.deptName,
+                        departmentName: userExists?.departmentName,
                         role: userExists?.role,
                     }
+
+                    const accessToken = signToken(userInfo)
+                    user = { ...userInfo, accessToken }
+
+                    return user
                 } catch (error) {
-
+                    console.error("Credentials Auth: " + error)
+                    return null
                 }
-
-                // logic to salt and hash password
-                // const pwHash = saltAndHashPassword(credentials.password)
-
-                // logic to verify if the user exists
-                // user = await getUserFromDb(credentials.email, pwHash)
-
-                // return user object with their profile data
-                return user
             },
         })
     ],
+    // callbacks: {
+    //     // async session({ session, token, user }) => {
+    //     //     console.log(session)
+    //     //     return {
+    //     //         ...session,
+    //     //         user: {
+    //     //             ...session.user,
+    //     //             id: token.id,
+    //     //             items: token.items
+    //     //         }
+    //     //     }
+    //     // },
+    //     async session({ session, token, user }) {
+    //         console.log(session, token, user)
+    //         return session
+    //     },
+    //     jwt: ({ user, token }) => {
+    //         console.log(token)
+    //         if (user) {
+    //             return {
+    //                 ...token,
+    //                 ...user,
+    //             }
+    //         }
+    //         return token
+    //     }
+    // },
+    // session: {
+    //     strategy: 'jwt'
+    // },
+    // secret: process.env.NEXTAUTH_SECRET,
+    // debug: process.env.NODE_ENV === "development",
 })

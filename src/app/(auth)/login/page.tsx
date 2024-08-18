@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/dist/client/link";
 import useUserStore from "@/store/useUserStore";
 import { type userTypes } from "@/store/useUserStore";
-import { signIn } from "next-auth/react";
+import { signIn } from "next-auth/react"
 
 const Login = () => {
   const [email, setEmail] = useState<string>("");

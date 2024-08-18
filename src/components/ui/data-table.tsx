@@ -94,19 +94,18 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell, index) => {
-                    // console.log("CellData:", cell.getValue());
                     return (
                       <>
                         <TableCell
                           key={cell.id}
                           className={columns[index]?.className}
+                          //style={{ padding: "4px 8px" }}
                         >
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()
                           )}
                         </TableCell>
-                        {console.log(columns, index, "⚗️⚗️⚗️")}
                       </>
                     );
                   })}
@@ -116,7 +115,7 @@ export function DataTable<TData, TValue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="h-24 text-center bg-black"
                 >
                   No results.
                 </TableCell>

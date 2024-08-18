@@ -1,0 +1,42 @@
+/* print.css */
+
+@media print {
+  body {
+    font-size: 12pt;
+    color: black;
+    background: white;
+  }
+
+  .no-print {
+    display: none;
+  }
+
+  .print-header {
+    text-align: center;
+    font-size: 18pt;
+    font-weight: bold;
+  }
+
+  .print-section {
+    margin: 20px 0;
+    page-break-inside: avoid;
+  }
+
+  .print-table th,
+  .print-table td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+  }
+
+  .print-table th {
+    background-color: #f2f2f2;
+  }
+  .hide-column {
+    display: none !important;
+  }
+  .actions-column {
+    text-align: center;
+    align-content: center;
+  }
+}

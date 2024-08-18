@@ -73,7 +73,7 @@ const DemoPage: React.FC = () => {
   if (loading) {
     return (
       <div>
-        <div className="animate-pulse bg-gray-700 px-2 rounded-md py-5 w-1/2 justify-center mx-auto"></div>
+        <div className="animate-pulse bg-slate-500 dark:bg-slate-300 px-2 rounded-md py-5 w-1/2 justify-center mx-auto"></div>
         {/* --- Header --- */}
         <div className="bg-slate-100 dark:bg-slate-900 py-4 mt-6 p-4 max-w-[93rem] px-4 mx-auto border-2 border-slate-600 rounded-lg">
           <div className="flex text-center mb-4 border-b-2 border-gray-600 pb-2">
@@ -142,7 +142,7 @@ const DemoPage: React.FC = () => {
         staggerChildren: 0.2,
       }}
     >
-      <div className="text-center text-3xl font-bold py-4 text-slate-200">
+      <div className="text-center text-3xl font-bold py-4 dark:text-white text-black">
         Calibration Schedule
       </div>
       {/* --- Header --- */}
@@ -156,10 +156,10 @@ const DemoPage: React.FC = () => {
             className="w-20 aspect-square"
           />
           <div className="w-full">
-            <h1 className="text-2xl font-bold text-slate-300">
+            <h1 className="text-2xl font-bold text-slate-800 dark:text-gray-300">
               ST JOSEPH ENGINEERING COLLEGE, VAMANJOOR, MANGALURU - 575028
             </h1>
-            <h2 className="text-xl font-semibold mt-2 text-slate-300">
+            <h2 className="text-xl font-semibold mt-2 text-slate-800 dark:text-gray-300">
               Calibration Schedule
             </h2>
           </div>

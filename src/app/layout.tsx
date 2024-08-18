@@ -3,7 +3,7 @@ import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
 import Provider from "@/components/Provider";
 import { Toaster } from "@/components/ui/sonner";
-// const inter = Inter({ subsets: ["latin"] });
+import Loading from "./Loading";
 
 // -- Font Config --
 const montserrat = Montserrat({

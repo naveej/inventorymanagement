@@ -27,6 +27,8 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
+import DarkModeToggle from "./DarkModeToggle.tsx";
+import SidebarDarkModeToggle from "./Sidebar_DarkModeToggle";
 
 type Props = {};
 
@@ -196,8 +198,9 @@ export default function SideNavbar({}: Props) {
         </Accordion>
       </Nav>
 
-      <div className="px-2 space-x-6 py-2">
-        <ModeToggle />
+      <div className="px-2 space-x-6 py-4">
+        {/* <ModeToggle /> */}
+        {isCollapsed ? <SidebarDarkModeToggle /> : <DarkModeToggle />}
       </div>
       <div className="px-2 py-2 cursor-pointer border border-border hover:bg-primary/20 rounded-lg">
         {isCollapsed ? (

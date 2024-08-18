@@ -143,7 +143,7 @@ const DemoPage: React.FC = () => {
         staggerChildren: 0.2,
       }}
     >
-      <div className="text-center text-3xl font-bold py-4 text-slate-200">
+      <div className="text-center text-3xl font-bold py-4 dark:text-white text-black">
         List of Documented Information
       </div>
       {/* --- Header --- */}
@@ -157,10 +157,10 @@ const DemoPage: React.FC = () => {
             className="w-20 aspect-square"
           />
           <div className="w-full">
-            <h1 className="text-2xl font-bold text-slate-300">
+            <h1 className="text-2xl font-bold text-slate-800 dark:text-gray-200">
               ST JOSEPH ENGINEERING COLLEGE, VAMANJOOR, MANGALURU - 575028
             </h1>
-            <h2 className="text-xl font-semibold mt-2 text-slate-300">
+            <h2 className="text-xl font-semibold mt-2 text-slate-800 dark:text-gray-300">
               Documented Information
             </h2>
           </div>

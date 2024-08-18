@@ -166,18 +166,7 @@ export default function DemoPage() {
                   <DropdownMenuLabel className="dark:text-white text-black">
                     Actions
                   </DropdownMenuLabel>
-                  <DropdownMenuItem
-                    className="dark:hover:bg-slate-700 hover:bg-gray-100"
-                    onClick={() => {
-                      if (data._id) {
-                        navigator.clipboard.writeText(data._id);
-                      } else {
-                        console.error("_id is undefined");
-                      }
-                    }}
-                  >
-                    Copy Entry ID
-                  </DropdownMenuItem>
+
                   <DropdownMenuItem className="dark:hover:bg-slate-700 hover:bg-gray-100">
                     Update
                   </DropdownMenuItem>

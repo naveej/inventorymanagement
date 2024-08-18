@@ -163,17 +163,6 @@ export const columns = (
             }}
           >
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => {
-                if (row.original._id) {
-                  navigator.clipboard.writeText(row.original._id);
-                } else {
-                  console.error("_id is undefined");
-                }
-              }}
-            >
-              Copy Entry ID
-            </DropdownMenuItem>
             <DropdownMenuItem>Update</DropdownMenuItem>
             <DropdownMenuItem
               onClick={async () => {

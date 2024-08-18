@@ -1,9 +1,11 @@
 import { create } from "zustand";
 
 export interface userTypes {
-  name: string;
+  firstName: string;
+  lastName: string;
   registerNo: string;
   email: string;
+  deptName?: string;
   role: "admin" | "department" | "central" | "director";
 }
 

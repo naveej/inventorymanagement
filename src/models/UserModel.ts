@@ -1,7 +1,13 @@
 import { Schema, model, models } from "mongoose";
 
 const UserSchema = new Schema({
-  username: {
+  firstName: {
+    type: String,
+    required: true,
+    unique: true,
+    min: 3,
+  },
+  lastName: {
     type: String,
     required: true,
     unique: true,
@@ -17,12 +23,15 @@ const UserSchema = new Schema({
     type: String,
     min: 6,
   },
-  avatarImg: {
+  registerNo: {
     type: String,
-    default: "",
   },
   role: {
     type: String,
+  },
+  deptName: {
+    type: String,
+    default: ""
   },
   createdAt: {
     type: Date,
@@ -30,6 +39,6 @@ const UserSchema = new Schema({
   },
 });
 
-const UserModel = models.User || model("User", UserSchema);
+const UserModel = models?.User || model("User", UserSchema);
 
 export default UserModel;

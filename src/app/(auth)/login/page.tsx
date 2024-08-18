@@ -1,29 +1,44 @@
 "use client";
-import React from "react";
+import React, { FormEvent, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/dist/client/link";
 import useUserStore from "@/store/useUserStore";
 import { type userTypes } from "@/store/useUserStore";
+import { signIn } from "next-auth/react";
 
 const Login = () => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const { setUser, setIsAdmin } = useUserStore();
 
-  
-  // const handleLogin = async () => {
-  //   const result = await fetch("./some/login/path")
-  //   const user: userTypes = {
-  //     name: result?.name || ,
-  //     registerNo: result?.regno,
-  //     email: result?.email,
-  //     role: result?.role,
-  //   }
 
-  //   // After Successful login, save user to Zustand store
-  //   setUser(user);
-  //   if(user.role == "admin"){
-  //     setIsAdmin(true)
-  //   }
-  // };
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
+    e?.preventDefault()
+
+    try {
+      const result = await signIn("credentials", {
+        email: email,
+        password: password,
+        redirect: false,
+      })
+      console.log("Login Res", result)
+    } catch (error) {
+      console.error("LoginError", error)
+    }
+
+    // const user: userTypes = {
+    //   name: result?.name || ,
+    //   registerNo: result?.regno,
+    //   email: result?.email,
+    //   role: result?.role,
+    // }
+
+    // After Successful login, save user to Zustand store
+    // setUser(user);
+    // if(user.role == "admin"){
+    //   setIsAdmin(true)
+    // }
+  };
 
   return (
     <section className="bg-card">
@@ -32,6 +47,7 @@ const Login = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
+          onSubmit={handleLogin}
           className="w-full max-w-md overflow-hidden rounded-lg shadow-lg bg-card"
         >
           <div className="bg-card px-8 py-10 dark:bg-slate-900">
@@ -53,6 +69,7 @@ const Login = () => {
                 name="email"
                 id="email"
                 placeholder="Enter your email address"
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-2 text-foreground bg-input border border-border rounded focus:outline-none focus:ring-2 focus:ring-ring"
               />
             </div>
@@ -68,6 +85,7 @@ const Login = () => {
                 name="password"
                 id="password"
                 placeholder="Enter your password"
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-2 text-foreground bg-input border border-border rounded focus:outline-none focus:ring-2 focus:ring-ring"
               />
             </div>

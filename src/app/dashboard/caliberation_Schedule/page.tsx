@@ -1,10 +1,12 @@
 "use client";
 import { columns } from "./columns";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { DataTable } from "@/components/ui/data-table";
 import Image from "next/image";
 import logo from "../../assets/logo.png";
 import { motion } from "framer-motion";
+import { useReactToPrint } from "react-to-print";
+import "../print.css";
 
 interface CalibrationSchedule {
   _id: string;
@@ -70,62 +72,13 @@ const DemoPage: React.FC = () => {
     fetchData();
   }, []);
 
+  const componentRef = useRef<HTMLDivElement>(null);
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
+
   if (loading) {
-    return (
-      <div>
-        <div className="animate-pulse bg-slate-500 dark:bg-slate-300 px-2 rounded-md py-5 w-1/2 justify-center mx-auto"></div>
-        {/* --- Header --- */}
-        <div className="bg-slate-100 dark:bg-slate-900 py-4 mt-6 p-4 max-w-[93rem] px-4 mx-auto border-2 border-slate-600 rounded-lg">
-          <div className="flex text-center mb-4 border-b-2 border-gray-600 pb-2">
-            <div className="w-20 aspect-square bg-gray-300 dark:bg-gray-700 animate-pulse"></div>
-            <div className="w-1/2 mx-auto justify-center">
-              <div className="h-6 bg-gray-300 dark:bg-gray-700 animate-pulse mb-2"></div>
-              <div className="h-5 bg-gray-300 dark:bg-gray-700 animate-pulse"></div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-3 gap-4 mb-4">
-            <div className="col-span-1 border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
-              <div className="h-4 bg-gray-300 dark:bg-gray-700 animate-pulse mb-2"></div>
-              <div className="h-4 bg-gray-300 dark:bg-gray-700 animate-pulse"></div>
-            </div>
-            <div className="col-span-1"></div>
-            <div className="col-span-1 border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
-              <div className="h-4 bg-gray-300 dark:bg-gray-700 animate-pulse mb-2"></div>
-              <div className="h-4 bg-gray-300 dark:bg-gray-700 animate-pulse"></div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-3 gap-4 mb-6 rounded-md">
-            <div className="border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
-              <div className="h-5 bg-gray-300 dark:bg-gray-700 animate-pulse mb-2"></div>
-              <div className="h-4 bg-gray-300 dark:bg-gray-700 animate-pulse"></div>
-            </div>
-            <div className="border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
-              <div className="h-5 bg-gray-300 dark:bg-gray-700 animate-pulse mb-2"></div>
-              <div className="h-4 bg-gray-300 dark:bg-gray-700 animate-pulse"></div>
-            </div>
-            <div className="border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
-              <div className="h-5 bg-gray-300 dark:bg-gray-700 animate-pulse mb-2"></div>
-              <div className="h-4 bg-gray-300 dark:bg-gray-700 animate-pulse"></div>
-            </div>
-          </div>
-
-          <div className="border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
-            <div className="h-4 bg-gray-300 dark:bg-gray-700 animate-pulse mb-2"></div>
-            <div className="h-4 bg-gray-300 dark:bg-gray-700 animate-pulse"></div>
-          </div>
-
-          {/* --- Database --- */}
-          <div className="justify-center px-12 py-6">
-            <div className="h-6 bg-gray-300 dark:bg-gray-700 animate-pulse mb-2"></div>
-            <div className="h-6 bg-gray-300 dark:bg-gray-700 animate-pulse mb-2"></div>
-            <div className="h-6 bg-gray-300 dark:bg-gray-700 animate-pulse mb-2"></div>
-            <div className="h-6 bg-gray-300 dark:bg-gray-700 animate-pulse mb-2"></div>
-          </div>
-        </div>
-      </div>
-    );
+    return <div>Loading...</div>;
   }
 
   if (error) {
@@ -145,92 +98,106 @@ const DemoPage: React.FC = () => {
       <div className="text-center text-3xl font-bold py-4 dark:text-white text-black">
         Calibration Schedule
       </div>
-      {/* --- Header --- */}
-      <div className="bg-slate-100 dark:bg-slate-900 py-4 mt-6 p-4 max-w-[93rem] px-4 mx-auto border-2 border-slate-600 rounded-lg">
-        <div className="flex text-center mb-4 border-b-2 border-slate-600 pb-2">
-          <Image
-            src={logo.src}
-            alt="logo"
-            width={logo.width}
-            height={logo.height}
-            className="w-20 aspect-square"
-          />
-          <div className="w-full">
-            <h1 className="text-2xl font-bold text-slate-800 dark:text-gray-300">
-              ST JOSEPH ENGINEERING COLLEGE, VAMANJOOR, MANGALURU - 575028
-            </h1>
-            <h2 className="text-xl font-semibold mt-2 text-slate-800 dark:text-gray-300">
-              Calibration Schedule
-            </h2>
-          </div>
-        </div>
 
-        <div className="grid grid-cols-3 gap-4 mb-4">
-          <div className="col-span-1 border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
-            <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-              Doc. No :{" "}
-            </span>
-            <span className="text-slate-900 dark:text-slate-100">
-              {data[0]?.metadata.docNo}
-            </span>
+      <div ref={componentRef}>
+        {/* --- Header --- */}
+        <div className="bg-slate-100 dark:bg-slate-900 py-4 mt-6 p-4 max-w-[93rem] px-4 mx-auto border-2 border-slate-600 rounded-lg print-section">
+          <div className="flex text-center mb-4 border-b-2 border-slate-600 pb-2 print-header">
+            <Image
+              src={logo.src}
+              alt="logo"
+              width={logo.width}
+              height={logo.height}
+              className="w-20 aspect-square"
+            />
+            <div className="w-full">
+              <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+                ST JOSEPH ENGINEERING COLLEGE, VAMANJOOR, MANGALURU - 575028
+              </h1>
+              <h2 className="text-xl font-semibold mt-2 text-slate-800 dark:text-slate-200">
+                Calibration Schedule
+              </h2>
+            </div>
           </div>
-          <div className="col-span-1"></div>
-          <div className="col-span-1 border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
-            <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-              Version No :{" "}
-            </span>
-            <span className="text-slate-900 dark:text-slate-100">
-              {data[0]?.metadata.version}
-            </span>
-          </div>
-        </div>
 
-        <div className="grid grid-cols-3 gap-4 mb-6 rounded-md">
+          <div className="grid grid-cols-3 gap-4 mb-4">
+            <div className="col-span-1 border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
+              <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                Doc. No :{" "}
+              </span>
+              <span className="text-slate-900 dark:text-slate-100">
+                {data[0]?.metadata.docNo}
+              </span>
+            </div>
+            <div className="col-span-1"></div>
+            <div className="col-span-1 border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
+              <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                Version No :{" "}
+              </span>
+              <span className="text-slate-900 dark:text-slate-100">
+                {data[0]?.metadata.version}
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-4 mb-6 rounded-md">
+            <div className="border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
+              <h3 className="text-lg font-semibold mb-2 text-center text-slate-900 dark:text-slate-100">
+                Prepared By
+              </h3>
+              <p className="text-sm text-center text-slate-900 dark:text-slate-100">
+                {data[0]?.metadata.preparedBy}
+              </p>
+            </div>
+            <div className="border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
+              <h3 className="text-lg font-semibold mb-2 text-center text-slate-900 dark:text-slate-100">
+                Reviewed By
+              </h3>
+              <p className="text-sm text-center text-slate-900 dark:text-slate-100">
+                {data[0]?.metadata.reviewedBy}
+              </p>
+            </div>
+            <div className="border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
+              <h3 className="text-lg font-semibold mb-2 text-center text-slate-900 dark:text-slate-100">
+                Approved By
+              </h3>
+              <p className="text-sm text-center text-slate-900 dark:text-slate-100">
+                {data[0]?.metadata.approvedBy}
+              </p>
+            </div>
+          </div>
+
           <div className="border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
-            <h3 className="text-lg font-semibold mb-2 text-center text-slate-900 dark:text-slate-100">
-              Prepared By
-            </h3>
-            <p className="text-sm text-center text-slate-900 dark:text-slate-100">
-              {data[0]?.metadata.preparedBy}
+            <p className="text-sm mb-2 font-semibold text-slate-900 dark:text-slate-100">
+              Last Updated On :{" "}
+              <span className="text-slate-900 dark:text-slate-100 font-mono">
+                {lastUpdated}
+              </span>
+            </p>
+            <p className="text-sm font-bold text-slate-900 dark:text-slate-100">
+              Name of the Department :{" "}
+              <span className="text-slate-900 dark:text-slate-100 font-normal">
+                {data[0]?.metadata.departmentName}
+              </span>
             </p>
           </div>
-          <div className="border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
-            <h3 className="text-lg font-semibold mb-2 text-center text-slate-900 dark:text-slate-100">
-              Reviewed By
-            </h3>
-            <p className="text-sm text-center text-slate-900 dark:text-slate-100">
-              {data[0]?.metadata.reviewedBy}
-            </p>
-          </div>
-          <div className="border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
-            <h3 className="text-lg font-semibold mb-2 text-center text-slate-900 dark:text-slate-100">
-              Approved By
-            </h3>
-            <p className="text-sm text-center text-slate-900 dark:text-slate-100">
-              {data[0]?.metadata.approvedBy}
-            </p>
+
+          {/* --- Database --- */}
+          <div className="justify-center px-3 py-6 print-section">
+            <div className="print-table">
+              <DataTable columns={columns(fetchData)} data={data} />
+            </div>
           </div>
         </div>
-
-        <div className="border border-slate-600 p-2 rounded-md dark:bg-slate-800 dark:border-slate-700">
-          <p className="text-sm mb-2 font-semibold text-slate-900 dark:text-slate-100">
-            Last Updated On :{" "}
-            <span className="text-slate-900 dark:text-slate-100 font-mono">
-              {lastUpdated}
-            </span>
-          </p>
-          <p className="text-sm font-bold text-slate-900 dark:text-slate-100">
-            Name of the Department :{" "}
-            <span className="text-slate-900 dark:text-slate-100 font-normal">
-              {data[0]?.metadata.departmentName}
-            </span>
-          </p>
-        </div>
-
-        {/* --- Database --- */}
-        <div className="justify-center px-12 py-6">
-          <DataTable columns={columns(fetchData)} data={data} />
-        </div>
+      </div>
+      {/* --- Print Button --- */}
+      <div className="flex justify-center mt-4">
+        <button
+          onClick={handlePrint}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Print PDF
+        </button>
       </div>
     </motion.div>
   );

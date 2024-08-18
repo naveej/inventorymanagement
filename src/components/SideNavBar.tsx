@@ -73,14 +73,16 @@ export default function SideNavbar({}: Props) {
       )}
 
       <div className="flex justify-center items-center mt-8">
-        <Image
-          src={logo.src}
-          alt="logo"
-          width={logo.width}
-          height={logo.height}
-          style={{ width: isCollapsed ? "30px" : "80px" }}
-          className="aspect-square cursor-pointer mx-auto"
-        />
+        <a href="/">
+          <Image
+            src={logo.src}
+            alt="logo"
+            width={logo.width}
+            height={logo.height}
+            style={{ width: isCollapsed ? "30px" : "80px" }}
+            className="aspect-square cursor-pointer mx-auto"
+          />
+        </a>
       </div>
 
       <Nav isCollapsed={mobileWidth ? true : isCollapsed} links={[]}>

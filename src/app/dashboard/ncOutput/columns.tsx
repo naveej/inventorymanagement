@@ -1,5 +1,5 @@
 "use client";
-import { ColumnDef } from "@tanstack/react-table";
+import { ExtendedColumnDef } from "../../_types/utility.types";
 import React, { useState } from "react";
 import { MoreHorizontal, ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,11 +8,11 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import axios from "axios";
+import "../print.css";
 import { useRouter } from "next/navigation";
 
 export type NCOutput = {
@@ -62,7 +62,7 @@ async function deleteRow(id: string, fetchData: () => void) {
 
 export const columns = (
   fetchData: () => void
-): ColumnDef<NCOutput, unknown>[] => [
+): ExtendedColumnDef<NCOutput, unknown>[] => [
   {
     accessorKey: "date",
     header: ({ column }) => {
@@ -80,31 +80,37 @@ export const columns = (
     cell: ({ row }) => (
       <span>{new Date(row.original.date).toLocaleDateString()}</span>
     ),
+    className: "date-column",
   },
   {
     accessorKey: "ncDetails",
     header: "NC Details",
     cell: ({ row }) => <span>{row.original.ncDetails}</span>,
+    className: "nc-details-column",
   },
   {
     accessorKey: "reason",
     header: "Reason",
     cell: ({ row }) => <span>{row.original.reason}</span>,
+    className: "reason-column",
   },
   {
     accessorKey: "actionTaken",
     header: "Action Taken",
     cell: ({ row }) => <span>{row.original.actionTaken}</span>,
+    className: "action-taken-column",
   },
   {
     accessorKey: "responsibility",
     header: "Responsibility",
     cell: ({ row }) => <span>{row.original.responsibility}</span>,
+    className: "responsibility-column",
   },
   {
     accessorKey: "ncApprovedBy",
     header: "Approved By",
     cell: ({ row }) => <span>{row.original.ncApprovedBy}</span>,
+    className: "approved-by-column",
   },
   {
     accessorKey: "targetDate",
@@ -112,16 +118,19 @@ export const columns = (
     cell: ({ row }) => (
       <span>{new Date(row.original.targetDate).toLocaleDateString()}</span>
     ),
+    className: "target-date-column",
   },
   {
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => <span>{row.original.status}</span>,
+    className: "status-column",
   },
   {
     accessorKey: "comments",
     header: "Comments",
     cell: ({ row }) => <span>{row.original.comments}</span>,
+    className: "comments-column",
   },
   {
     id: "actions",

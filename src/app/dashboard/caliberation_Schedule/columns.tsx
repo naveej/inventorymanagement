@@ -1,5 +1,5 @@
 "use client";
-
+import { ExtendedColumnDef } from "../../_types/utility.types";
 import { ColumnDef } from "@tanstack/react-table";
 import React, { useState } from "react";
 import { MoreHorizontal, ArrowUpDown } from "lucide-react";
@@ -65,7 +65,7 @@ async function deleteRow(id: string, fetchData: () => void) {
 
 export const columns = (
   fetchData: () => void
-): ColumnDef<CalibrationSchedule, unknown>[] => [
+): ExtendedColumnDef<CalibrationSchedule, unknown>[] => [
   {
     accessorKey: "instrumentName",
     header: "Instrument Name",
@@ -134,6 +134,7 @@ export const columns = (
   },
   {
     id: "actions",
+    className: "hide-column",
     cell: ({ row }) => {
       const [loading, setLoading] = useState(false);
       const router = useRouter();

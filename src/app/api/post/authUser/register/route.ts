@@ -1,28 +1,28 @@
 import { NextResponse } from 'next/server';
-import bcrypt from 'bcrypt';
 import { connectDB } from '@/lib/database';
-import AuthUser from '@/models/AuthModel';
+import UserModel from '@/models/UserModel';
 import { UserRole } from '../../../../_types/userRole';
+import { hashPassword } from '@/lib/authUtils';
 
 type RequestBody = {
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-    role: UserRole;
-    departmentName?: string;
-  };
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  role: UserRole;
+  departmentName?: string;
+};
 
 export async function POST(request: Request) {
   try {
-    const { firstName, lastName, email, password, role,departmentName }: RequestBody = await request.json();
-
+    const { firstName, lastName, email, password, role, departmentName }: RequestBody = await request.json();
+    console.log("Body", { firstName, lastName, email, password, role, departmentName })
     // Validate the required fields
     if (!firstName || !lastName || !email || !password || !role) {
       return NextResponse.json({ error: "All fields are required" }, { status: 400 });
     }
-    if(role === UserRole.Department && !departmentName){
-        return NextResponse.json({ error: "Department name is required" }, { status: 400 });
+    if (role === UserRole.Department && !departmentName) {
+      return NextResponse.json({ error: "Department name is required" }, { status: 400 });
     }
 
     // Validate email format
@@ -34,23 +34,22 @@ export async function POST(request: Request) {
     await connectDB();
 
     // Check if email already exists
-    const existingUser = await AuthUser.findOne({ email });
+    const existingUser = await UserModel.findOne({ email });
     if (existingUser) {
       return NextResponse.json({ error: "Email already exists" }, { status: 400 });
     }
 
     // Hash the password
-    const hashedPwd = await bcrypt.hash(password, 10);
+    const hashedPwd = await hashPassword(password);
 
     // Store the user data in the database
-    const result = new AuthUser({
+    const result = new UserModel({
       firstName,
       lastName,
       email,
       password: hashedPwd,
       role,
       departmentName: role === UserRole.Department ? departmentName : undefined,
-      refreshToken: null
     });
 
     await result.save();

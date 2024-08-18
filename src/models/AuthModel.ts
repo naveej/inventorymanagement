@@ -29,9 +29,10 @@ const UserSchema = new Schema<IUser>({
     type: String,
     required: true,
   },
-  role: { type: String, 
+  role: {
+    type: String,
     required: true,
-    enum: Object.values(UserRole) 
+    enum: Object.values(UserRole)
   },
   departmentName: {
     type: String,
@@ -49,5 +50,5 @@ UserSchema.pre("save", function (next) {
 });
 
 const AuthUser =
-  mongoose.models.AuthUser || mongoose.model<IUser>("Users", UserSchema);
+  mongoose.models.AuthUser || mongoose.model<IUser>("AuthUsers", UserSchema);
 export default AuthUser;

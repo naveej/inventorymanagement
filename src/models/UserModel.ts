@@ -1,6 +1,18 @@
+import { UserRole } from "@/app/_types/userRole";
 import { Schema, model, models } from "mongoose";
 
-const UserSchema = new Schema({
+interface IUser extends Document {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  role: UserRole;
+  departmentName: string | undefined;
+  refreshToken: string | null;
+  createdAt: Date
+}
+
+const UserSchema = new Schema<IUser>({
   firstName: {
     type: String,
     required: true,
@@ -20,16 +32,15 @@ const UserSchema = new Schema({
     max: 50,
   },
   password: {
+    required: true,
     type: String,
     min: 6,
   },
-  registerNo: {
-    type: String,
-  },
   role: {
+    required: true,
     type: String,
   },
-  deptName: {
+  departmentName: {
     type: String,
     default: ""
   },

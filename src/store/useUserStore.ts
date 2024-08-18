@@ -5,7 +5,7 @@ export interface userTypes {
   lastName: string;
   registerNo: string;
   email: string;
-  deptName?: string;
+  departmentName?: string;
   role: "admin" | "department" | "central" | "director";
 }
 

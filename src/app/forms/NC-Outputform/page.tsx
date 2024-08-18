@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/form";
 import { toast } from "sonner"; // Import sonnar
 import { motion } from "framer-motion";
+import { useRouter, useSearchParams } from "next/navigation";
 
 // Define the form schema using zod
 const formSchema = z.object({
@@ -40,24 +41,31 @@ const formSchema = z.object({
 });
 
 const NCOutputform = () => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const dataString = searchParams.get('data');
+  let data:any;
+  if(dataString){
+    data = JSON.parse(dataString);
+  }
   // Set up the form using useForm and zodResolver
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      docNo: "IAD011",
-      version: "01",
-      preparedBy: "Dr Pavana Kumara B - Head-IQAC",
-      reviewedBy: "Dr Prakash Pinto - Dean MBA",
-      approvedBy: "Dr Rio D'Souza - Principal",
-      departmentName: "",
-      ncDetails: "",
-      reason: "",
-      actionTaken: "",
-      responsibility: "",
-      ncApprovedBy: "",
-      targetDate: "",
-      status: "",
-      comments: "",
+      docNo: data?.metadata?.docNo|| "IAD011",
+      version: data?.metadata?.version||"01",
+      preparedBy: data?.metadata?.preparedBy || "Dr Pavana Kumara B - Head-IQAC",
+      reviewedBy: data?.metadata?.reviewedBy || "Dr Prakash Pinto - Dean MBA",
+      approvedBy: data?.metadata?.approvedBy || "Dr Rio D'Souza - Principal",
+      departmentName: data?.metadata?.departmentName ?? "",
+      ncDetails: data?.ncDetails || "",
+      reason: data?.reason || "",
+      actionTaken: data?.actionTaken || "",
+      responsibility: data?.responsibility || "",
+      ncApprovedBy: data?.ncApprovedBy || "",
+      targetDate: data?.targetDate || "",
+      status: data?.status || "",
+      comments: data?.comments || "",
     },
   });
 
@@ -85,13 +93,19 @@ const NCOutputform = () => {
     };
 
     console.log("Client before Send", formData);
-    const promise = axios.post("/api/post/create/ncOutput", formData);
+    let promise;
+    if(!data){
+    promise = axios.post("/api/post/create/ncOutput", formData);}
+    else{
+      promise = axios.post("/api/post/update/ncOutput", {...formData, _id:data._id});
+    }
     form.reset();
     toast.promise(promise, {
       loading: "Loading...",
       success: (result) => {
         console.log("Result", result);
-        return "Form submitted successfully!";
+        router.push('/dashboard/ncOutput');
+        return data?"Form updated successfully!":"Form submitted succesfully";
       },
       error: (error) => {
         if (axios.isAxiosError(error)) {

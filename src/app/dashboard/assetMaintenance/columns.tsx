@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 // This type is used to define the shape of our data.
 export type Asset = {
@@ -130,6 +131,7 @@ export const columns = (fetchData: () => void): ColumnDef<Asset, unknown>[] => [
     id: "actions",
     cell: ({ row }) => {
       const [loading, setLoading] = useState(false);
+      const router = useRouter();
 
       const handleDelete = async (id: string) => {
         if (window.confirm("Are you sure you want to delete this item?")) {
@@ -167,7 +169,19 @@ export const columns = (fetchData: () => void): ColumnDef<Asset, unknown>[] => [
             >
               Copy Entry ID
             </DropdownMenuItem>
-            <DropdownMenuItem>Update</DropdownMenuItem>
+            <DropdownMenuItem
+            onClick = {async ()=>{
+              if(row.original){
+                if (
+                  window.confirm("Are you sure you want to update this item?")
+                ) {
+                  router.push(`/forms/AssetMaintenanceform?data=${encodeURIComponent(JSON.stringify(row.original))}`); 
+                }
+              }
+              else{
+                console.log("_id is undefined")
+              }
+            }}>Update</DropdownMenuItem>
             <DropdownMenuItem
               onClick={async () => {
                 if (row.original._id) {

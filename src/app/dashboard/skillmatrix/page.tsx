@@ -16,6 +16,7 @@ import { ExtendedColumnDef } from "@/app/_types/utility.types";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface SkillMatrixForm {
   _id: string;
@@ -138,6 +139,7 @@ export default function DemoPage() {
           cell: ({ row }) => {
             const [data, setData] = useState(row.original);
             const [loading, setLoading] = useState(false);
+            const router = useRouter();
 
             const handleDelete = async (id: string) => {
               if (
@@ -176,7 +178,19 @@ export default function DemoPage() {
                   >
                     Copy Entry ID
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="dark:hover:bg-slate-700 hover:bg-gray-100">
+                  <DropdownMenuItem className="dark:hover:bg-slate-700 hover:bg-gray-100"
+                  onClick = {async ()=>{
+                    if(row.original){
+                      if (
+                        window.confirm("Are you sure you want to update this item?")
+                      ) {
+                        router.push(`/forms/skillmatrix?data=${encodeURIComponent(JSON.stringify(row.original))}`); 
+                      }
+                    }
+                    else{
+                      console.log("_id is undefined")
+                    }
+                  }}>
                     Update
                   </DropdownMenuItem>
                   <DropdownMenuItem

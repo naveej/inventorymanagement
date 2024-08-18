@@ -7,7 +7,7 @@ import axios from "axios";
 import Link from "next/link";
 import { PlusIcon, StarIcon, Trash, Trash2Icon } from "lucide-react";
 import FormInput from "@/components/customUI/FormInput";
-import StarRating from "@/components/customUI/StarRaking";
+import StarRating from "@/components/customUI/StarRanking";
 
 const SkillMatrixForm = () => {
   const [docNo, setDocNo] = useState<string>("IAD003");
@@ -178,7 +178,7 @@ const SkillMatrixForm = () => {
         <h2 className="font-bold">Skills Ranking</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-4 mt-4">
           {skills.map((skill, index) => (
-            <div className="">
+            <div key={index} className="">
               <span>{skill}</span>
               <div className="">
                 <StarRating />

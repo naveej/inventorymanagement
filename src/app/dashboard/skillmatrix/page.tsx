@@ -87,6 +87,7 @@ export default function DemoPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string>();
+  const router = useRouter();
 
   const refreshData = async () => {
     try {
@@ -140,17 +141,18 @@ export default function DemoPage() {
           id: "actions",
           className: "text-right",
           cell: ({ row }) => {
-            const [data, setData] = useState(row.original);
-            const [loading, setLoading] = useState(false);
-            const router = useRouter();
+            const data = row.original
+            // const [data, setData] = useState(row.original);
+            // const [loading, setLoading] = useState(false);
+
 
             const handleDelete = async (id: string) => {
               if (
                 window.confirm("Are you sure you want to delete this item?")
               ) {
-                setLoading(true);
+                // setLoading(true);
                 await deleteRow(id, refreshData);
-                setLoading(false);
+                // setLoading(false);
               }
             };
 
@@ -231,7 +233,7 @@ export default function DemoPage() {
 
   useEffect(() => {
     refreshData();
-  }, []);
+  }, [refreshData]);
 
   const componentRef = useRef<HTMLDivElement>(null);
   const handlePrint = useReactToPrint({

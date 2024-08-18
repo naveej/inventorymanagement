@@ -354,7 +354,7 @@ export default function DemoPage() {
         </div>
       </div>
       {/* --- Print Button --- */}
-      <div className="flex justify-end mt-4 mr-4">
+      <div className="max-w-[93rem] mx-auto mt-4 flex justify-end">
         <Button
           onClick={handlePrint}
           variant="secondary"

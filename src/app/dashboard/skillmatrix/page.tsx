@@ -3,7 +3,7 @@ import { DataTable } from "@/components/ui/data-table";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import logo from "../../assets/logo.png";
-import { MoreHorizontal, ArrowUpDown } from "lucide-react";
+import { MoreHorizontal, ArrowUpDown, Ghost, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -256,13 +256,13 @@ export default function DemoPage() {
         staggerChildren: 0.2,
       }}
     >
-      <div className="text-center text-3xl font-bold py-4 dark:text-white text-black">
+      <div className="text-center text-3xl font-bold py-2 dark:text-white text-black">
         Skill Matrix
       </div>
 
       <div ref={componentRef}>
         {/* --- Header --- */}
-        <div className="bg-slate-100 dark:bg-slate-900 py-4 mt-6 p-4 max-w-[93rem] px-4 mx-auto border-2 border-slate-600 rounded-lg">
+        <div className="bg-slate-100 dark:bg-slate-900 py-2 mt-4 p-4 max-w-[93rem] px-4 mx-auto border-2 border-slate-600 rounded-lg">
           <div className="flex text-center mb-4 border-b-2 border-gray-600 pb-2 print-header">
             <Image
               src={logo.src}
@@ -352,13 +352,15 @@ export default function DemoPage() {
         </div>
       </div>
       {/* --- Print Button --- */}
-      <div className="flex justify-center mt-4">
-        <button
+      <div className="flex justify-end mt-4 mr-4">
+        <Button
           onClick={handlePrint}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          variant="secondary"
+          className="rounded-lg"
         >
+          <Printer color="#f1f5f9" className="mr-2 h-5 w-5" />
           Print PDF
-        </button>
+        </Button>
       </div>
     </motion.div>
   );

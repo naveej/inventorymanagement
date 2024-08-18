@@ -1,5 +1,4 @@
 "use client";
-import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/ui/data-table";
 import { useEffect, useState } from "react";
 import Image from "next/image";
@@ -11,11 +10,12 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ExtendedColumnDef } from "@/app/_types/utility.types";
 import { motion } from "framer-motion";
+import axios from "axios";
+import { toast } from "sonner";
 
 interface SkillMatrixForm {
   _id: string;
@@ -52,6 +52,29 @@ async function fetchData(): Promise<SkillMatrixForm[]> {
   }));
 }
 
+async function deleteRow(id: string, refreshData: () => void) {
+  try {
+    const response = await axios.delete(`/api/post/delete/skillMatrix`, {
+      data: { id },
+    });
+    if (response.status === 200) {
+      toast.success("Row deleted successfully!");
+      refreshData();
+    } else {
+      throw new Error(response.data.message || "Failed to delete the row");
+    }
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      // Handle known errors from the server
+      toast.error(`Failed to delete row: ${error.response.data.message}`);
+    } else {
+      // Handle unknown errors
+      toast.error("Failed to delete row. Please try again later.");
+    }
+    console.error("Error deleting row:", error);
+  }
+}
+
 export default function DemoPage() {
   const [data, setData] = useState<SkillMatrixForm[]>([]);
   const [columns, setColumns] = useState<ExtendedColumnDef<SkillMatrixForm>[]>(
@@ -61,109 +84,129 @@ export default function DemoPage() {
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string>();
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const result = await fetchData();
-        const updatedResult = result.map((item) => {
-          const updatedSkill = item.skills.map((skill, index) => ({
-            [`skill${index}`]: skill,
-          }));
+  const refreshData = async () => {
+    try {
+      const result = await fetchData();
+      const updatedResult = result.map((item) => {
+        const updatedSkill = item.skills.map((skill, index) => ({
+          [`skill${index}`]: skill,
+        }));
 
-          return {
-            ...item,
-            ...updatedSkill.reduce((acc, cur) => ({ ...acc, ...cur }), {}),
-          };
-        });
-        // Find the latest lastUpdated date
-        const latestLastUpdated = updatedResult.reduce((latest, item) => {
-          const itemDate = new Date(item.lastUpdated);
-          return itemDate > new Date(latest) ? item.lastUpdated : latest;
-        }, updatedResult[0]?.lastUpdated || "");
+        return {
+          ...item,
+          ...updatedSkill.reduce((acc, cur) => ({ ...acc, ...cur }), {}),
+        };
+      });
+      // Find the latest lastUpdated date
+      const latestLastUpdated = updatedResult.reduce((latest, item) => {
+        const itemDate = new Date(item.lastUpdated);
+        return itemDate > new Date(latest) ? item.lastUpdated : latest;
+      }, updatedResult[0]?.lastUpdated || "");
 
-        setData(updatedResult);
-        setLastUpdated(latestLastUpdated);
+      setData(updatedResult);
+      setLastUpdated(latestLastUpdated);
 
-        // Determine the maximum number of skills in the fetched data
-        const maxSkills = Math.max(...result.map((item) => item.skills.length));
+      // Determine the maximum number of skills in the fetched data
+      const maxSkills = Math.max(...result.map((item) => item.skills.length));
 
-        const updatedColumns: ExtendedColumnDef<SkillMatrixForm>[] = [
-          {
-            accessorKey: "name",
-            header: ({ column }) => {
-              return (
-                <Button
-                  className="p-0"
-                  variant="ghost"
-                  onClick={() =>
-                    column.toggleSorting(column.getIsSorted() === "asc")
-                  }
+      const updatedColumns: ExtendedColumnDef<SkillMatrixForm>[] = [
+        {
+          accessorKey: "name",
+          header: ({ column }) => {
+            return (
+              <Button
+                className="p-0"
+                variant="ghost"
+                onClick={() =>
+                  column.toggleSorting(column.getIsSorted() === "asc")
+                }
+              >
+                Name
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+              </Button>
+            );
+          },
+        },
+        // Dynamically generate columns for skills based on the maximum number of skills
+        ...Array.from({ length: maxSkills }).map((_, i) => ({
+          accessorKey: `skill${i}`,
+          header: `Skill ${i + 1}`,
+        })),
+        {
+          id: "actions",
+          className: "text-right",
+          cell: ({ row }) => {
+            const [data, setData] = useState(row.original);
+            const [loading, setLoading] = useState(false);
+
+            const handleDelete = async (id: string) => {
+              if (
+                window.confirm("Are you sure you want to delete this item?")
+              ) {
+                setLoading(true);
+                await deleteRow(id, refreshData);
+                setLoading(false);
+              }
+            };
+
+            return (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="h-8 w-8 p-0">
+                    <span className="sr-only">Open menu</span>
+                    <MoreHorizontal className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="end"
+                  className="dark:bg-slate-800 dark:border-slate-700 bg-white border-gray-300 shadow-lg"
                 >
-                  Name
-                  <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-              );
-            },
-          },
-          // Dynamically generate columns for skills based on the maximum number of skills
-          ...Array.from({ length: maxSkills }).map((_, i) => ({
-            accessorKey: `skill${i}`,
-            header: `Skill ${i + 1}`,
-          })),
-          {
-            id: "actions",
-            className: "text-right",
-            cell: ({ row }) => {
-              const data = row.original;
-              return (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="h-8 w-8 p-0">
-                      <span className="sr-only">Open menu</span>
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent
-                    align="end"
-                    className="dark:bg-slate-800 dark:border-slate-700 bg-white border-gray-300 shadow-lg"
+                  <DropdownMenuLabel className="dark:text-white text-black">
+                    Actions
+                  </DropdownMenuLabel>
+                  <DropdownMenuItem
+                    className="dark:hover:bg-slate-700 hover:bg-gray-100"
+                    onClick={() => {
+                      if (data._id) {
+                        navigator.clipboard.writeText(data._id);
+                      } else {
+                        console.error("_id is undefined");
+                      }
+                    }}
                   >
-                    <DropdownMenuLabel className="dark:text-white text-black">
-                      Actions
-                    </DropdownMenuLabel>
-                    <DropdownMenuItem
-                      className="dark:hover:bg-slate-700 hover:bg-gray-100"
-                      onClick={() => {
-                        if (data._id) {
-                          navigator.clipboard.writeText(data._id);
-                        } else {
-                          console.error("_id is undefined");
-                        }
-                      }}
-                    >
-                      Copy Entry ID
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="dark:hover:bg-slate-700 hover:bg-gray-100">
-                      Update
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="dark:hover:bg-slate-700 hover:bg-gray-100">
-                      Delete
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              );
-            },
+                    Copy Entry ID
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="dark:hover:bg-slate-700 hover:bg-gray-100">
+                    Update
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={async () => {
+                      if (data._id) {
+                        await handleDelete(data._id);
+                      } else {
+                        console.error("_id is undefined");
+                      }
+                    }}
+                  >
+                    Delete
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            );
           },
-        ];
+        },
+      ];
 
-        setColumns(updatedColumns);
-      } catch (err) {
-        setError((err as Error).message);
-      } finally {
-        setLoading(false);
-      }
-    };
+      setColumns(updatedColumns);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    getData();
+  useEffect(() => {
+    refreshData();
   }, []);
 
   if (loading) {

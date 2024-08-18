@@ -42,32 +42,32 @@ const DemoPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string>();
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const data = await getData();
-        const formattedData = data.map((item) => ({
-          ...item,
-          date: new Date(item.date).toLocaleDateString(),
-          targetDate: new Date(item.targetDate).toLocaleDateString(),
-          lastUpdated: new Date(item.lastUpdated).toLocaleDateString(),
-        }));
+  const fetchData = async () => {
+    try {
+      const data = await getData();
+      const formattedData = data.map((item) => ({
+        ...item,
+        date: new Date(item.date).toLocaleDateString(),
+        targetDate: new Date(item.targetDate).toLocaleDateString(),
+        lastUpdated: new Date(item.lastUpdated).toLocaleDateString(),
+      }));
 
-        // Find the latest lastUpdated date
-        const latestLastUpdated = formattedData.reduce((latest, item) => {
-          const itemDate = new Date(item.lastUpdated);
-          return itemDate > new Date(latest) ? item.lastUpdated : latest;
-        }, formattedData[0]?.lastUpdated || "");
+      // Find the latest lastUpdated date
+      const latestLastUpdated = formattedData.reduce((latest, item) => {
+        const itemDate = new Date(item.lastUpdated);
+        return itemDate > new Date(latest) ? item.lastUpdated : latest;
+      }, formattedData[0]?.lastUpdated || "");
 
-        setData(formattedData);
-        setLastUpdated(latestLastUpdated);
-      } catch (error) {
-        setError((error as Error).message);
-      } finally {
-        setLoading(false);
-      }
+      setData(formattedData);
+      setLastUpdated(latestLastUpdated);
+    } catch (error) {
+      setError((error as Error).message);
+    } finally {
+      setLoading(false);
     }
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -176,7 +176,7 @@ const DemoPage: React.FC = () => {
 
         {/* --- Database --- */}
         <div className="justify-center px-12 py-6">
-          <DataTable columns={columns} data={data} />
+          <DataTable columns={columns(fetchData)} data={data} />
         </div>
       </div>
     </motion.div>

@@ -1,8 +1,7 @@
 "use client";
-
 import { ColumnDef } from "@tanstack/react-table";
-import React from "react";
-import { MoreHorizontal } from "lucide-react";
+import React, { useState } from "react";
+import { MoreHorizontal, ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,8 +11,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { toast } from "sonner";
+import axios from "axios";
 
-// This type is used to define the shape of our data.
 export type DocumentedInformation = {
   _id: string;
   metadata: {
@@ -37,7 +37,35 @@ export type DocumentedInformation = {
   lastUpdated: string;
 };
 
-export const columns: ColumnDef<DocumentedInformation, unknown>[] = [
+async function deleteRow(id: string, fetchData: () => void) {
+  try {
+    const response = await axios.delete(
+      `/api/post/delete/documentedInformation`,
+      {
+        data: { id },
+      }
+    );
+    if (response.status === 200) {
+      toast.success("Row deleted successfully!");
+      fetchData(); // Refresh the table data
+    } else {
+      throw new Error(response.data.message || "Failed to delete the row");
+    }
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      // Handle known errors from the server
+      toast.error(`Failed to delete row: ${error.response.data.message}`);
+    } else {
+      // Handle unknown errors
+      toast.error("Failed to delete row. Please try again later.");
+    }
+    console.error("Error deleting row:", error);
+  }
+}
+
+export const columns = (
+  fetchData: () => void
+): ColumnDef<DocumentedInformation, unknown>[] => [
   {
     accessorKey: "documentTitle",
     header: "Document Title",
@@ -45,27 +73,38 @@ export const columns: ColumnDef<DocumentedInformation, unknown>[] = [
   },
   {
     accessorKey: "refNo",
-    header: "Reference Number",
+    header: "Reference No",
     cell: ({ row }) => <span>{row.original.refNo}</span>,
   },
   {
     accessorKey: "versionNo",
-    header: "Version Number",
+    header: "Version No",
     cell: ({ row }) => <span>{row.original.versionNo}</span>,
   },
   {
     accessorKey: "area",
-    header: "Internal/External",
+    header: "Area",
     cell: ({ row }) => <span>{row.original.area}</span>,
   },
   {
     accessorKey: "typeOfDocument",
-    header: "Document/Record",
+    header: "Type of Document",
     cell: ({ row }) => <span>{row.original.typeOfDocument}</span>,
   },
   {
     accessorKey: "effectiveDate",
-    header: "Effective Date",
+    header: ({ column }) => {
+      return (
+        <Button
+          className="p-0"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Effective Date
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => (
       <span>{new Date(row.original.effectiveDate).toLocaleDateString()}</span>
     ),
@@ -90,11 +129,37 @@ export const columns: ColumnDef<DocumentedInformation, unknown>[] = [
     header: "Retention Period",
     cell: ({ row }) => <span>{row.original.retentionPeriod}</span>,
   },
-
+  {
+    accessorKey: "lastUpdated",
+    header: ({ column }) => {
+      return (
+        <Button
+          className="p-0"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Last Updated
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => (
+      <span>{new Date(row.original.lastUpdated).toLocaleDateString()}</span>
+    ),
+  },
   {
     id: "actions",
     cell: ({ row }) => {
-      const data = row.original;
+      const [loading, setLoading] = useState(false);
+
+      const handleDelete = async (id: string) => {
+        if (window.confirm("Are you sure you want to delete this item?")) {
+          setLoading(true);
+          await deleteRow(id, fetchData);
+          setLoading(false);
+        }
+      };
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -114,8 +179,8 @@ export const columns: ColumnDef<DocumentedInformation, unknown>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => {
-                if (data._id) {
-                  navigator.clipboard.writeText(data._id);
+                if (row.original._id) {
+                  navigator.clipboard.writeText(row.original._id);
                 } else {
                   console.error("_id is undefined");
                 }
@@ -124,7 +189,17 @@ export const columns: ColumnDef<DocumentedInformation, unknown>[] = [
               Copy Entry ID
             </DropdownMenuItem>
             <DropdownMenuItem>Update</DropdownMenuItem>
-            <DropdownMenuItem>Delete</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={async () => {
+                if (row.original._id) {
+                  await handleDelete(row.original._id);
+                } else {
+                  console.error("_id is undefined");
+                }
+              }}
+            >
+              Delete
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

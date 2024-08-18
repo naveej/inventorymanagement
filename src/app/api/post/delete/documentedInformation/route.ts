@@ -1,5 +1,5 @@
 import { connectDB } from "@/lib/database";
-import NCOutput from "@/models/NCOutputModel";
+import documentedInformation from "@/models/DocumentedInformationModel";
 import { NextResponse } from "next/server";
 
 export async function DELETE(req: Request) {
@@ -18,11 +18,11 @@ export async function DELETE(req: Request) {
 
   try {
     await connectDB();
-    const result = await NCOutput.findByIdAndDelete(id);
+    const result = await documentedInformation.findByIdAndDelete(id);
 
     if (!result) {
       return NextResponse.json(
-        { message: "NC Output not found" },
+        { message: "documentedInformation not found" },
         { status: 404 }
       );
     }
@@ -32,7 +32,7 @@ export async function DELETE(req: Request) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error deleting NC Output:", error);
+    console.error("Error deleting documentedInformation:", error);
     return NextResponse.json(
       { message: "Internal server error" },
       { status: 200 }

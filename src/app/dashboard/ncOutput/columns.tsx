@@ -1,6 +1,6 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { MoreHorizontal, ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,7 +14,6 @@ import {
 import { toast } from "sonner";
 import axios from "axios";
 
-// This type is used to define the shape of our data.
 export type NCOutput = {
   _id: string;
   metadata: {
@@ -37,15 +36,14 @@ export type NCOutput = {
   lastUpdated: string;
 };
 
-async function deleteRow(id: string) {
+async function deleteRow(id: string, fetchData: () => void) {
   try {
-    console.log(`Sending DELETE request to /api/post/delete/ncOutput?id=${id}`);
     const response = await axios.delete(`/api/post/delete/ncOutput`, {
       data: { id },
     });
-    console.log(`Received response:`, response);
     if (response.status === 200) {
       toast.success("Row deleted successfully!");
+      fetchData(); // Refresh the table data
     } else {
       throw new Error(response.data.message || "Failed to delete the row");
     }
@@ -61,7 +59,9 @@ async function deleteRow(id: string) {
   }
 }
 
-export const columns: ColumnDef<NCOutput, unknown>[] = [
+export const columns = (
+  fetchData: () => void
+): ColumnDef<NCOutput, unknown>[] => [
   {
     accessorKey: "date",
     header: ({ column }) => {
@@ -125,14 +125,12 @@ export const columns: ColumnDef<NCOutput, unknown>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const [data, setData] = useState(row.original);
       const [loading, setLoading] = useState(false);
 
       const handleDelete = async (id: string) => {
         if (window.confirm("Are you sure you want to delete this item?")) {
           setLoading(true);
-          await deleteRow(id);
-          // Refresh the table data here if necessary
+          await deleteRow(id, fetchData);
           setLoading(false);
         }
       };
@@ -156,8 +154,8 @@ export const columns: ColumnDef<NCOutput, unknown>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => {
-                if (data._id) {
-                  navigator.clipboard.writeText(data._id);
+                if (row.original._id) {
+                  navigator.clipboard.writeText(row.original._id);
                 } else {
                   console.error("_id is undefined");
                 }
@@ -168,8 +166,8 @@ export const columns: ColumnDef<NCOutput, unknown>[] = [
             <DropdownMenuItem>Update</DropdownMenuItem>
             <DropdownMenuItem
               onClick={async () => {
-                if (data._id) {
-                  await handleDelete(data._id);
+                if (row.original._id) {
+                  await handleDelete(row.original._id);
                 } else {
                   console.error("_id is undefined");
                 }

@@ -1,4 +1,5 @@
 "use client";
+import { motion } from "framer-motion";
 import { useState } from "react";
 
 const AdminForm = () => {
@@ -21,7 +22,16 @@ const AdminForm = () => {
   };
 
   return (
-    <div className="p-6 max-w-lg mx-auto mt-12 bg-white dark:bg-gray-900 shadow-lg rounded-md">
+    <motion.div
+      className="p-6 max-w-lg mx-auto mt-12 bg-white dark:bg-gray-900 shadow-lg rounded-md"
+      initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
+      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      transition={{
+        duration: 0.8,
+
+        ease: "easeInOut",
+      }}
+    >
       <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
         User Dashboard
       </h2>
@@ -155,7 +165,7 @@ const AdminForm = () => {
       <button className="w-full bg-blue-500 dark:bg-blue-700 text-white py-2 rounded-md hover:bg-blue-600 dark:hover:bg-blue-800">
         Submit
       </button>
-    </div>
+    </motion.div>
   );
 };
 

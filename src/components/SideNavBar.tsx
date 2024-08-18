@@ -66,7 +66,6 @@ export default function SideNavbar({}: Props) {
               style={{ rotate: isCollapsed ? "0deg" : "180deg" }}
               className="transition-all duration-500"
             />
-            <span>Mobile Btn</span>
           </Button>
         </div>
       )}

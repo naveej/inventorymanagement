@@ -29,18 +29,24 @@ import {
 } from "@/components/ui/accordion";
 import DarkModeToggle from "./DarkModeToggle.tsx";
 import SidebarDarkModeToggle from "./Sidebar_DarkModeToggle";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 type Props = {};
 
 export default function SideNavbar({}: Props) {
   const [isCollapsed, setIsCollapsed] = useState(false);
-
+  const router = useRouter();
+  const {data: session, status} = useSession();
   const onlyWidth = useWindowWidth();
   const mobileWidth = onlyWidth < 768;
-
   function toggleSidebar() {
     setIsCollapsed(!isCollapsed);
   }
+  if(status === 'unauthenticated'){
+    return null;
+  }
+  const role = session?.user?.role;
 
   return (
     <div className="flex justify-start items-center flex-col relative min-w-[80px] border-r border-secondary px-3 py-4">
@@ -110,7 +116,7 @@ export default function SideNavbar({}: Props) {
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="Tables">
+          { role === 'departement' && <AccordionItem value="Tables">
             <AccordionTrigger>
               <BookPlus className="mr-1 h-4 w-4" />
               {!isCollapsed && "Tables"}
@@ -152,9 +158,9 @@ export default function SideNavbar({}: Props) {
                 {!isCollapsed && "Documented Information"}
               </Link>
             </AccordionContent>
-          </AccordionItem>
+          </AccordionItem>}
 
-          <AccordionItem value="Forms">
+          {role === 'department' && <AccordionItem value="Forms">
             <AccordionTrigger>
               <BookPlus className="mr-2 h-4 w-4" />
               {!isCollapsed && "Forms"}
@@ -197,6 +203,7 @@ export default function SideNavbar({}: Props) {
               </Link>
             </AccordionContent>
           </AccordionItem>
+} 
         </Accordion>
       </Nav>
 

@@ -50,5 +50,5 @@ UserSchema.pre("save", function (next) {
 });
 
 const AuthUser =
-  mongoose.models.AuthUser || mongoose.model<IUser>("AuthUsers", UserSchema);
+  mongoose.models.AuthUser || mongoose.model<IUser>("users", UserSchema);
 export default AuthUser;

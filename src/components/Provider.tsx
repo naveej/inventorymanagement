@@ -2,6 +2,7 @@
 import React from "react";
 import { ThemeProvider } from "./ThemeProvider"; // Adjust the import path as necessary
 import SideNavbar from "./SideNavBar";
+import { SessionProvider } from "next-auth/react";
 
 type Props = {
   children: React.ReactNode;
@@ -15,6 +16,7 @@ const Provider = ({ children }: Props) => {
       enableSystem
       disableTransitionOnChange
     >
+      <SessionProvider refetchOnWindowFocus={true}>
       <main className="flex flex-col min-h-screen bg-background">
         <div className="flex flex-1">
           {/* -- Sidebar -- */}
@@ -24,6 +26,7 @@ const Provider = ({ children }: Props) => {
           <div className="flex-1">{children}</div>
         </div>
       </main>
+      </SessionProvider>
     </ThemeProvider>
   );
 };

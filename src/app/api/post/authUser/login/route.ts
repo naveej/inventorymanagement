@@ -22,12 +22,13 @@ export async function POST(request: Request) {
     await connectDB();
     // Find user by email
     const user = await AuthUser.findOne({ email });
+    console.log(user)
     if (!user) {
       return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
     }
-
     // Check password
     const isPasswordValid = await bcrypt.compare(password, user.password);
+    console.log(isPasswordValid)
     if (!isPasswordValid) {
       return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
     }
@@ -43,7 +44,7 @@ export async function POST(request: Request) {
     response.cookies.set('refreshToken', refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      sameSite: 'none',
       path: '/',
     });
 

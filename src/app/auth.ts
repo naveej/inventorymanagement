@@ -12,17 +12,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 email: { label: "Email", type: "email", placeholder: "example@email.com" },
                 password: { label: "Password", type: "password", placeholder: "Enter Password" },
             },
-            authorize: async (credentials) => {
+            authorize: async (credentials):Promise<any> => {
                 let user = null
                 console.log("Authorizing User")
                 try {
-                    if (!credentials.email || !credentials.password) {
+                    if (!credentials?.email || !credentials?.password) {
                         return null
                     }
 
                     await connectDB()
-                    const userExists = await UserModel.findOne({ email: credentials?.email })
-                    const matchpassword = await bcrypt.compare(userExists?.password, credentials?.password as string)
+                    const userExists = await UserModel.findOne({ email: credentials.email })
+                    const matchpassword = await bcrypt.compare(credentials.password, userExists.password);
 
                     if (!userExists || !matchpassword) {
                         throw new Error("Invalid User Credentials")

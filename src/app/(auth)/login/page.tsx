@@ -5,27 +5,49 @@ import Link from "next/dist/client/link";
 import useUserStore from "@/store/useUserStore";
 import { type userTypes } from "@/store/useUserStore";
 import { signIn } from "next-auth/react"
-
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const { setUser, setIsAdmin } = useUserStore();
-
+  const {data: session} = useSession();
+  // const { setUser, setIsAdmin } = useUserStore();
+  // const router = useRouter();
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e?.preventDefault()
+  //   console.log(JSON.stringify({email, password}))
+  //   const response = await fetch('/api/post/authUser/login', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({ email, password }),
+  //   });
 
+  //   const data = await response.json();
+
+  //   if (response.ok) {
+  //     // Handle successful login, e.g., store token, redirect, etc.
+  //     console.log('Login successful:', data);
+  //     router.push('/')
+  //     router
+  //   } else {
+  //     throw new Error(data.error || 'Failed to login');
+  //   }
     try {
       const result = await signIn("credentials", {
         email: email,
         password: password,
-        redirect: false,
+        redirect: true,
+        callbackUrl: '/'
       })
       console.log("Login Res", result)
+      console.log(session)
     } catch (error) {
       console.error("LoginError", error)
     }
-
+  };
     // const user: userTypes = {
     //   name: result?.name || ,
     //   registerNo: result?.regno,
@@ -38,7 +60,6 @@ const Login = () => {
     // if(user.role == "admin"){
     //   setIsAdmin(true)
     // }
-  };
 
   return (
     <section className="bg-card">

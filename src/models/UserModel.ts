@@ -8,7 +8,6 @@ interface IUser extends Document {
   password: string;
   role: UserRole;
   departmentName: string | undefined;
-  refreshToken: string | null;
   createdAt: Date
 }
 
@@ -16,13 +15,11 @@ const UserSchema = new Schema<IUser>({
   firstName: {
     type: String,
     required: true,
-    unique: true,
     min: 3,
   },
   lastName: {
     type: String,
     required: true,
-    unique: true,
     min: 3,
   },
   email: {

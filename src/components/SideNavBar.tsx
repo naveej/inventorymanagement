@@ -183,13 +183,13 @@ export default function SideNavbar({}: Props) {
               {!isCollapsed && "Forms"}
             </AccordionTrigger>
             <AccordionContent>
-              <Link
+              {/* <Link
                 href="/forms/skillmatrix"
                 className="flex items-center py-1"
               >
                 <BookText className="mr-2 h-4 w-4" />
                 {!isCollapsed && "Skill Matrix"}
-              </Link>
+              </Link> */}
               <Link
                 href="/forms/AssetMaintenanceform"
                 className="flex items-center py-1"

@@ -1,5 +1,5 @@
 "use client";
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/dist/client/link";
 import useUserStore from "@/store/useUserStore";
@@ -14,8 +14,13 @@ const Login = () => {
   const [emailError, setEmailError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   // const { setUser, setIsAdmin } = useUserStore();
+  const {data: session} = useSession();
   const router = useRouter();
-
+  useEffect(()=>{
+    if(session){
+      router.push('/');
+    }
+  },[router, session])
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e?.preventDefault()
   //   console.log(JSON.stringify({email, password}))

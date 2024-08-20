@@ -72,6 +72,7 @@ export const AuthOptions: NextAuthOptions = {
             lastName: user?.lastName,
             email: user?.email,
             role: user?.role,
+            departmentName: user?.departmentName
           };
           const accessToken = signToken(userData);
           token = { ...userData, accessToken };

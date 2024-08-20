@@ -8,84 +8,47 @@ import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
+
 const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [emailError, setEmailError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
-  // const { setUser, setIsAdmin } = useUserStore();
-  const {data: session} = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
-  useEffect(()=>{
-    if(session){
+
+  useEffect(() => {
+    if (status === "authenticated") {
       router.push('/');
     }
-  },[router, session])
+  }, [router, session])
+
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e?.preventDefault()
-  //   console.log(JSON.stringify({email, password}))
-  //   const response = await fetch('/api/post/authUser/login', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({ email, password }),
-  //   });
 
-  //   const data = await response.json();
+    if (!email)
+      setEmailError("Email is required");
 
-  //   if (response.ok) {
-  //     // Handle successful login, e.g., store token, redirect, etc.
-  //     console.log('Login successful:', data);
-  //     router.push('/')
-  //     router
-  //   } else {
-  //     throw new Error(data.error || 'Failed to login');
-  //   }
-  let hasError = false;
-  if (!email) {
-    setEmailError("Email is required");
-    hasError = true;
-  }
-  if (!password) {
-    setPasswordError("Password is required");
-    hasError = true;
-  }
+    if (!password)
+      setPasswordError("Password is required");
 
-  if (hasError) {
-    return;
-  }
-  try {
-    const result = await signIn('credentials', {
-      email: email,
-      password: password,
-      redirect: false,
-    });
+    try {
+      const result = await signIn('credentials', {
+        email: email,
+        password: password,
+        redirect: false,
+      });
 
-    if (result?.ok) {
-      toast.success('Login successful!');
-      router.push('/');
-    } else {
-      toast.error(result?.error || 'Failed to login');
-      router.push('/login')
+      if (result?.ok) {
+        toast.success('Login successful!');
+        router.push('/');
+      } else
+        toast.error(result?.error || 'Failed to login');
+    } catch (error) {
+      console.error('LoginError', error);
+      toast.error('An error occurred during login');
     }
-  } catch (error) {
-    console.error('LoginError', error);
-    toast.error('An error occurred during login');
-  }
   };
-    // const user: userTypes = {
-    //   name: result?.name || ,
-    //   registerNo: result?.regno,
-    //   email: result?.email,
-    //   role: result?.role,
-    // }
-
-    // After Successful login, save user to Zustand store
-    // setUser(user);
-    // if(user.role == "admin"){
-    //   setIsAdmin(true)
-    // }
 
   return (
     <section className="bg-card">

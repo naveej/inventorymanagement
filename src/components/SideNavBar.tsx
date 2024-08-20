@@ -33,10 +33,11 @@ import SidebarDarkModeToggle from "./Sidebar_DarkModeToggle";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import UserProfile from "./customUI/UserProfile";
 
 type Props = {};
 
-export default function SideNavbar({}: Props) {
+export default function SideNavbar({ }: Props) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const router = useRouter();
   const { data: session, status } = useSession();
@@ -251,7 +252,9 @@ export default function SideNavbar({}: Props) {
           </Link>
         )}
       </div> */}
-      <div className="mt-auto w-full px-2 py-2">
+      <div className="flex flex-col gap-4 mt-auto w-full px-2 py-2">
+        <UserProfile />
+
         <Button
           onClick={() => signOut({ callbackUrl: "/login" })}
           variant="ghost"

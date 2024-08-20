@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import FormInput from "./FormInput";
 import { Button } from "@/components/ui/button";
+import { UserRole } from "@/app/_types/userRole";
 
 // Define the form schema using zod
 const formSchema = z.object({
@@ -167,7 +168,7 @@ const UserCreate = () => {
           )}
         />
 
-        {role === "Department" && (
+        {role === UserRole.Department && (
           <Controller
             name="departmentName"
             control={control}

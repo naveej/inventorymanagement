@@ -19,6 +19,7 @@ import {
 import { toast } from "sonner"; // Import sonnar
 import { motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 // Define the form schema using zod
 const formSchema = z.object({
@@ -45,6 +46,7 @@ const formSchema = z.object({
 
 const AssetMaintenanceForm = () => {
   // Set up the form using useForm and zodResolver
+  const {data: session} = useSession();
   const searchParams = useSearchParams();
   const router = useRouter();
   const dataString = searchParams.get('data');
@@ -60,7 +62,7 @@ const AssetMaintenanceForm = () => {
       preparedBy: data?.metadata?.preparedBy || "Dr Pavana Kumara B - Head-IQAC",
       reviewedBy: data?.metadata?.reviewedBy || "Dr Prakash Pinto - Dean MBA",
       approvedBy: data?.metadata?.approvedBy || "Dr Rio D'Souza - Principal",
-      departmentName: data?.metadata?.departmentName ?? "",
+      departmentName: data?.metadata?.departmentName || session?.user?.departmentName,
       assetName: data?.assetName ?? "",
       assetNo: data?.assetNo || "",
       frequencyOfMaintenance: data?.frequencyOfMaintenance || "",

@@ -43,6 +43,37 @@ export default function SideNavbar({ }: Props) {
   const { data: session, status } = useSession();
   const onlyWidth = useWindowWidth();
   const mobileWidth = onlyWidth < 768;
+  const isAdmin = session?.user?.role === 'admin';
+  const links:any = [
+    {
+      title: "Home",
+      href: "/",
+      icon: House,
+      variant: "ghost",
+    },
+    {
+      title: "Profile",
+      href: "/forms/UpdateProfile",
+      icon: UserRoundPen,
+      variant: "ghost",
+    },
+    ...(isAdmin
+      ? [
+          {
+            title: "AddUsers",
+            href: "/adminDashboard/userCreation",
+            icon: UserPlus,
+            variant: "ghost",
+          },
+          {
+            title: "Users",
+            href: "/adminDashboard/userManage",
+            icon: Users,
+            variant: "ghost",
+          },
+        ]
+      : []),
+  ];
   function toggleSidebar() {
     setIsCollapsed(!isCollapsed);
   }
@@ -104,32 +135,7 @@ export default function SideNavbar({ }: Props) {
       <div className="w-full px-2 py-2">
         <Nav
           isCollapsed={mobileWidth ? true : isCollapsed}
-          links={[
-            {
-              title: "Home",
-              href: "/",
-              icon: House,
-              variant: "ghost",
-            },
-            {
-              title: "Profie",
-              href: "#",
-              icon: UserRoundPen,
-              variant: "ghost",
-            },
-            {
-              title: "AddUsers",
-              href: "/adminDashboard/userCreation",
-              icon: UserPlus,
-              variant: "ghost",
-            },
-            {
-              title: "Users",
-              href: "/adminDashboard/userManage",
-              icon: Users,
-              variant: "ghost",
-            },
-          ]}
+          links={links}
         />
       </div>
 
@@ -140,7 +146,6 @@ export default function SideNavbar({ }: Props) {
         )}
       >
         <Accordion type="single" collapsible>
-          {(role === "department" || role === "admin") && (
             <AccordionItem value="Tables">
               <AccordionTrigger>
                 <BookPlus size={20} className="mr-1 self-start" />
@@ -188,15 +193,14 @@ export default function SideNavbar({ }: Props) {
                 </Link>
               </AccordionContent>
             </AccordionItem>
-          )}
 
-          {role === "department" && (
+          {!isAdmin && (
             <AccordionItem value="Forms">
               <AccordionTrigger>
                 <BookPlus size={20} className="mr-1 self-start" />
                 {!isCollapsed && (
                   <span className="hover:!no-underline text-start pl-2 w-full">
-                    "Forms"
+                    Forms
                   </span>
                 )}
               </AccordionTrigger>

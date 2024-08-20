@@ -101,7 +101,7 @@ const DemoPage: React.FC = () => {
       </div>
       <div ref={componentRef}>
         {/* --- Header --- */}
-        <div className="bg-slate-100 dark:bg-slate-900 py-2 mt-4 p-4 max-w-[93rem] px-4 mx-auto border-2 border-slate-600 rounded-lg">
+        <div className="bg-slate-100 dark:bg-slate-900 py-2 mt-4 p-4 max-w-[93rem] px-4 mx-auto border-2 border-slate-600 rounded-lg print-section">
           <div className="flex text-center mb-4 border-b-2 border-gray-600 pb-2 print-header">
             <Image
               src={logo.src}

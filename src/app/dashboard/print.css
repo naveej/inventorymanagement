@@ -15,11 +15,13 @@
     text-align: center;
     font-size: 18pt;
     font-weight: bold;
+    border: 0;
   }
 
   .print-section {
     margin: 20px 0;
     page-break-inside: avoid;
+    border: 0;
   }
 
   .print-table th,

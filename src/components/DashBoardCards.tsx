@@ -70,7 +70,7 @@ const DashboardCards = () => {
     //     <p className="card-count">{dataCounts.ncOutput} entries</p>
     //   </div>
     // </div>
-    <div className="stats shadow flex">
+    <div className="stats shadow flex justify-between w-full h-full p-4 items-center">
       <div className="stat">
         <div className="stat-figure text-secondary">
           <svg

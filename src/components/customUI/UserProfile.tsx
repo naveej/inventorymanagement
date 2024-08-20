@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import useUserStore from '@/store/useUserStore'
 import { User2Icon } from 'lucide-react'
+import { Button } from '../ui/button'
 
 type UserRole = "admin" | "department" | "central" | "director";
 interface userTypes {
@@ -14,7 +15,7 @@ interface userTypes {
     role: UserRole;
 }
 
-const UserProfile = () => {
+const UserProfile = ({ isCollapsed }: { isCollapsed: boolean }) => {
     const { user, setUser, setIsAdmin } = useUserStore()
     const { data: session, status } = useSession()
     const router = useRouter()
@@ -36,12 +37,12 @@ const UserProfile = () => {
     }, [session, status, router, setUser, setIsAdmin])
 
     return (
-        <div className="flex justify-between items-center gap-4 w-full px-2 py-1 rounded text-white bg-secondary drop-shadow-md">
-            <div className='bg-background text-foreground p-2 rounded-full'>
+        <Button variant={"ghost"} size={isCollapsed ? "icon" : "default"} className="w-full py-6">
+            <div className='p-2 rounded-full'>
                 <User2Icon size={25} />
             </div>
 
-            <div className="flex_center flex-col w-full">
+            {!isCollapsed && <div className="flex_center flex-col w-full">
                 {status == "loading" ?
                     <>
                         <h2 className="text-[0.95em]">Loading...</h2>
@@ -53,8 +54,8 @@ const UserProfile = () => {
                         <span className='opacity-80 text-[0.8em] tracking-wider'>{user?.email}</span>
                     </>
                 }
-            </div>
-        </div>
+            </div>}
+        </Button>
     )
 }
 

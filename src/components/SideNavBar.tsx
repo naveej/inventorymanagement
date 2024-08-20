@@ -253,7 +253,7 @@ export default function SideNavbar({ }: Props) {
         )}
       </div> */}
       <div className="flex flex-col gap-4 mt-auto w-full px-2 py-2">
-        <UserProfile />
+        <UserProfile isCollapsed={isCollapsed} />
 
         <Button
           onClick={() => signOut({ callbackUrl: "/login" })}

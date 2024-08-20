@@ -1,12 +1,28 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { get } from "http";
+import { useEffect, useState } from "react";
 
-const UserManagement = () => {
-  const users:any = fetch('/api/get/authUser/users');
-  console.log(users)
+const UserManagement =  () => {
+  const [users, setUsers] = useState<any[]>([]); // Initialize as an empty array
 
+  useEffect(() => {
+    // Fetch users data from an API or other source
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch('/api/get/authUser/users'); // Replace with your API endpoint
+        const data = await response.json();
+        setUsers(data);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+  console.log(users);
   const handleUserAction = (action: string, userId: number) => {
     switch (action) {
       case "view":

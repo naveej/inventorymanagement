@@ -61,8 +61,6 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  console.log("DATA:", data);
-
   return (
     <div>
       {/*Table*/}

@@ -5,7 +5,7 @@ const SkeletonLoader = () => {
     <>
       {" "}
       <div>
-        <div className="animate-pulse bg-gray-700 px-2 rounded-md py-5 w-1/2 justify-center mx-auto"></div>
+        <div className="animate-pulse bg-gray-300 dark:bg-gray-700 px-2 rounded-md py-5 w-1/2 justify-center mx-auto"></div>
         {/* --- Header --- */}
         <div className="bg-slate-100 dark:bg-slate-900 py-4 mt-6 p-4 max-w-[93rem] px-4 mx-auto border-2 border-slate-600 rounded-lg">
           <div className="flex text-center mb-4 border-b-2 border-gray-600 pb-2">

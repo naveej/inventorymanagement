@@ -7,12 +7,14 @@ import { type userTypes } from "@/store/useUserStore";
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const {data: session} = useSession();
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
   // const { setUser, setIsAdmin } = useUserStore();
-  // const router = useRouter();
+  const router = useRouter();
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e?.preventDefault()
@@ -35,18 +37,37 @@ const Login = () => {
   //   } else {
   //     throw new Error(data.error || 'Failed to login');
   //   }
-    try {
-      const result = await signIn("credentials", {
-        email: email,
-        password: password,
-        redirect: true,
-        callbackUrl: '/'
-      })
-      console.log("Login Res", result)
-      console.log(session)
-    } catch (error) {
-      console.error("LoginError", error)
+  let hasError = false;
+  if (!email) {
+    setEmailError("Email is required");
+    hasError = true;
+  }
+  if (!password) {
+    setPasswordError("Password is required");
+    hasError = true;
+  }
+
+  if (hasError) {
+    return;
+  }
+  try {
+    const result = await signIn('credentials', {
+      email: email,
+      password: password,
+      redirect: false,
+    });
+
+    if (result?.ok) {
+      toast.success('Login successful!');
+      router.push('/');
+    } else {
+      toast.error(result?.error || 'Failed to login');
+      router.push('/login')
     }
+  } catch (error) {
+    console.error('LoginError', error);
+    toast.error('An error occurred during login');
+  }
   };
     // const user: userTypes = {
     //   name: result?.name || ,
@@ -93,6 +114,7 @@ const Login = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-2 text-foreground bg-input border border-border rounded focus:outline-none focus:ring-2 focus:ring-ring"
               />
+              {emailError && <p className="text-red-500 text-sm">{emailError}</p>}
             </div>
             <div className="mb-6">
               <label
@@ -109,6 +131,7 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-2 text-foreground bg-input border border-border rounded focus:outline-none focus:ring-2 focus:ring-ring"
               />
+              {passwordError && <p className="text-red-500 text-sm">{passwordError}</p>}
             </div>
             <div className="flex justify-center mb-6">
               <button

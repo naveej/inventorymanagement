@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/accordion";
 import DarkModeToggle from "./DarkModeToggle.tsx";
 import SidebarDarkModeToggle from "./Sidebar_DarkModeToggle";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 type Props = {};
@@ -109,9 +109,10 @@ export default function SideNavbar({}: Props) {
                 <UsersRound className="mr-2 h-4 w-4" />
                 {!isCollapsed && "Users"}
               </Link>
-              <Link href="#" className="flex items-center py-1">
+              <Link href="#" className="flex items-center py-1"
+              onClick={()=>signOut({callbackUrl: '/login'})}>
                 <Settings className="mr-2 h-4 w-4" />
-                {!isCollapsed && "Settings"}
+                {!isCollapsed && "Logout"}
               </Link>
             </AccordionContent>
           </AccordionItem>

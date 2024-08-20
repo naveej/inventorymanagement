@@ -104,6 +104,6 @@ export const AuthOptions: NextAuthOptions = {
   //         console.log("\nSignOutEvent", message)
   //     },
   // },
-//   secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.ACCESS_TOKEN_SECRET,
   // debug: process.env.NODE_ENV === "development",
 };

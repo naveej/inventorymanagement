@@ -142,11 +142,9 @@ export default function SideNavbar({}: Props) {
           {(role === "department" || role === "admin") && (
             <AccordionItem value="Tables">
               <AccordionTrigger>
-                <BookPlus className="mr-1 h-4 w-4" />
+                <BookPlus className="mr-1 h-4 w-4 self-start" />
                 {!isCollapsed && (
-                  <span className="!self-start hover:!no-underline">
-                    Tables
-                  </span>
+                  <span className="hover:!no-underline">Tables</span>
                 )}
               </AccordionTrigger>
               <AccordionContent>

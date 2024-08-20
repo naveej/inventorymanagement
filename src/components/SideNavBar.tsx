@@ -143,9 +143,11 @@ export default function SideNavbar({ }: Props) {
           {(role === "department" || role === "admin") && (
             <AccordionItem value="Tables">
               <AccordionTrigger>
-                <BookPlus className="mr-1 h-4 w-4 self-start" />
+                <BookPlus size={20} className="mr-1 self-start" />
                 {!isCollapsed && (
-                  <span className="hover:!no-underline">Tables</span>
+                  <span className="hover:!no-underline text-start pl-2 w-full">
+                    Tables
+                  </span>
                 )}
               </AccordionTrigger>
               <AccordionContent>
@@ -191,8 +193,12 @@ export default function SideNavbar({ }: Props) {
           {role === "department" && (
             <AccordionItem value="Forms">
               <AccordionTrigger>
-                <BookPlus className="mr-2 h-4 w-4" />
-                {!isCollapsed && "Forms"}
+                <BookPlus size={20} className="mr-1 self-start" />
+                {!isCollapsed && (
+                  <span className="hover:!no-underline text-start pl-2 w-full">
+                    "Forms"
+                  </span>
+                )}
               </AccordionTrigger>
               <AccordionContent>
                 {/* <Link

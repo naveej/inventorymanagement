@@ -1,8 +1,9 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { ThemeProvider } from "./ThemeProvider"; // Adjust the import path as necessary
 import SideNavbar from "./SideNavBar";
-import { SessionProvider } from "next-auth/react";
+import { SessionProvider, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 type Props = {
   children: React.ReactNode;

@@ -10,7 +10,6 @@ import { UserRole } from "./_types/userRole";
 export default function Home() {
   const router = useRouter();
   const {data: session, status} = useSession();
-  console.log("home page: ", session)
   useEffect(() => {
     if (status === 'loading') return; // Do nothing while loading
     if (!session) {
@@ -21,15 +20,11 @@ export default function Home() {
 if (status === 'loading') {
     return <div>Loading...</div>; // Show a loading state while checking session
 }
-
-if (!session) {
-    return null; // Render nothing if no session (redirect will happen)
-}
   return (
     <div className="max-w-3xl mx-auto p-10">
       {/* //hello user header heading */}
       <h1 className="text-3xl font-bold text-center">
-        Hello , <span className="font-bold italic">{session.user?.firstName}</span>
+        Hello , <span className="font-bold italic">{session?.user?.firstName}</span>
       </h1>
       <NCOutputform />
     </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Nav } from "./ui/nav";
 import Link from "next/link";
 import Image from "next/image";
@@ -43,9 +43,14 @@ export default function SideNavbar({}: Props) {
   function toggleSidebar() {
     setIsCollapsed(!isCollapsed);
   }
-  if(status === 'unauthenticated'){
-    return null;
-  }
+  useEffect(()=>{
+    if(status === 'unauthenticated'){
+      return undefined;
+    };
+    if(!session){
+      router.push('/login')
+    }
+  },[router, session, status])
   const role = session?.user?.role;
 
   return (
@@ -117,7 +122,7 @@ export default function SideNavbar({}: Props) {
             </AccordionContent>
           </AccordionItem>
 
-          { role === 'departement' && <AccordionItem value="Tables">
+          { (role === 'department' || role ==='admin') && <AccordionItem value="Tables">
             <AccordionTrigger>
               <BookPlus className="mr-1 h-4 w-4" />
               {!isCollapsed && "Tables"}

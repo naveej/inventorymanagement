@@ -16,6 +16,8 @@ import {
   Shield,
   LogOut,
   UserRoundPen,
+  UserPlus,
+  Users,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { useWindowWidth } from "@react-hook/window-size";
@@ -30,6 +32,7 @@ import DarkModeToggle from "./DarkModeToggle.tsx";
 import SidebarDarkModeToggle from "./Sidebar_DarkModeToggle";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 type Props = {};
 
@@ -97,73 +100,63 @@ export default function SideNavbar({}: Props) {
           />
         </a>
       </div>
+      <div className="w-full px-2 py-2">
+        <Nav
+          isCollapsed={mobileWidth ? true : isCollapsed}
+          links={[
+            {
+              title: "Home",
+              href: "/",
+              icon: House,
+              variant: "ghost",
+            },
+            {
+              title: "Profie",
+              href: "#",
+              icon: UserRoundPen,
+              variant: "ghost",
+            },
+            {
+              title: "AddUsers",
+              href: "/adminDashboard/userCreation",
+              icon: UserPlus,
+              variant: "ghost",
+            },
+            {
+              title: "Users",
+              href: "/adminDashboard/userManage",
+              icon: Users,
+              variant: "ghost",
+            },
+          ]}
+        />
+      </div>
 
-      <Nav
-        isCollapsed={mobileWidth ? true : isCollapsed}
-        links={[
-          {
-            title: "Dashboard",
-            href: "/",
-            icon: LayoutDashboard,
-            variant: "default",
-          },
-          {
-            title: "Profie",
-            href: "/forms/UpdateProfile",
-            icon: UserRoundPen,
-            variant: "ghost",
-          },
-          {
-            title: "Logout",
-            href: "#",
-            icon: LogOut,
-            variant: "ghost",
-            onClick: () => signOut({ callbackUrl: "/login" }),
-          },
-        ]}
+      <div
+        className={cn(
+          "px-2 py-2",
+          isCollapsed ? "min-w-full" : "min-w-[250px]"
+        )}
       >
         <Accordion type="single" collapsible>
-          <AccordionItem value="main">
-            <AccordionTrigger>
-              <LayoutDashboard className="mr-2 h-4 w-4" />
-              {!isCollapsed && "Main"}
-            </AccordionTrigger>
-            <AccordionContent>
-              {
-                <Link href="/" className="flex items-center py-1">
-                  <House className="mr-2 h-4 w-4" />
-                  {!isCollapsed && "Home"}
-                </Link>
-              }
-              <Link href="#" className="flex items-center py-1">
-                <UsersRound className="mr-2 h-4 w-4" />
-                {!isCollapsed && "Users"}
-              </Link>
-              <Link
-                href="#"
-                className="flex items-center py-1"
-                onClick={() => signOut({ callbackUrl: "/login" })}
-              >
-                <Settings className="mr-2 h-4 w-4" />
-                {!isCollapsed && "Logout"}
-              </Link>
-            </AccordionContent>
-          </AccordionItem>
-
           {(role === "department" || role === "admin") && (
             <AccordionItem value="Tables">
               <AccordionTrigger>
                 <BookPlus className="mr-1 h-4 w-4" />
-                {!isCollapsed && "Tables"}
+                {!isCollapsed && (
+                  <span className="!self-start hover:!no-underline">
+                    Tables
+                  </span>
+                )}
               </AccordionTrigger>
               <AccordionContent>
-                <Link
-                  href="/dashboard/skillmatrix"
-                  className="flex items-center py-1"
-                >
-                  <BookText className="mr-2 h-4 w-4" />
-                  {!isCollapsed && "Skill Matrix"}
-                </Link>
+                {/* <Link
+                href="/dashboard/skillmatrix"
+                className="flex items-center py-1"
+              >
+                <BookText className="mr-2 h-4 w-4" />
+                {!isCollapsed && "Skill Matrix"}
+              </Link> */}
                 <Link
                   href="/dashboard/assetMaintenance"
                   className="flex items-center py-1"
@@ -203,13 +196,13 @@ export default function SideNavbar({}: Props) {
                 {!isCollapsed && "Forms"}
               </AccordionTrigger>
               <AccordionContent>
-                <Link
-                  href="/forms/skillmatrix"
-                  className="flex items-center py-1"
-                >
-                  <BookText className="mr-2 h-4 w-4" />
-                  {!isCollapsed && "Skill Matrix"}
-                </Link>
+                {/* <Link
+                href="/forms/skillmatrix"
+                className="flex items-center py-1"
+              >
+                <BookText className="mr-2 h-4 w-4" />
+                {!isCollapsed && "Skill Matrix"}
+              </Link> */}
                 <Link
                   href="/forms/AssetMaintenanceform"
                   className="flex items-center py-1"
@@ -242,13 +235,13 @@ export default function SideNavbar({}: Props) {
             </AccordionItem>
           )}
         </Accordion>
-      </Nav>
+      </div>
 
       <div className="px-2 space-x-6 py-4">
         {/* <ModeToggle /> */}
         {isCollapsed ? <SidebarDarkModeToggle /> : <DarkModeToggle />}
       </div>
-      <div className="px-2 py-2 cursor-pointer border border-border hover:bg-primary/20 rounded-lg">
+      {/* <div className="px-2 py-2 cursor-pointer border border-border hover:bg-primary/20 rounded-lg">
         {isCollapsed ? (
           <Shield color="#ff2600" />
         ) : (
@@ -259,6 +252,16 @@ export default function SideNavbar({}: Props) {
             <Shield /> Admin <br></br>Dashboard
           </Link>
         )}
+      </div> */}
+      <div className="mt-auto w-full px-2 py-2">
+        <Button
+          onClick={() => signOut({ callbackUrl: "/login" })}
+          variant="ghost"
+          className="w-full flex items-center justify-center gap-2"
+        >
+          <LogOut className="h-4 w-4" />
+          {!isCollapsed && "Logout"}
+        </Button>
       </div>
     </div>
   );

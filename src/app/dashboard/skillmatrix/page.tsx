@@ -1,6 +1,6 @@
 "use client";
 import { DataTable } from "@/components/ui/data-table";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
 import logo from "../../assets/logo.png";
 import { MoreHorizontal, ArrowUpDown, Ghost, Printer } from "lucide-react";
@@ -56,14 +56,17 @@ async function fetchData(): Promise<SkillMatrixForm[]> {
   }));
 }
 
-async function deleteRow(id: string, refreshData: () => void) {
+async function deleteRow(
+  id: string,
+  setDeleteTrigger: React.Dispatch<React.SetStateAction<boolean>>
+) {
   try {
     const response = await axios.delete(`/api/post/delete/skillMatrix`, {
       data: { id },
     });
     if (response.status === 200) {
       toast.success("Row deleted successfully!");
-      refreshData();
+      setDeleteTrigger((prev) => !prev); // Toggle the delete trigger
     } else {
       throw new Error(response.data.message || "Failed to delete the row");
     }
@@ -87,9 +90,10 @@ export default function DemoPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string>();
+  const [deleteTrigger, setDeleteTrigger] = useState<boolean>(false); // State to track delete operation
   const router = useRouter();
 
-  const refreshData = async () => {
+  const refreshData = useCallback(async () => {
     try {
       const result = await fetchData();
       const updatedResult = result.map((item) => {
@@ -141,18 +145,13 @@ export default function DemoPage() {
           id: "actions",
           className: "text-right",
           cell: ({ row }) => {
-            const data = row.original
-            // const [data, setData] = useState(row.original);
-            // const [loading, setLoading] = useState(false);
-
+            const data = row.original;
 
             const handleDelete = async (id: string) => {
               if (
                 window.confirm("Are you sure you want to delete this item?")
               ) {
-                // setLoading(true);
-                await deleteRow(id, refreshData);
-                // setLoading(false);
+                await deleteRow(id, setDeleteTrigger);
               }
             };
 
@@ -229,11 +228,11 @@ export default function DemoPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     refreshData();
-  }, [refreshData]);
+  }, [deleteTrigger]); // Only refresh when deleteTrigger changes
 
   const componentRef = useRef<HTMLDivElement>(null);
   const handlePrint = useReactToPrint({

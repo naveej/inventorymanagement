@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useState } from "react";
 
-const AdminForm = () => {
+const UserCreate = () => {
   const [role, setRole] = useState("User");
   const [formData, setFormData] = useState({
     firstName: "",
@@ -35,8 +35,8 @@ const AdminForm = () => {
           ease: "easeInOut",
         }}
       >
-        <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
-          User Dashboard
+        <h2 className="text-xl font-semibold text-gray-800 text-center dark:text-gray-200 mb-4">
+          User Creation
         </h2>
 
         {/* First Name */}
@@ -170,12 +170,8 @@ const AdminForm = () => {
           </Button>
         </div>
       </motion.div>
-      {/* -- User Management -- */}
-      <div className="py-4 flex flex-col justify-center text-center">
-        <UserManagement />
-      </div>
     </>
   );
 };
 
-export default AdminForm;
+export default UserCreate;

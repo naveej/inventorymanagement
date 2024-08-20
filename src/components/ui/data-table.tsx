@@ -33,6 +33,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ExtendedColumnDef } from "@/app/_types/utility.types";
+import "../../app/dashboard/print.css";
 interface DataTableProps<TData, TValue> {
   columns: ExtendedColumnDef<TData, TValue>[];
   data: TData[];
@@ -60,8 +61,6 @@ export function DataTable<TData, TValue>({
       sorting,
     },
   });
-
-  console.log("DATA:", data);
 
   return (
     <div>
@@ -127,7 +126,7 @@ export function DataTable<TData, TValue>({
 
       {/*Pagination*/}
 
-      <div className="flex items-center space-x-6 lg:space-x-8">
+      <div className="flex items-center space-x-6 lg:space-x-8 no-print">
         <div className="flex items-center space-x-18">
           <p className="text-sm whitespace-nowrap font-medium">Rows per page</p>
           <Select

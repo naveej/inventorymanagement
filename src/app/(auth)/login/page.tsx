@@ -21,7 +21,7 @@ const Login = () => {
     if (status === "authenticated") {
       router.push('/');
     }
-  }, [router, session])
+  }, [router, session, status])
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e?.preventDefault()
@@ -109,7 +109,7 @@ const Login = () => {
                 Login
               </button>
             </div>
-            <p className="text-sm text-center text-muted-foreground">
+            {/* <p className="text-sm text-center text-muted-foreground">
               Don’t have an account?{" "}
               <Link
                 href="/SignUp"
@@ -117,7 +117,7 @@ const Login = () => {
               >
                 Sign Up
               </Link>
-            </p>
+            </p> */}
           </div>
         </motion.form>
       </div>

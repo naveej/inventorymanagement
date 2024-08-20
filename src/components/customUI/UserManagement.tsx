@@ -4,23 +4,8 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 
 const UserManagement = () => {
-  const [users, setUsers] = useState([
-    {
-      id: 1,
-      firstName: "Jevaan",
-      lastName: "Kumar",
-      email: "Jevaan@coolbois.com",
-      role: "Admin",
-    },
-    {
-      id: 2,
-      firstName: "John",
-      lastName: "Cena",
-      email: "ucantseeme@coolbois.com",
-      role: "User",
-    },
-    // Add more users as needed
-  ]);
+  const users:any = fetch('/api/get/authUser/users');
+  console.log(users)
 
   const handleUserAction = (action: string, userId: number) => {
     switch (action) {
@@ -34,7 +19,6 @@ const UserManagement = () => {
         break;
       case "delete":
         // Handle delete user
-        setUsers(users.filter((user) => user.id !== userId));
         break;
       default:
         break;
@@ -76,7 +60,7 @@ const UserManagement = () => {
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => (
+          {users.map((user:any) => (
             <tr key={user.id}>
               <td className="py-2 px-4 border-b border-gray-300 dark:border-gray-700">
                 {user.firstName}

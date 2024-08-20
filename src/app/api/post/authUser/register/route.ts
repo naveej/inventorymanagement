@@ -13,62 +13,48 @@ type RequestBody = {
   departmentName?: string;
 };
 
+async function validateRequestBody(body: RequestBody) {
+  const { firstName, lastName, email, password, role, departmentName } = body;
+
+  if (!firstName || !lastName || !email || !password || !role) {
+    throw new Error("All fields are required");
+  }
+
+  if (role === UserRole.Department && !departmentName) {
+    throw new Error("Department name is required");
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    throw new Error("Invalid email format");
+  }
+}
+
+async function checkIfEmailExists(email: string) {
+  const existingUser = await UserModel.findOne({ email });
+  if (existingUser) {
+    throw new Error("Email already exists");
+  }
+}
+
 export async function POST(request: Request) {
   try {
-    const {
-      firstName,
-      lastName,
-      email,
-      password,
-      role,
-      departmentName,
-    }: RequestBody = await request.json();
+    const body: RequestBody = await request.json();
 
-    // Validate the required fields
-    if (!firstName || !lastName || !email || !password || !role) {
-      return NextResponse.json(
-        { error: "All fields are required" },
-        { status: 400 }
-      );
-    }
-    if (role === UserRole.Department && !departmentName) {
-      return NextResponse.json(
-        { error: "Department name is required" },
-        { status: 400 }
-      );
-    }
-
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { error: "Invalid email format" },
-        { status: 400 }
-      );
-    }
-
+    await validateRequestBody(body);
     await connectDB();
+    await checkIfEmailExists(body.email);
 
-    // Check if email already exists
-    const existingUser = await UserModel.findOne({ email });
-    if (existingUser) {
-      return NextResponse.json(
-        { error: "Email already exists" },
-        { status: 400 }
-      );
-    }
+    const hashedPwd = await hashPassword(body.password);
 
-    // Hash the password
-    const hashedPwd = await hashPassword(password);
-
-    // Store the user data in the database
     const newUser = new UserModel({
-      firstName,
-      lastName,
-      email,
+      firstName: body.firstName,
+      lastName: body.lastName,
+      email: body.email,
       password: hashedPwd,
-      role,
-      departmentName: role === UserRole.Department ? departmentName : undefined,
+      role: body.role,
+      departmentName:
+        body.role === UserRole.Department ? body.departmentName : undefined,
     });
 
     await newUser.save();

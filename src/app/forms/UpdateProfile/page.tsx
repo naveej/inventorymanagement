@@ -35,7 +35,6 @@ import { useRouter } from "next/navigation";
             error: "Failed to update profile"
           });
           const result = await response;
-          console.log("Result", result);
           router.push('/');
         } catch (error) {
           console.error('Error updating profile:', error);
@@ -115,6 +114,7 @@ import { useRouter } from "next/navigation";
             type="email"
             name="email"
             id="email"
+            disabled
             value={formData.email}
             onChange={handleInputChange}
             className="mt-1 block w-full px-4 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md text-gray-800 dark:text-gray-300"

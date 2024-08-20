@@ -3,7 +3,6 @@ import { create } from "zustand";
 export interface userTypes {
   firstName: string;
   lastName: string;
-  registerNo: string;
   email: string;
   departmentName?: string;
   role: "admin" | "department" | "central" | "director";

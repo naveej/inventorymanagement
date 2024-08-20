@@ -50,6 +50,7 @@ export const AuthOptions: NextAuthOptions = {
             lastName: userExists?.lastName,
             email: userExists?.email,
             role: userExists?.role,
+            departmentName: userExists?.departmentName,
           };
 
           const accessToken = signToken(userData);
@@ -64,7 +65,7 @@ export const AuthOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
         if (user) {
           const userData = {
             id: user?.id,
@@ -76,6 +77,26 @@ export const AuthOptions: NextAuthOptions = {
           };
           const accessToken = signToken(userData);
           token = { ...userData, accessToken };
+        }
+        if (trigger === "update") {
+          try {
+              await connectDB()
+              const userExists = await UserModel.findOne({ email: token?.email })
+
+              const userData = {
+                id: userExists?.id,
+                firstName: userExists?.firstName,
+                lastName: userExists?.lastName,
+                email: userExists?.email,
+                role: userExists?.role,
+                departmentName: userExists?.departmentName
+              }
+
+              const accessToken = signToken(userData)
+              token = { ...userData, accessToken }
+          } catch (err) {
+              console.log("Update_Callback_Err", err)
+          }
         }
       return token;
     },

@@ -109,7 +109,7 @@ export default function SideNavbar({}: Props) {
           },
           {
             title: "Profie",
-            href: "/",
+            href: "/forms/UpdateProfile",
             icon: UserRoundPen,
             variant: "ghost",
           },

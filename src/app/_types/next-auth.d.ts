@@ -9,6 +9,7 @@ declare module "next-auth" {
         email?: string | null,
         accessToken?: string | null,
         role?: string | null,
+        departmentName?: string | null
     }
 
     interface Session {

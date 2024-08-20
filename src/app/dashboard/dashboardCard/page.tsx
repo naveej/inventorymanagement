@@ -15,7 +15,7 @@ const DashboardCards = () => {
     // Fetch data counts for each form
     const fetchDataCounts = async () => {
       try {
-        const department = session?.user?.department;
+        const department = session?.user?.departmentName;
         const responses = await Promise.all([
           fetch(`/api/asset-maintenance/count?department=${department}`),
           fetch(`/api/skill-matrix/count?department=${department}`),
@@ -44,7 +44,7 @@ const DashboardCards = () => {
       }
     };
 
-    if (session?.user?.department) {
+    if (session?.user?.departmentName) {
       fetchDataCounts();
     }
   }, [session]);

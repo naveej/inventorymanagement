@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Debug CSS Mode */
+/* * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background: #ffffff00;
+  border: 1px solid red;
+  outline: 1px solid greenyellow;
+} */
+
 @layer base {
   :root {
     --background: 0 0% 100%;

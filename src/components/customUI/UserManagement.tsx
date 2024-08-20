@@ -92,20 +92,21 @@ const UserManagement = () => {
               </td>
               <td className="py-2 px-4 border-b border-gray-300 dark:border-gray-700">
                 <Button
-                  className="mr-2"
+                  className="mr-2 !bg-green-400/70 hover:!bg-green-700"
                   variant="secondary"
                   onClick={() => handleUserAction("view", user.id)}
                 >
                   View
                 </Button>
                 <Button
-                  className="mr-2"
+                  className="mr-2 !bg-yellow-300/70 hover:!bg-yellow-300"
                   variant="secondary"
                   onClick={() => handleUserAction("edit", user.id)}
                 >
                   Edit
                 </Button>
                 <Button
+                  className="mr-2 !bg-red-500/70 hover:!bg-red-800"
                   variant="secondary"
                   onClick={() => handleUserAction("delete", user.id)}
                 >

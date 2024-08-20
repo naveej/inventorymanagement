@@ -10,13 +10,12 @@ import {
   UsersRound,
   Settings,
   ChevronRight,
-  ChevronLeft,
   BookText,
   House,
-  Library,
-  User,
   BookPlus,
   Shield,
+  LogOut,
+  UserRoundPen,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { useWindowWidth } from "@react-hook/window-size";
@@ -37,20 +36,23 @@ type Props = {};
 export default function SideNavbar({}: Props) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const router = useRouter();
-  const {data: session, status} = useSession();
+  const { data: session, status } = useSession();
   const onlyWidth = useWindowWidth();
   const mobileWidth = onlyWidth < 768;
   function toggleSidebar() {
     setIsCollapsed(!isCollapsed);
   }
-  useEffect(()=>{
-    if(status === 'unauthenticated'){
+  useEffect(() => {
+    if (status === "unauthenticated") {
       return undefined;
-    };
-    if(!session){
-      router.push('/login')
     }
-  },[router, session, status])
+    if (!session) {
+      router.push("/login");
+    }
+  }, [router, session, status]);
+  if (!session) {
+    return null;
+  }
   const role = session?.user?.role;
 
   return (
@@ -96,7 +98,30 @@ export default function SideNavbar({}: Props) {
         </a>
       </div>
 
-      <Nav isCollapsed={mobileWidth ? true : isCollapsed} links={[]}>
+      <Nav
+        isCollapsed={mobileWidth ? true : isCollapsed}
+        links={[
+          {
+            title: "Dashboard",
+            href: "/",
+            icon: LayoutDashboard,
+            variant: "default",
+          },
+          {
+            title: "Profie",
+            href: "/",
+            icon: UserRoundPen,
+            variant: "ghost",
+          },
+          {
+            title: "Logout",
+            href: "#",
+            icon: LogOut,
+            variant: "ghost",
+            onClick: () => signOut({ callbackUrl: "/login" }),
+          },
+        ]}
+      >
         <Accordion type="single" collapsible>
           <AccordionItem value="main">
             <AccordionTrigger>
@@ -114,102 +139,108 @@ export default function SideNavbar({}: Props) {
                 <UsersRound className="mr-2 h-4 w-4" />
                 {!isCollapsed && "Users"}
               </Link>
-              <Link href="#" className="flex items-center py-1"
-              onClick={()=>signOut({callbackUrl: '/login'})}>
+              <Link
+                href="#"
+                className="flex items-center py-1"
+                onClick={() => signOut({ callbackUrl: "/login" })}
+              >
                 <Settings className="mr-2 h-4 w-4" />
                 {!isCollapsed && "Logout"}
               </Link>
             </AccordionContent>
           </AccordionItem>
 
-          { (role === 'department' || role ==='admin') && <AccordionItem value="Tables">
-            <AccordionTrigger>
-              <BookPlus className="mr-1 h-4 w-4" />
-              {!isCollapsed && "Tables"}
-            </AccordionTrigger>
-            <AccordionContent>
-              <Link
-                href="/dashboard/skillmatrix"
-                className="flex items-center py-1"
-              >
-                <BookText className="mr-2 h-4 w-4" />
-                {!isCollapsed && "Skill Matrix"}
-              </Link>
-              <Link
-                href="/dashboard/assetMaintenance"
-                className="flex items-center py-1"
-              >
-                <BookText className="mr-2 h-4 w-4" />
-                {!isCollapsed && "Asset Maintenance"}
-              </Link>
-              <Link
-                href="/dashboard/caliberation_Schedule"
-                className="flex items-center py-1"
-              >
-                <BookText className="mr-2 h-4 w-4" />
-                {!isCollapsed && "Calibration Schedule"}
-              </Link>
-              <Link
-                href="/dashboard/ncOutput"
-                className="flex items-center py-1"
-              >
-                <BookText className="mr-2 h-4 w-4" />
-                {!isCollapsed && "NC Output"}
-              </Link>
-              <Link
-                href="/dashboard/documentedInformation"
-                className="flex items-center py-1"
-              >
-                <BookText className="mr-2 h-4 w-4" />
-                {!isCollapsed && "Documented Information"}
-              </Link>
-            </AccordionContent>
-          </AccordionItem>}
+          {(role === "department" || role === "admin") && (
+            <AccordionItem value="Tables">
+              <AccordionTrigger>
+                <BookPlus className="mr-1 h-4 w-4" />
+                {!isCollapsed && "Tables"}
+              </AccordionTrigger>
+              <AccordionContent>
+                <Link
+                  href="/dashboard/skillmatrix"
+                  className="flex items-center py-1"
+                >
+                  <BookText className="mr-2 h-4 w-4" />
+                  {!isCollapsed && "Skill Matrix"}
+                </Link>
+                <Link
+                  href="/dashboard/assetMaintenance"
+                  className="flex items-center py-1"
+                >
+                  <BookText className="mr-2 h-4 w-4" />
+                  {!isCollapsed && "Asset Maintenance"}
+                </Link>
+                <Link
+                  href="/dashboard/caliberation_Schedule"
+                  className="flex items-center py-1"
+                >
+                  <BookText className="mr-2 h-4 w-4" />
+                  {!isCollapsed && "Calibration Schedule"}
+                </Link>
+                <Link
+                  href="/dashboard/ncOutput"
+                  className="flex items-center py-1"
+                >
+                  <BookText className="mr-2 h-4 w-4" />
+                  {!isCollapsed && "NC Output"}
+                </Link>
+                <Link
+                  href="/dashboard/documentedInformation"
+                  className="flex items-center py-1"
+                >
+                  <BookText className="mr-2 h-4 w-4" />
+                  {!isCollapsed && "Documented Information"}
+                </Link>
+              </AccordionContent>
+            </AccordionItem>
+          )}
 
-          {role === 'department' && <AccordionItem value="Forms">
-            <AccordionTrigger>
-              <BookPlus className="mr-2 h-4 w-4" />
-              {!isCollapsed && "Forms"}
-            </AccordionTrigger>
-            <AccordionContent>
-              <Link
-                href="/forms/skillmatrix"
-                className="flex items-center py-1"
-              >
-                <BookText className="mr-2 h-4 w-4" />
-                {!isCollapsed && "Skill Matrix"}
-              </Link>
-              <Link
-                href="/forms/AssetMaintenanceform"
-                className="flex items-center py-1"
-              >
-                <BookText className="mr-2 h-4 w-4" />
-                {!isCollapsed && "Asset Maintenance"}
-              </Link>
-              <Link
-                href="/forms/CaliberationScheduleform"
-                className="flex items-center py-1"
-              >
-                <BookText className="mr-2 h-4 w-4" />
-                {!isCollapsed && "Calibration Schedule"}
-              </Link>
-              <Link
-                href="/forms/NC-Outputform"
-                className="flex items-center py-1"
-              >
-                <BookText className="mr-2 h-4 w-4" />
-                {!isCollapsed && "NC Output"}
-              </Link>
-              <Link
-                href="/forms/DocumentedInformationform"
-                className="flex items-center py-1"
-              >
-                <BookText className="mr-2 h-4 w-4" />
-                {!isCollapsed && "Documented Information"}
-              </Link>
-            </AccordionContent>
-          </AccordionItem>
-} 
+          {role === "department" && (
+            <AccordionItem value="Forms">
+              <AccordionTrigger>
+                <BookPlus className="mr-2 h-4 w-4" />
+                {!isCollapsed && "Forms"}
+              </AccordionTrigger>
+              <AccordionContent>
+                <Link
+                  href="/forms/skillmatrix"
+                  className="flex items-center py-1"
+                >
+                  <BookText className="mr-2 h-4 w-4" />
+                  {!isCollapsed && "Skill Matrix"}
+                </Link>
+                <Link
+                  href="/forms/AssetMaintenanceform"
+                  className="flex items-center py-1"
+                >
+                  <BookText className="mr-2 h-4 w-4" />
+                  {!isCollapsed && "Asset Maintenance"}
+                </Link>
+                <Link
+                  href="/forms/CaliberationScheduleform"
+                  className="flex items-center py-1"
+                >
+                  <BookText className="mr-2 h-4 w-4" />
+                  {!isCollapsed && "Calibration Schedule"}
+                </Link>
+                <Link
+                  href="/forms/NC-Outputform"
+                  className="flex items-center py-1"
+                >
+                  <BookText className="mr-2 h-4 w-4" />
+                  {!isCollapsed && "NC Output"}
+                </Link>
+                <Link
+                  href="/forms/DocumentedInformationform"
+                  className="flex items-center py-1"
+                >
+                  <BookText className="mr-2 h-4 w-4" />
+                  {!isCollapsed && "Documented Information"}
+                </Link>
+              </AccordionContent>
+            </AccordionItem>
+          )}
         </Accordion>
       </Nav>
 

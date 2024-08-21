@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { Users } from "lucide-react";
+import { BookText } from "lucide-react";
 
 const DashboardCards = () => {
   const [dataCounts, setDataCounts] = useState({
@@ -57,7 +57,7 @@ const DashboardCards = () => {
       <div className="stats shadow flex justify-between w-full max-w-4xl p-4 items-center gap-4">
         <div className="stat flex flex-col items-center justify-center">
           <div className="stat-figure text-secondary">
-            <Users size={32} className="text-black dark:text-white" />
+            <BookText size={32} className="text-black dark:text-white" />
           </div>
           <div className="stat-title">Asset Maintenance</div>
           <div className="stat-value">
@@ -67,7 +67,7 @@ const DashboardCards = () => {
 
         <div className="stat flex flex-col items-center justify-center">
           <div className="stat-figure text-secondary">
-            <Users size={32} className="text-black dark:text-white" />
+            <BookText size={32} className="text-black dark:text-white" />
           </div>
           <div className="stat-title">Documented Information</div>
           <div className="stat-value">
@@ -77,7 +77,7 @@ const DashboardCards = () => {
 
         <div className="stat flex flex-col items-center justify-center">
           <div className="stat-figure text-secondary">
-            <Users size={32} className="text-black dark:text-white" />
+            <BookText size={32} className="text-black dark:text-white" />
           </div>
           <div className="stat-title">Calibration Schedule</div>
           <div className="stat-value">
@@ -87,7 +87,7 @@ const DashboardCards = () => {
 
         <div className="stat flex flex-col items-center justify-center">
           <div className="stat-figure text-secondary">
-            <Users size={32} className="text-black dark:text-white" />
+            <BookText size={32} className="text-black dark:text-white" />
           </div>
           <div className="stat-title">NC Output</div>
           <div className="stat-value">{dataCounts.ncOutput} entries</div>

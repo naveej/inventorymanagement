@@ -52,86 +52,92 @@ const DashboardCards = () => {
   }, [session]);
 
   return (
-    // <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-    //   <div className="card">
-    //     <h3 className="card-title">Asset Maintenance</h3>
-    //     <p className="card-count">{dataCounts.assetMaintenance} entries</p>
-    //   </div>
-    //   <div className="card">
-    //     <h3 className="card-title">Documented Information</h3>
-    //     <p className="card-count">{dataCounts.documentedInformation} entries</p>
-    //   </div>
-    //   <div className="card">
-    //     <h3 className="card-title">Calibration Schedule</h3>
-    //     <p className="card-count">{dataCounts.calibrationSchedule} entries</p>
-    //   </div>
-    //   <div className="card">
-    //     <h3 className="card-title">NC Output</h3>
-    //     <p className="card-count">{dataCounts.ncOutput} entries</p>
-    //   </div>
-    // </div>
-    <div className="stats shadow flex justify-between w-full h-full p-4 items-center">
-      <div className="stat">
-        <div className="stat-figure text-secondary">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            className="inline-block h-8 w-8 stroke-current"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            ></path>
-          </svg>
+    <div className="flex justify-center items-center min-h-screen">
+      <div className="stats shadow flex justify-between w-full max-w-4xl p-4 items-center">
+        <div className="stat">
+          <div className="stat-figure text-secondary">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              className="inline-block h-8 w-8 stroke-current"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+          </div>
+          <div className="stat-title">Asset Maintenance</div>
+          <div className="stat-value">
+            {dataCounts.assetMaintenance} entries
+          </div>
         </div>
-        <div className="stat-title">Asset Maintenance</div>
-        <div className="stat-value">{dataCounts.assetMaintenance} entries</div>
-      </div>
 
-      <div className="stat">
-        <div className="stat-figure text-secondary">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            className="inline-block h-8 w-8 stroke-current"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-            ></path>
-          </svg>
+        <div className="stat">
+          <div className="stat-figure text-secondary">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              className="inline-block h-8 w-8 stroke-current"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+              ></path>
+            </svg>
+          </div>
+          <div className="stat-title">Documented Information</div>
+          <div className="stat-value">
+            {dataCounts.documentedInformation} entries
+          </div>
         </div>
-        <div className="stat-title">Documented Information</div>
-        <div className="stat-value">
-          {dataCounts.documentedInformation} entries
-        </div>
-      </div>
 
-      <div className="stat">
-        <div className="stat-figure text-secondary">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            className="inline-block h-8 w-8 stroke-current"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
-            ></path>
-          </svg>
+        <div className="stat">
+          <div className="stat-figure text-secondary">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              className="inline-block h-8 w-8 stroke-current"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
+              ></path>
+            </svg>
+          </div>
+          <div className="stat-title">Calibration Schedule</div>
+          <div className="stat-value">
+            {dataCounts.calibrationSchedule} entries
+          </div>
         </div>
-        <div className="stat-title">Calibration Schedule</div>
-        <div className="stat-value">
-          {dataCounts.calibrationSchedule} entries
+
+        <div className="stat">
+          <div className="stat-figure text-secondary">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              className="inline-block h-8 w-8 stroke-current"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+          </div>
+          <div className="stat-title">NC Output</div>
+          <div className="stat-value">{dataCounts.ncOutput} entries</div>
         </div>
       </div>
     </div>

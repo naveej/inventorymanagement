@@ -13,20 +13,23 @@ export default function Home() {
 
   useEffect(() => {
     if (!session && status === "unauthenticated") {
-      router.push('/login');
+      router.push("/login");
     }
   }, [session, status, router]);
 
-  if (status === 'loading')
+  if (status === "loading")
     return <div>Loading...</div>; // Show a loading state while checking session
   else
     return (
-      <div className="max-w-3xl mx-auto p-10">
-        {/* //hello user header heading */}
-        <h1 className="text-3xl font-bold text-center">
-          Hello , <span className="font-bold italic">{session?.user?.firstName}</span>
-        </h1>
-        <DashboardCards />
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="max-w-3xl mx-auto p-10 text-center">
+          {/* //hello user header heading */}
+          <h1 className="text-3xl font-bold">
+            Hello,{" "}
+            <span className="font-bold italic">{session?.user?.firstName}</span>
+          </h1>
+          <DashboardCards />
+        </div>
       </div>
     );
 }

@@ -54,7 +54,7 @@ const DashboardCards = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen">
-      <div className="stats shadow flex justify-between w-full max-w-4xl p-4 items-center">
+      <div className="stats shadow flex justify-between w-full max-w-4xl p-4 items-center gap-4">
         <div className="stat flex flex-col items-center justify-center">
           <div className="stat-figure text-secondary">
             <Users size={32} className="text-black dark:text-white" />
